@@ -1,16 +1,13 @@
 {
-  "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "*": ["src/*"],
       "common/*": ["./src/common/*", "./src/common/*/index"],
       "components/*": ["./src/components/*", "./src/components/*/index"],
       "assets/*": ["./src/assets/*", "./src/assets/*/index"],
       "utils/*": ["./src/utils/*", "./src/utils/*/index"],
       "store/*": ["./src/store/*", "./src/store/*/index"],
-      "hook/*": ["./src/hook/*", "./src/hook/*/index"],
-      "tests": ["tests/*"],
-    },
+      "hook/*": ["./src/hook/*", "./src/hook/*/index"]
+    }
   }
 }
