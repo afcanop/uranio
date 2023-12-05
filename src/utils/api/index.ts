@@ -1,6 +1,6 @@
 import Axios, {AxiosResponse} from 'axios';
 
-const URL_BASE = 'http://localhost/public/index.php/';
+const URL_BASE = 'http://143.110.216.145/rodio/public/index.php/';
 
 interface Configuracion {
   method?: 'get' | 'post' | 'put' | 'delete';
