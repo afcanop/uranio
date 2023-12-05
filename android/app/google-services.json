@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "439864510664",
+    "firebase_url": "https://vecifirebase-ba44d-default-rtdb.firebaseio.com",
+    "project_id": "vecifirebase-ba44d",
+    "storage_bucket": "vecifirebase-ba44d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439864510664:android:902d37495d73f2191ffdfd",
+        "android_client_info": {
+          "package_name": "com.torio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439864510664-s8dorgm2j8ktfcac4rk0tvou3tmjle4p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDl6jF0ZTsmIumpT-Wf1e6DhHOwivlJqYw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439864510664-s8dorgm2j8ktfcac4rk0tvou3tmjle4p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "439864510664-2g5libj60udls6au4fm3j6r4pqq11d3c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.veci"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439864510664:android:470a761fe402c6071ffdfd",
+        "android_client_info": {
+          "package_name": "com.uranio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439864510664-s8dorgm2j8ktfcac4rk0tvou3tmjle4p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDl6jF0ZTsmIumpT-Wf1e6DhHOwivlJqYw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439864510664-s8dorgm2j8ktfcac4rk0tvou3tmjle4p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "439864510664-2g5libj60udls6au4fm3j6r4pqq11d3c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.veci"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
