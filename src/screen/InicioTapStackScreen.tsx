@@ -38,7 +38,7 @@ export default function InicioTapStackScreen() {
             case 'OfertasTap':
               return (
                 <Ionicons
-                  name={focused ? 'cart' : 'cart-outline'}
+                  name={focused ? 'pricetag' : 'pricetag-outline'}
                   size={size}
                   color={color}
                 />
@@ -46,7 +46,7 @@ export default function InicioTapStackScreen() {
             case 'TiendaTap':
               return (
                 <Ionicons
-                  name={focused ? 'person' : 'person-outline'}
+                  name={focused ? 'cart' : 'cart-outline'}
                   size={size}
                   color={color}
                 />
@@ -54,7 +54,7 @@ export default function InicioTapStackScreen() {
             case 'PerfilTap':
               return (
                 <Ionicons
-                  name={focused ? 'pricetag' : 'pricetag-outline'}
+                  name={focused ? 'person' : 'person-outline'}
                   size={size}
                   color={color}
                 />

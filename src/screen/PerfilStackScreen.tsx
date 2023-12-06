@@ -1,11 +1,15 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import Publicaciones from '../components/Publicaciones';
+import Perfil from '../components/Perfil';
 import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
+import InformacionPersonal from 'components/Perfil/InformacionPersonal';
+import CambioClave from 'components/Perfil/CambioClave';
 
 export type RootStackParamList = {
     Perfil: undefined;
+    InformacionPersonal: undefined;
+    CambioClave: undefined;
 };
 
 const PerfilStackScreen: React.FC<any> = () => {
@@ -23,9 +27,24 @@ const PerfilStackScreen: React.FC<any> = () => {
       }}>
       <Stack.Screen 
         name="Perfil"
-        component={Publicaciones} 
+        component={Perfil} 
         options={() => ({
           headerLeft: () => <IconoMenu />,
+          title: 'Perfil'
+        })}
+      />
+      <Stack.Screen 
+        name="InformacionPersonal"
+        component={InformacionPersonal} 
+        options={() => ({
+          title: 'Información Personal'
+        })}
+      />
+      <Stack.Screen 
+        name="CambioClave"
+        component={CambioClave} 
+        options={() => ({
+          title: 'Cambio de clave'
         })}
       />
     </Stack.Navigator>
