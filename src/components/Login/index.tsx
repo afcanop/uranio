@@ -22,6 +22,8 @@ import { useNavigation } from '@react-navigation/native';
 import Contenedor from '../../common/Contenedor';
 import { setUsuarioInformacion } from '../../store/reducers/usuarioReducer';
 import { RespuestaUsuarioAutenticar } from 'interface/api/autenticar';
+import { actualizarRegistroFireBase, crearRegistroFireBase, obtenerTokenFirebase } from 'utils/services/firebase';
+import database from '@react-native-firebase/database';
 
 
 const Login = () => {
@@ -48,23 +50,27 @@ const Login = () => {
       if (validarCorreoElectronico(usuario)) {
         if (clave.length >= 8) {
             try {
+              const tokenFirebase = await obtenerTokenFirebase();
+              
               const respuestaApiLogin: RespuestaUsuarioAutenticar = await consultarApi(
                 'api/usuario/autenticar',
                 {
                   usuario,
                   clave,
-                  tokenFirebase: "tokenFirebase"
+                  ...{tokenFireBase: tokenFirebase},
                 }
               );
+
 
               if (respuestaApiLogin.autenticar) {
                 let informacionUsuario = respuestaApiLogin.usuario;
                 informacionUsuario = {
                   ...informacionUsuario,
-                  ...{tokenFireBase: "tokenFirebase"},
+                  ...{tokenFireBase: tokenFirebase},
                 };
 
-                /*let consultaFireBase = await database()
+                /*
+                let consultaFireBase = await database()
                   .ref(`/session/${informacionUsuario.codigo}`)
                   .once('value');
                 const informacionFirebase = await consultaFireBase._snapshot.value;
@@ -81,19 +87,12 @@ const Login = () => {
                     tokenFirebase,
                   );
                 }
-                const db = await getDbConeccion();
-                const usuarioObtenido = await obtenerUsuarios(db, usuario);
-                if (usuarioObtenido.length === 0) {
-                  await guardarUsuarioOffline(db, informacionUsuario);
-                  db.close();
-                  dispatch(setUsuarioInformacion(informacionUsuario));
-                }*/
+                */
                 dispatch(setUsuarioInformacion(informacionUsuario));
               } else {
                 toast.show({
                   title: 'Algo ha salido mal',
                   description: 'error al autenticar',
-                  placement: 'bottom-right',
                 });
               }
             } catch (error) {
@@ -109,21 +108,18 @@ const Login = () => {
           toast.show({
             title: 'Algo ha salido mal',
             description: 'La clave debe tener 8 o más caracteres',
-            placement: 'bottom-right',
           });
         }
       } else {
         toast.show({
           title: 'Algo ha salido mal',
           description: 'El usuario no es un correo válido',
-          placement: 'bottom-right',
         });
       }
     } else {
       Toast.show({
         title: 'Algo ha salido mal',
         description: 'Usuario y contraseña no tiene información',
-        placement: 'bottom-right',
       });
     }
   };
