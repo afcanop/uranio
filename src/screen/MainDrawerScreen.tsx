@@ -5,18 +5,9 @@ import {
 } from '@react-navigation/drawer';
 import {Alert, Image, StyleSheet} from 'react-native';
 import {Box, Divider, HStack, Pressable, Text, VStack} from 'native-base';
-/*import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useDispatch, useSelector} from 'react-redux';
-import {actualizarRegistroFireBase} from '../utils/services/firebase';
-import InicioTapStackScreen from './InicioTapStackScreen';
-import DepachoStackScreen from './DespachoStackScreen';
-import DespachoOfflineStackScreen from './DespachoOfflineStackScreen';
-import ConfiguracionStackScreen from './ConfiguracionStackScreen';
-import GuiaStackScreen from './GuiaStackScreen';
-import IngresoStackScreen from './IngresoStackScreen';
-import OperadorStackScreen from './OperadorStackScreen';
-*/
+import PublicacionesStackScreen from './PublicacionesStackScreen';
 import colores from '../assets/theme/colores';
 import { cerrarSesionUsuario } from 'store/reducers/usuarioReducer';
 import { useDispatch, useSelector } from 'react-redux';
@@ -210,12 +201,31 @@ export default function MainDrawerScreen() {
               {usuarioNombre}
             </Text>
           </Box>
-
+          <VStack space="3">
+            {props.state.routeNames.map((name, index) => (
+              <Pressable
+                px="5"
+                py="2.5"
+                bg={
+                  index === props.state.index
+                    ? colores.primary
+                    : 'transparent'
+                }
+                onPress={event => {
+                  props.navigation.navigate(name);
+                }}
+                key={index.toString()}>
+                <HStack space="1" alignItems="center">
+                  {mostrarMenuItem(name, index, props.state.index)}
+                </HStack>
+              </Pressable>
+            ))}
+          </VStack>
           <VStack space="2" my="1">
             <Pressable
               px="5"
               py="2.5"
-              bg={colores.principal}
+              bg={colores.primary}
               onPress={cerrarSession}>
               <HStack space="3" alignItems="center">
                 <Ionicons
@@ -267,6 +277,18 @@ export default function MainDrawerScreen() {
       <Drawer.Screen name="Home">
         {props => (
           <DrawerScreenContainer>
+            <DrawerScreenContainer>
+              <PublicacionesStackScreen />
+            </DrawerScreenContainer>
+          </DrawerScreenContainer>
+        )}
+      </Drawer.Screen>
+      <Drawer.Screen name="Visitas">
+        {props => (
+          <DrawerScreenContainer>
+            <DrawerScreenContainer>
+              <PublicacionesStackScreen />
+            </DrawerScreenContainer>
           </DrawerScreenContainer>
         )}
       </Drawer.Screen>

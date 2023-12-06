@@ -63,10 +63,9 @@ const Login = () => {
 
 
               if (respuestaApiLogin.autenticar) {
-                let informacionUsuario = respuestaApiLogin.usuario;
-                informacionUsuario = {
-                  ...informacionUsuario,
-                  ...{tokenFireBase: tokenFirebase},
+                let informacionUsuario = {
+                  ...respuestaApiLogin.usuario,
+                  tokenFireBase: tokenFirebase,
                 };
 
                 /*
