@@ -3,15 +3,23 @@ import {
   createDrawerNavigator,
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
-import {Alert, Image, StyleSheet} from 'react-native';
-import {Box, Divider, HStack, Pressable, Text, VStack} from 'native-base';
+import { Alert, Image, StyleSheet } from 'react-native';
+import { Avatar, Box, Divider, HStack, Pressable, Spacer, Text, VStack } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import PublicacionesStackScreen from './PublicacionesStackScreen';
+import InicioTapStackScreen from './InicioTapStackScreen';
+import VotacionStackScreen from './VotacionStackScreen';
+import ReservasStackScreen from './ReservasStackScreen';
+import DocumentosStackScreen from './DocumentosStackScreen';
+import AtencionesStackScreen from './AtencionesStackScreen';
+import PqrsStackScreen from './PqrsStackScreen';
+import ContactanosStackScreen from './ContactanosStackScreen';
 import colores from '../assets/theme/colores';
 import { cerrarSesionUsuario } from 'store/reducers/usuarioReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store/reducers';
+import EntregasStackScreen from './EntregasStackScreen';
+import VisitasStackScreen from './VisitasStackScreen';
 
 export default function MainDrawerScreen() {
   const Drawer = createDrawerNavigator();
@@ -20,149 +28,58 @@ export default function MainDrawerScreen() {
   const usuarioNombre = useSelector((state: RootState) => state.usuario.nombre);
   const usuarioImagen = useSelector((state: RootState) => state.usuario.urlImagen);
 
-  const mostrarMenuItem = (nombre, index, stateIndex) => {
-    switch (nombre) {
-      case 'Home':
-        return (
-          <>
-            <Ionicons
-              name={index === stateIndex ? 'home' : 'home-outline'}
-              size={25}
-              color={index === stateIndex ? colores.blanco : colores.gris}
-            />
-            <Text
-              style={[
-                styles.menuItemTexto,
-                {
-                  color: index === stateIndex ? colores.blanco : colores.gris,
-                },
-              ]}>
-              Inicio
-            </Text>
-          </>
-        );
-      case 'Entrega':
-        return (
-          <>
-            <Ionicons
-              name={index === stateIndex ? 'documents' : 'documents-outline'}
-              size={25}
-              color={index === stateIndex ? colores.blanco : colores.gris}
-            />
-            <Text
-              style={[
-                styles.menuItemTexto,
-                {
-                  color: index === stateIndex ? colores.blanco : colores.gris,
-                },
-              ]}>
-              Entrega
-            </Text>
-          </>
-        );
-      case 'Ingreso':
-        return (
-          <>
-            <MaterialCommunityIcons
-              name={
-                index === stateIndex
-                  ? 'archive-arrow-down'
-                  : 'archive-arrow-down-outline'
-              }
-              size={25}
-              color={index === stateIndex ? colores.blanco : colores.gris}
-            />
-            <Text
-              style={[
-                styles.menuItemTexto,
-                {
-                  color: index === stateIndex ? colores.blanco : colores.gris,
-                },
-              ]}>
-              Ingreso
-            </Text>
-          </>
-        );
-      case 'Perfil':
-        return (
-          <>
-            <Ionicons
-              name={index === stateIndex ? 'people' : 'people-outline'}
-              size={25}
-              color={index === stateIndex ? colores.blanco : colores.gris}
-            />
-            <Text
-              style={[
-                styles.menuItemTexto,
-                {
-                  color: index === stateIndex ? colores.blanco : colores.gris,
-                },
-              ]}>
-              Perfil
-            </Text>
-          </>
-        );
-      case 'Guia':
-        return (
-          <>
-            <Ionicons
-              name={index === stateIndex ? 'newspaper' : 'newspaper-outline'}
-              size={25}
-              color={index === stateIndex ? colores.blanco : colores.gris}
-            />
-            <Text
-              style={[
-                styles.menuItemTexto,
-                {
-                  color: index === stateIndex ? colores.blanco : colores.gris,
-                },
-              ]}>
-              Guía
-            </Text>
-          </>
-        );
-      case 'Despacho':
-        return (
-          <>
-            <Ionicons
-              name={
-                index === stateIndex ? 'cloud-offline' : 'cloud-offline-outline'
-              }
-              size={25}
-              color={index === stateIndex ? colores.blanco : colores.gris}
-            />
-            <Text
-              style={[
-                styles.menuItemTexto,
-                {
-                  color: index === stateIndex ? colores.blanco : colores.gris,
-                },
-              ]}>
-              Despacho
-            </Text>
-          </>
-        );
-      case 'Operador':
-        return (
-          <>
-            <Ionicons
-              name={index === stateIndex ? 'options' : 'options-outline'}
-              size={25}
-              color={index === stateIndex ? colores.blanco : colores.gris}
-            />
-            <Text
-              style={[
-                styles.menuItemTexto,
-                {
-                  color: index === stateIndex ? colores.blanco : colores.gris,
-                },
-              ]}>
-              Operador
-            </Text>
-          </>
-        );
+  const mostrarMenuItem = (nombre: any, index: any, stateIndex: any) => {
+    const iconos: any = {
+      'Inicio': 'home',
+      'Entrega': 'file-tray-full',
+      'Visita': 'document-lock',
+      'Votacion': 'people',
+      'Reservas': 'calendar',
+      'Documentos': 'document-text',
+      'Atenciones': 'alert',
+      'PQRS': 'help',
+      'Contactanos': 'trail-sign',
+    };
+  
+    const texto: any = {
+      'Inicio': 'Inicio',
+      'Entrega': 'Entrega',
+      'Visita': 'Visita',
+      'Votacion': 'Votación',
+      'Reservas': 'Reservas',
+      'Documentos': 'Documentos',
+      'Atenciones': 'ATENCIONES',
+      'PQRS': 'PQRS',
+      'Contactanos': 'Contactanos',
+    };
+  
+    const icono = iconos[nombre];
+    const textoItem = texto[nombre];
+  
+    if (icono !== undefined && textoItem !== undefined) {
+      return (
+        <>
+          <Ionicons
+            name={index === stateIndex ? icono : `${icono}-outline`}
+            size={25}
+            color={index === stateIndex ? colores.blanco : colores.negro}
+          />
+          <Text
+            style={[
+              styles.menuItemTexto,
+              {
+                color: index === stateIndex ? colores.blanco : colores.negro,
+              },
+            ]}>
+            {textoItem}
+          </Text>
+        </>
+      );
     }
-  };
+  
+    // Manejar el caso 'Contactanos' u otros casos no especificados
+    return null;
+  };  
 
   const cerrarSession = () => {
     return Alert.alert(
@@ -181,7 +98,7 @@ export default function MainDrawerScreen() {
           },
         },
       ],
-      {cancelable: true},
+      { cancelable: true },
     );
   };
 
@@ -189,20 +106,22 @@ export default function MainDrawerScreen() {
     return (
       <DrawerContentScrollView {...props}>
         <VStack divider={<Divider />} space="1" my="1" mx="1">
-          <Box px="4" alignItems={'center'}>
-            <Image
-              style={{width: 80, height: 80, borderRadius: 80 / 2}}
-              source={{
-                uri: usuarioImagen,
-              }}
-              resizeMode="contain"
-            />
-            <Text fontSize="16" mt="1" color={colores.blanco} fontWeight="500">
-              {usuarioNombre}
-            </Text>
+          <Box pl="4" pr="5" py="2">
+            <HStack alignItems="center" space={3}>
+              <Avatar size="48px" source={{
+                uri: usuarioImagen
+              }} />
+              <VStack>
+                <Text color="coolGray.800" _dark={{
+                  color: 'warmGray.50'
+                }} bold>
+                  {usuarioNombre}
+                </Text>
+              </VStack>
+            </HStack>
           </Box>
           <VStack space="3">
-            {props.state.routeNames.map((name, index) => (
+            {props.state.routeNames.map((name:String, index:Number) => (
               <Pressable
                 px="5"
                 py="2.5"
@@ -225,7 +144,6 @@ export default function MainDrawerScreen() {
             <Pressable
               px="5"
               py="2.5"
-              bg={colores.primary}
               onPress={cerrarSession}>
               <HStack space="3" alignItems="center">
                 <Ionicons
@@ -250,7 +168,7 @@ export default function MainDrawerScreen() {
     );
   };
 
-  const DrawerScreenContainer = ({children}) => {
+  const DrawerScreenContainer = ({ children }) => {
     return (
       <>
         {children}
@@ -265,30 +183,74 @@ export default function MainDrawerScreen() {
         drawerType: 'slide',
         drawerStyle: {
           width: 180,
-          backgroundColor: colores.base[600],
         },
         sceneContainerStyle: {
-          backgroundColor: colores.base[600],
+          backgroundColor: colores.base[500],
         },
         drawerActiveTintColor: colores.blanco,
-        drawerInactiveTintColor: colores.gris,
+        drawerInactiveTintColor: colores.blanco,
       }}
       drawerContent={props => <CustomDrawerContent {...props} />}>
-      <Drawer.Screen name="Home">
+      <Drawer.Screen name="Inicio">
         {props => (
           <DrawerScreenContainer>
-            <DrawerScreenContainer>
-              <PublicacionesStackScreen />
-            </DrawerScreenContainer>
+            <InicioTapStackScreen />
           </DrawerScreenContainer>
         )}
       </Drawer.Screen>
-      <Drawer.Screen name="Visitas">
+      <Drawer.Screen name="Entrega">
         {props => (
           <DrawerScreenContainer>
-            <DrawerScreenContainer>
-              <PublicacionesStackScreen />
-            </DrawerScreenContainer>
+            <EntregasStackScreen />
+          </DrawerScreenContainer>
+        )}
+      </Drawer.Screen>
+      <Drawer.Screen name="Visita">
+        {props => (
+          <DrawerScreenContainer>
+            <VisitasStackScreen />
+          </DrawerScreenContainer>
+        )}
+      </Drawer.Screen>
+      <Drawer.Screen name="Votacion">
+        {props => (
+          <DrawerScreenContainer>
+            <VotacionStackScreen />
+          </DrawerScreenContainer>
+        )}
+      </Drawer.Screen>
+      <Drawer.Screen name="Reservas">
+        {props => (
+          <DrawerScreenContainer>
+            <ReservasStackScreen />
+          </DrawerScreenContainer>
+        )}
+      </Drawer.Screen>
+      <Drawer.Screen name="Documentos">
+        {props => (
+          <DrawerScreenContainer>
+            <DocumentosStackScreen />
+          </DrawerScreenContainer>
+        )}
+      </Drawer.Screen>
+      <Drawer.Screen name="Atenciones">
+        {props => (
+          <DrawerScreenContainer>
+            <AtencionesStackScreen />
+          </DrawerScreenContainer>
+        )}
+      </Drawer.Screen>
+      <Drawer.Screen name="PQRS">
+        {props => (
+          <DrawerScreenContainer>
+            <PqrsStackScreen />
+          </DrawerScreenContainer>
+        )}
+      </Drawer.Screen>
+      <Drawer.Screen name="Contactanos">
+        {props => (
+          <DrawerScreenContainer>
+            <PqrsStackScreen />
           </DrawerScreenContainer>
         )}
       </Drawer.Screen>

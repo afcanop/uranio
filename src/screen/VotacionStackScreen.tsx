@@ -5,10 +5,10 @@ import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
 
 export type RootStackParamList = {
-    Publicaciones: undefined;
+    Votaciones: undefined;
 };
 
-const PublicacionesStackScreen: React.FC<any> = () => {
+const VotacionesStackScreen: React.FC<any> = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
   return (
@@ -22,7 +22,7 @@ const PublicacionesStackScreen: React.FC<any> = () => {
         headerBackTitleVisible: false,
       }}>
       <Stack.Screen 
-        name="Publicaciones"
+        name="Votaciones"
         component={Publicaciones} 
         options={() => ({
           headerLeft: () => <IconoMenu />,
@@ -32,4 +32,4 @@ const PublicacionesStackScreen: React.FC<any> = () => {
   );
 };
 
-export default PublicacionesStackScreen;
+export default VotacionesStackScreen;
