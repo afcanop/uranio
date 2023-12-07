@@ -21,7 +21,7 @@ import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import Contenedor from '../../common/Contenedor';
 import {setUsuarioInformacion} from '../../store/reducers/usuarioReducer';
-import {RespuestaUsuarioAutenticar} from 'interface/api/autenticar';
+import {RespuestaUsuarioAutenticar} from 'interface/api/usuario';
 import {
   actualizarRegistroFireBase,
   crearRegistroFireBase,

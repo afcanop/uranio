@@ -5,12 +5,3 @@ export interface RespuestaPanelBuscar {
   errorMensaje?: string;
   panales: Panal[];
 }
-
-export interface RespuestaAsignarPanal {
-  error: boolean;
-  errorMensaje?: string;
-  ciudad?: number;
-  oferta?: boolean;
-  panal?: number;
-  tienda?: boolean;
-}
