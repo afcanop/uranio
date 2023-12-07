@@ -1,6 +1,6 @@
-import { Image, TouchableOpacity } from 'react-native';
-import React, { useLayoutEffect, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {Image, TouchableOpacity} from 'react-native';
+import React, {useLayoutEffect, useState} from 'react';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   Box,
@@ -15,16 +15,19 @@ import {
   useToast,
 } from 'native-base';
 import HojaDeEstiloGenerales from '../../assets/HojaDeEstiloGenerales';
-import { fechaActual, validarCorreoElectronico } from '../../utils/funciones';
-import { consultarApi } from '../../utils/api';
-import { useDispatch } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import {fechaActual, validarCorreoElectronico} from '../../utils/funciones';
+import {consultarApi} from '../../utils/api';
+import {useDispatch} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 import Contenedor from '../../common/Contenedor';
-import { setUsuarioInformacion } from '../../store/reducers/usuarioReducer';
-import { RespuestaUsuarioAutenticar } from 'interface/api/autenticar';
-import { actualizarRegistroFireBase, crearRegistroFireBase, obtenerTokenFirebase } from 'utils/services/firebase';
+import {setUsuarioInformacion} from '../../store/reducers/usuarioReducer';
+import {RespuestaUsuarioAutenticar} from 'interface/api/autenticar';
+import {
+  actualizarRegistroFireBase,
+  crearRegistroFireBase,
+  obtenerTokenFirebase,
+} from 'utils/services/firebase';
 import database from '@react-native-firebase/database';
-
 
 const Login = () => {
   const toast = useToast();
@@ -49,26 +52,23 @@ const Login = () => {
     if (usuario !== '' && clave !== '') {
       if (validarCorreoElectronico(usuario)) {
         if (clave.length >= 8) {
-            try {
-              const tokenFirebase = await obtenerTokenFirebase();
-              
-              const respuestaApiLogin: RespuestaUsuarioAutenticar = await consultarApi(
-                'api/usuario/autenticar',
-                {
-                  usuario,
-                  clave,
-                  ...{tokenFireBase: tokenFirebase},
-                }
-              );
+          try {
+            const tokenFirebase = await obtenerTokenFirebase();
 
+            const respuestaApiLogin: RespuestaUsuarioAutenticar =
+              await consultarApi('api/usuario/autenticar', {
+                usuario,
+                clave,
+                ...{tokenFireBase: tokenFirebase},
+              });
 
-              if (respuestaApiLogin.autenticar) {
-                let informacionUsuario = {
-                  ...respuestaApiLogin.usuario,
-                  tokenFireBase: tokenFirebase,
-                };
+            if (respuestaApiLogin.autenticar) {
+              let informacionUsuario = {
+                ...respuestaApiLogin.usuario,
+                tokenFireBase: tokenFirebase,
+              };
 
-                /*
+              /*
                 let consultaFireBase = await database()
                   .ref(`/session/${informacionUsuario.codigo}`)
                   .once('value');
@@ -87,22 +87,22 @@ const Login = () => {
                   );
                 }
                 */
-                dispatch(setUsuarioInformacion(informacionUsuario));
-              } else {
-                toast.show({
-                  title: 'Algo ha salido mal',
-                  description: 'error al autenticar',
-                });
-              }
-            } catch (error) {
-              console.log(error);
-              
+              dispatch(setUsuarioInformacion(informacionUsuario));
+            } else {
               toast.show({
                 title: 'Algo ha salido mal',
-                description:
-                  'Error al conectar al servidor, por favor comprobar su conexión a internet',
+                description: 'error al autenticar',
               });
             }
+          } catch (error) {
+            console.log(error);
+
+            toast.show({
+              title: 'Algo ha salido mal',
+              description:
+                'Error al conectar al servidor, por favor comprobar su conexión a internet',
+            });
+          }
         } else {
           toast.show({
             title: 'Algo ha salido mal',
@@ -124,14 +124,14 @@ const Login = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{flex: 1}}>
       <KeyboardAvoidingView>
         <ScrollView showsVerticalScrollIndicator={false}>
           <Contenedor>
             <VStack space={3} mt="5">
               <Box mt="5" alignItems="center" justifyContent="center">
                 <Image
-                  style={{ width: 128, height: 128 }}
+                  style={{width: 128, height: 128}}
                   source={require('../../assets/img/logo-fondo-blanco.png')}
                 />
               </Box>
@@ -166,7 +166,7 @@ const Login = () => {
                 InputRightElement={
                   <TouchableOpacity
                     onPress={() => setMostrarClave(!mostrarClave)}
-                    style={{ marginHorizontal: 5 }}>
+                    style={{marginHorizontal: 5}}>
                     {mostrarClave == false ? (
                       <Ionicons name={'eye-off-outline'} size={25} />
                     ) : (
@@ -183,12 +183,12 @@ const Login = () => {
             <VStack space={3} mt={2}>
               <Button onPress={() => iniciarSesion()}>Ingresar</Button>
               <Button
-                onPress={() => navigation.navigate("CrearCuenta")}
+                onPress={() => navigation.navigate('CrearCuenta')}
                 variant="link">
                 Crear cuenta
               </Button>
               <Button
-                onPress={() => navigation.navigate("OlvidoClave")}
+                onPress={() => navigation.navigate('OlvidoClave')}
                 variant="link">
                 ¿Olvidaste la contraseña?
               </Button>
