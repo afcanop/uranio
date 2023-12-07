@@ -124,8 +124,8 @@ const ConectarPanal = () => {
             <FormControl.Label>Ciudad</FormControl.Label>
             <Select
               selectedValue={ciudad}
-              accessibilityLabel="Choose Service"
-              placeholder="Choose Service"
+              accessibilityLabel="Seleccionar ciudad"
+              placeholder="Seleccionar ciudad"
               _selectedItem={{
                 bg: 'teal.600',
                 endIcon: <CheckIcon size="5" />,
@@ -147,8 +147,8 @@ const ConectarPanal = () => {
             <FormControl.Label>Panal</FormControl.Label>
             <Select
               selectedValue={panal}
-              accessibilityLabel="Choose Service"
-              placeholder="Choose Service"
+              accessibilityLabel="Seleccionar panal"
+              placeholder="Seleccionar panal"
               _selectedItem={{
                 bg: 'teal.600',
                 endIcon: <CheckIcon size="5" />,
