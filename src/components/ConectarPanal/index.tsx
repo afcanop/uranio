@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unstable-nested-components */
-import {ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
+import {Alert, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import React, {useCallback, useLayoutEffect, useState} from 'react';
 import {
   Box,
@@ -25,7 +25,10 @@ import {Panal} from 'interface/panal';
 import colores from 'assets/theme/colores';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
-import {actualizarUsuarioInformacion} from 'store/reducers/usuarioReducer';
+import {
+  actualizarUsuarioInformacion,
+  cerrarSesionUsuario,
+} from 'store/reducers/usuarioReducer';
 
 const ConectarPanal = () => {
   const [ciudad, setCiudad] = useState<String>('');
@@ -48,12 +51,33 @@ const ConectarPanal = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={() => console.log('asd')}>
-          <Ionicons name={'qr-code-outline'} size={30} color={colores.blanco} />
+        <TouchableOpacity onPress={() => cerrarSession()}>
+          <Ionicons name={'exit-outline'} size={30} color={colores.blanco} />
         </TouchableOpacity>
       ),
     });
   }, [navigation]);
+
+  const cerrarSession = () => {
+    Alert.alert(
+      'Cerrar sesión',
+      'Esta seguro de cerrar la sesión',
+      [
+        {
+          text: 'Cancelar',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Confirmar',
+          onPress: () => {
+            dispatch(cerrarSesionUsuario());
+          },
+        },
+      ],
+      {cancelable: true},
+    );
+  };
 
   const consultarCiudades = async () => {
     const respuestaApiCiudadBuscar: RespuestaCiudadBuscar = await consultarApi(
