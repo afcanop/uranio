@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {Alert, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {Avatar, Box, HStack, Heading, Stack, Text, useToast} from 'native-base';
+import {Avatar, Box, HStack, Heading, Row, Stack, Text, useToast} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {consultarApi} from 'utils/api';
@@ -15,7 +15,16 @@ const index = () => {
   const toast = useToast();
   const dispatch = useDispatch();
 
-  const usuarioCodigo = useSelector((state: RootState) => state.usuario.codigo);
+  const usuario = useSelector((state: RootState) => {
+    return {
+      codigo: state.usuario.codigo,
+      nombre: state.usuario.nombre,
+      celular: state.usuario.celular,
+      panal: state.usuario.codigoPanal,
+      celda: state.usuario.codigoCelda,
+      ciudad: state.usuario.codigoCelda,
+    };
+  });
 
   const confirmarDesvinculacionPanal = () => {
     Alert.alert(
@@ -35,7 +44,7 @@ const index = () => {
   const desvinculacionPanal = async () => {
     const respuestaApiDesvincularPanal: RespuestaUsuarioDesvincularPanal =
       await consultarApi('api/usuario/desvincular', {
-        codigoUsuario: usuarioCodigo,
+        codigoUsuario: usuario.codigo,
       });
     if (respuestaApiDesvincularPanal.error === false) {
       dispatch(
@@ -86,9 +95,18 @@ const index = () => {
                 <Ionicons name={'pencil'} size={25} />
               </TouchableOpacity>
             </HStack>
-            <Text fontWeight="400">Código:</Text>
-            <Text fontWeight="400">Usuario:</Text>
-            <Text fontWeight="400">Celular:</Text>
+            <Row justifyContent={'space-between'}>
+              <Text fontWeight="400">Código:</Text>
+              <Text fontWeight="400">{usuario.codigo}</Text>
+            </Row>
+            <Row justifyContent={'space-between'}>
+              <Text fontWeight="400">Usuario:</Text>
+              <Text fontWeight="400">{usuario.nombre}</Text>
+            </Row>
+            <Row justifyContent={'space-between'}>
+              <Text fontWeight="400">Celular:</Text>
+              <Text fontWeight="400">{usuario.celular}</Text>
+            </Row>
           </Stack>
         </Box>
       </Box>
@@ -108,10 +126,18 @@ const index = () => {
                 <Text>Desvincular</Text>
               </TouchableOpacity>
             </HStack>
-
-            <Text fontWeight="400">Ciudad:</Text>
-            <Text fontWeight="400">Panel:</Text>
-            <Text fontWeight="400">Celda:</Text>
+            <Row justifyContent={'space-between'}>
+              <Text fontWeight="400">Ciudad:</Text>
+              <Text fontWeight="400">{usuario.ciudad}</Text>
+            </Row>
+            <Row justifyContent={'space-between'}>
+              <Text fontWeight="400">Panel:</Text>
+              <Text fontWeight="400">{usuario.panal}</Text>
+            </Row>
+            <Row justifyContent={'space-between'}>
+              <Text fontWeight="400">Celda:</Text>
+              <Text fontWeight="400">{usuario.celda}</Text>
+            </Row>
           </Stack>
         </Box>
       </Box>

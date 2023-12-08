@@ -1,12 +1,19 @@
-import React, { ReactNode } from 'react';
+import React, {ReactNode} from 'react';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
-import { Alert, Image, StyleSheet } from 'react-native';
-import { Avatar, Box, Divider, HStack, Pressable, Spacer, Text, VStack } from 'native-base';
+import {Alert, StyleSheet} from 'react-native';
+import {
+  Avatar,
+  Box,
+  Divider,
+  HStack,
+  Pressable,
+  Text,
+  VStack,
+} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import InicioTapStackScreen from './InicioTapStackScreen';
 import VotacionStackScreen from './VotacionStackScreen';
 import ReservasStackScreen from './ReservasStackScreen';
@@ -15,9 +22,9 @@ import AtencionesStackScreen from './AtencionesStackScreen';
 import PqrsStackScreen from './PqrsStackScreen';
 import ContactanosStackScreen from './ContactanosStackScreen';
 import colores from '../assets/theme/colores';
-import { cerrarSesionUsuario } from 'store/reducers/usuarioReducer';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'store/reducers';
+import {cerrarSesionUsuario} from 'store/reducers/usuarioReducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from 'store/reducers';
 import EntregasStackScreen from './EntregasStackScreen';
 import VisitasStackScreen from './VisitasStackScreen';
 
@@ -26,36 +33,38 @@ export default function MainDrawerScreen() {
   const dispatch = useDispatch();
   const codigoUsuario = useSelector((state: RootState) => state.usuario.codigo);
   const usuarioNombre = useSelector((state: RootState) => state.usuario.nombre);
-  const usuarioImagen = useSelector((state: RootState) => state.usuario.urlImagen);
+  const usuarioImagen = useSelector(
+    (state: RootState) => state.usuario.urlImagen,
+  );
 
   const mostrarMenuItem = (nombre: any, index: any, stateIndex: any) => {
     const iconos: any = {
-      'Inicio': 'home',
-      'Entrega': 'file-tray-full',
-      'Visita': 'document-lock',
-      'Votacion': 'people',
-      'Reservas': 'calendar',
-      'Documentos': 'document-text',
-      'Atenciones': 'alert',
-      'PQRS': 'help',
-      'Contactanos': 'trail-sign',
+      Inicio: 'home',
+      Entrega: 'file-tray-full',
+      Visita: 'document-lock',
+      Votacion: 'people',
+      Reservas: 'calendar',
+      Documentos: 'document-text',
+      Atenciones: 'alert',
+      PQRS: 'help',
+      Contactanos: 'trail-sign',
     };
-  
+
     const texto: any = {
-      'Inicio': 'Inicio',
-      'Entrega': 'Entrega',
-      'Visita': 'Visita',
-      'Votacion': 'Votación',
-      'Reservas': 'Reservas',
-      'Documentos': 'Documentos',
-      'Atenciones': 'ATENCIONES',
-      'PQRS': 'PQRS',
-      'Contactanos': 'Contactanos',
+      Inicio: 'Inicio',
+      Entrega: 'Entrega',
+      Visita: 'Visita',
+      Votacion: 'Votación',
+      Reservas: 'Reservas',
+      Documentos: 'Documentos',
+      Atenciones: 'ATENCIONES',
+      PQRS: 'PQRS',
+      Contactanos: 'Contactanos',
     };
-  
+
     const icono = iconos[nombre];
     const textoItem = texto[nombre];
-  
+
     if (icono !== undefined && textoItem !== undefined) {
       return (
         <>
@@ -76,10 +85,10 @@ export default function MainDrawerScreen() {
         </>
       );
     }
-  
+
     // Manejar el caso 'Contactanos' u otros casos no especificados
     return null;
-  };  
+  };
 
   const cerrarSession = () => {
     return Alert.alert(
@@ -98,7 +107,7 @@ export default function MainDrawerScreen() {
           },
         },
       ],
-      { cancelable: true },
+      {cancelable: true},
     );
   };
 
@@ -108,27 +117,31 @@ export default function MainDrawerScreen() {
         <VStack divider={<Divider />} space="1" my="1" mx="1">
           <Box pl="4" pr="5" py="2">
             <HStack alignItems="center" space={3}>
-              <Avatar size="48px" source={{
-                uri: usuarioImagen
-              }} />
+              <Avatar
+                size="48px"
+                source={{
+                  uri: usuarioImagen,
+                }}
+              />
               <VStack>
-                <Text color="coolGray.800" _dark={{
-                  color: 'warmGray.50'
-                }} bold>
+                <Text
+                  color="coolGray.800"
+                  _dark={{
+                    color: 'warmGray.50',
+                  }}
+                  bold>
                   {usuarioNombre}
                 </Text>
               </VStack>
             </HStack>
           </Box>
           <VStack space="3">
-            {props.state.routeNames.map((name:String, index:Number) => (
+            {props.state.routeNames.map((name: String, index: Number) => (
               <Pressable
                 px="5"
                 py="2.5"
                 bg={
-                  index === props.state.index
-                    ? colores.primary
-                    : 'transparent'
+                  index === props.state.index ? colores.primary : 'transparent'
                 }
                 onPress={event => {
                   props.navigation.navigate(name);
@@ -141,10 +154,7 @@ export default function MainDrawerScreen() {
             ))}
           </VStack>
           <VStack space="2" my="1">
-            <Pressable
-              px="5"
-              py="2.5"
-              onPress={cerrarSession}>
+            <Pressable px="5" py="2.5" onPress={cerrarSession}>
               <HStack space="3" alignItems="center">
                 <Ionicons
                   name={'exit-outline'}
@@ -168,12 +178,8 @@ export default function MainDrawerScreen() {
     );
   };
 
-  const DrawerScreenContainer = ({ children }) => {
-    return (
-      <>
-        {children}
-      </>
-    );
+  const DrawerScreenContainer = ({children}) => {
+    return <>{children}</>;
   };
 
   return (
