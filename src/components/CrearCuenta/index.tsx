@@ -5,18 +5,16 @@ import {
   ScrollView,
   useToast,
   VStack,
-  Text,
   Box,
 } from 'native-base';
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView, TouchableOpacity, Image} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import HojaDeEstiloGenerales from '../../assets/HojaDeEstiloGenerales';
-import { validarCorreoElectronico } from '../../utils/funciones';
-import { consultarApi } from '../../utils/api';
-import { useNavigation } from '@react-navigation/native';
+import {validarCorreoElectronico} from '../../utils/funciones';
+import {consultarApi} from '../../utils/api';
+import {useNavigation} from '@react-navigation/native';
 import Contenedor from 'common/Contenedor';
-
+import {RespuestaUsuarioNuevo} from 'interface/api/usuario';
 
 function CrearCuenta() {
   const toast = useToast();
@@ -24,56 +22,39 @@ function CrearCuenta() {
   const [clave, setClave] = useState('');
   const [celular, setCelular] = useState('');
   const [mostrarclave, setMostrarContrasena] = useState(false);
-  const [mostrarAnimacionCargando, setMostrarAnimacionCargando] =
-    useState(false);
   const navigation = useNavigation();
-
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: () => (
-        <Text style={HojaDeEstiloGenerales.headerTitle}>Crear cuenta</Text>
-      ),
-    });
-  }, [navigation]);
 
   const crearUsuario = async () => {
     if (validarCorreoElectronico(usuario)) {
       if (clave.length >= 8) {
-        const respuestaApiUsuarioNuevo = await consultarApi(
-          'api/usuario/nuevo',
-          {
+        const respuestaApiUsuarioNuevo: RespuestaUsuarioNuevo =
+          await consultarApi('api/usuario/nuevo', {
             usuario,
             clave,
             celular,
-          },
-        );
-        if (respuestaApiUsuarioNuevo.error == false) {
+          });
+        if (respuestaApiUsuarioNuevo.error === false) {
           navigation.goBack();
           toast.show({
             title: 'Correcto',
             description: 'Creación de usuario exitoso',
-            placement: 'bottom-right',
           });
         } else {
           toast.show({
             title: 'Algo ha salido mal',
             description: respuestaApiUsuarioNuevo.errorMensaje,
-            placement: 'bottom-right',
           });
         }
       } else {
         toast.show({
           title: 'Algo ha salido mal',
           description: 'La clave debe de tener más 8 caracteres',
-          placement: 'bottom-right',
         });
       }
     } else {
       toast.show({
         title: 'Algo ha salido mal',
         description: 'El no correo válido',
-        placement: 'bottom-right',
       });
     }
   };
@@ -88,7 +69,7 @@ function CrearCuenta() {
             <Image
               style={{width: 128, height: 128}}
               source={require('../../assets/img/logo-fondo-blanco.png')}
-              />
+            />
           </Box>
           <ScrollView>
             <FormControl isRequired={true}>

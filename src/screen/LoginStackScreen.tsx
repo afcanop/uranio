@@ -27,9 +27,27 @@ const LoginStackScreen: React.FC<any> = () => {
         headerBackTitleVisible: false,
       }}>
       <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="CrearCuenta" component={CrearCuenta} />
-      <Stack.Screen name="OlvidoClave" component={OlvidoContrasena} />
-      <Stack.Screen name="SolicitarAyuda" component={SolicitarAyuda} />
+      <Stack.Screen
+        name="CrearCuenta"
+        component={CrearCuenta}
+        options={() => ({
+          title: 'Crear cuenta',
+        })}
+      />
+      <Stack.Screen
+        name="OlvidoClave"
+        component={OlvidoContrasena}
+        options={() => ({
+          title: 'Olvido contraseña',
+        })}
+      />
+      <Stack.Screen
+        name="SolicitarAyuda"
+        component={SolicitarAyuda}
+        options={() => ({
+          title: 'Solicitar ayuda',
+        })}
+      />
     </Stack.Navigator>
   );
 };

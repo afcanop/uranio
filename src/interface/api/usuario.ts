@@ -20,3 +20,13 @@ export interface RespuestaUsuarioDesvincularPanal {
   error: boolean;
   errorMensaje?: string;
 }
+
+export interface RespuestaUsuarioRecuperarClave {
+  error: boolean;
+  errorMensaje?: string;
+}
+
+export interface RespuestaUsuarioNuevo {
+  error: boolean;
+  errorMensaje?: string;
+}
