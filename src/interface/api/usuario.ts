@@ -30,3 +30,24 @@ export interface RespuestaUsuarioNuevo {
   error: boolean;
   errorMensaje?: string;
 }
+
+export interface RespuestaUsuarioDetalle {
+  error: boolean;
+  errorMensaje?: string;
+  codigoUsuario: number;
+  usuario: string;
+  nombre: string;
+  codigoPanalFk: number;
+  codigoCeldaFk: number;
+  celular: string;
+  panalNombre: string;
+  celda: string;
+  codigoCiudadFk: number;
+  ciudadNombre: string;
+  urlImagen: string;
+}
+
+export interface RespuestaUsuarioEditarinformacion {
+  error: boolean;
+  errorMensaje?: string;
+}

@@ -20,8 +20,14 @@ import {consultarApi} from '../../utils/api';
 import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import Contenedor from '../../common/Contenedor';
-import {setUsuarioInformacion} from '../../store/reducers/usuarioReducer';
-import {RespuestaUsuarioAutenticar} from 'interface/api/usuario';
+import {
+  actualizarUsuarioInformacion,
+  setUsuarioInformacion,
+} from '../../store/reducers/usuarioReducer';
+import {
+  RespuestaUsuarioAutenticar,
+  RespuestaUsuarioDetalle,
+} from 'interface/api/usuario';
 import {
   actualizarRegistroFireBase,
   crearRegistroFireBase,
@@ -68,6 +74,11 @@ const Login = () => {
                 tokenFireBase: tokenFirebase,
               };
 
+              const respuestaApiUsuarioDetalle: RespuestaUsuarioDetalle =
+                await consultarApi('api/usuario/detalle', {
+                  codigoUsuario: respuestaApiLogin.usuario.codigo,
+                });
+
               /*
                 let consultaFireBase = await database()
                   .ref(`/session/${informacionUsuario.codigo}`)
@@ -88,6 +99,9 @@ const Login = () => {
                 }
                 */
               dispatch(setUsuarioInformacion(informacionUsuario));
+              dispatch(
+                actualizarUsuarioInformacion(respuestaApiUsuarioDetalle),
+              );
             } else {
               toast.show({
                 title: 'Algo ha salido mal',
