@@ -51,3 +51,8 @@ export interface RespuestaUsuarioEditarinformacion {
   error: boolean;
   errorMensaje?: string;
 }
+
+export interface RespuestaUsuarioCambioClave {
+  error: boolean;
+  errorMensaje?: string;
+}
