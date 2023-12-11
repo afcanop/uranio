@@ -32,6 +32,7 @@ const index = () => {
       panal: state.usuario.codigoPanal,
       celda: state.usuario.codigoCelda,
       ciudad: state.usuario.codigoCelda,
+      imagen: state.usuario.urlImagen,
     };
   });
 
@@ -79,11 +80,11 @@ const index = () => {
           bg="cyan.500"
           size={'2xl'}
           source={{
-            uri: 'https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+            uri: usuario.imagen,
           }}>
-          TE
+          {usuario.nombre}
         </Avatar>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('CambioImagen')}>
           <Text>Cambiar foto del perfil</Text>
         </TouchableOpacity>
       </Box>

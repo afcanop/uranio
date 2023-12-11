@@ -56,3 +56,9 @@ export interface RespuestaUsuarioCambioClave {
   error: boolean;
   errorMensaje?: string;
 }
+
+export interface RespuestaUsuarioCambioImagen {
+  error: boolean;
+  errorMensaje?: string;
+  urlImagen: string;
+}

@@ -1,4 +1,4 @@
-import {View, Text, PermissionsAndroid, StyleSheet, Linking} from 'react-native';
+import {Text, PermissionsAndroid, StyleSheet, Linking} from 'react-native';
 import React, {useCallback, useRef, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {Camera, CameraType} from 'react-native-camera-kit';

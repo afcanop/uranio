@@ -5,11 +5,13 @@ import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
 import InformacionPersonal from 'components/Perfil/InformacionPersonal';
 import CambioClave from 'components/Perfil/CambioClave';
+import CambioImagen from 'components/Perfil/CambioImagen';
 
 export type RootStackParamList = {
-    Perfil: undefined;
-    InformacionPersonal: undefined;
-    CambioClave: undefined;
+  Perfil: undefined;
+  InformacionPersonal: undefined;
+  CambioClave: undefined;
+  CambioImagen: undefined;
 };
 
 const PerfilStackScreen: React.FC<any> = () => {
@@ -25,26 +27,33 @@ const PerfilStackScreen: React.FC<any> = () => {
         headerShadowVisible: false,
         headerBackTitleVisible: false,
       }}>
-      <Stack.Screen 
+      <Stack.Screen
         name="Perfil"
-        component={Perfil} 
+        component={Perfil}
         options={() => ({
           headerLeft: () => <IconoMenu />,
-          title: 'Perfil'
+          title: 'Perfil',
         })}
       />
-      <Stack.Screen 
+      <Stack.Screen
         name="InformacionPersonal"
-        component={InformacionPersonal} 
+        component={InformacionPersonal}
         options={() => ({
-          title: 'Información Personal'
+          title: 'Información Personal',
         })}
       />
-      <Stack.Screen 
+      <Stack.Screen
         name="CambioClave"
-        component={CambioClave} 
+        component={CambioClave}
         options={() => ({
-          title: 'Cambio de clave'
+          title: 'Cambio de clave',
+        })}
+      />
+      <Stack.Screen
+        name="CambioImagen"
+        component={CambioImagen}
+        options={() => ({
+          title: 'Cambio de imagen',
         })}
       />
     </Stack.Navigator>
