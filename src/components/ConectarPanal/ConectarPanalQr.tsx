@@ -1,11 +1,10 @@
-import { View, Text, PermissionsAndroid, StyleSheet } from 'react-native'
-import React, { useCallback, useRef, useState } from 'react'
-import { useFocusEffect } from '@react-navigation/native';
-import { Camera, CameraType } from 'react-native-camera-kit';
-import { Box, Button, VStack } from 'native-base';
+import {View, Text, PermissionsAndroid, StyleSheet, Linking} from 'react-native';
+import React, {useCallback, useRef, useState} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
+import {Camera, CameraType} from 'react-native-camera-kit';
+import {Box, Button, VStack} from 'native-base';
 
 const ConectarPanalQr = () => {
-
   const [accesoCamara, setAccesoCamara] = useState<Boolean>(false);
   const camera = useRef(null);
 
@@ -31,55 +30,54 @@ const ConectarPanalQr = () => {
         },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        setAccesoCamara(true)
+        setAccesoCamara(true);
       } else {
-        setAccesoCamara(false)
+        if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+          // Si el usuario selecciona "Never Ask Again", guíalos a la configuración de la aplicación
+          Linking.openSettings();
+        } else {
+          setAccesoCamara(false);
+        }
+        setAccesoCamara(false);
       }
     } catch (err) {
-      console.log(err);
-      
-      setAccesoCamara(false)
+      setAccesoCamara(false);
     }
-  }
+  };
 
-  const LeerCodigo = (code:any) =>{
+  const LeerCodigo = (code: any) => {
     const dataQr = JSON.parse(code.nativeEvent.codeStringValue);
-
-  }
-
+  };
 
   return (
     <>
-      {
-        accesoCamara ? (
-          <View style={{ flex: 1 }}>
-
+      {accesoCamara ? (
+        <Box flex={1}>
           <Camera
             ref={camera}
             cameraType={CameraType.Back} // front/back(default)
-            flashMode='auto'
+            flashMode="auto"
             style={StyleSheet.absoluteFill}
             scanBarcode={true}
-            onReadCode={(event:any) => LeerCodigo(event)} // optional
+            onReadCode={(event: any) => LeerCodigo(event)} // optional
             showFrame={true} // (default false) optional, show frame with transparent layer (qr code or barcode will be read on this area ONLY), start animation for scanner, that stops when a code has been found. Frame always at center of the screen
-            laserColor='red' // (default red) optional, color of laser in scanner frame
-            frameColor='white' // (default white) optional, color of border of scanner frame
+            laserColor="red" // (default red) optional, color of laser in scanner frame
+            frameColor="white" // (default white) optional, color of border of scanner frame
           />
-
-        </View>
-        ) : 
-        (
-          <Box flex={1} padding={2}>
-            <VStack space={3} mt="5">
-              <Text>Veeci no tiene permiso a la cámara del dispositivo, por favor intentar solicitar permiso.</Text>
-              <Button title="Solicitar permiso" onPress={requestCameraPermission} />
-
-            </VStack>
-          </Box>
-        )
-      }
+        </Box>
+      ) : (
+        <Box flex={1} padding={2}>
+          <VStack space={3} mt="5">
+            <Text>
+              Veeci no tiene permiso a la cámara del dispositivo, por favor
+              intentar solicitar permiso.
+            </Text>
+            <Button onPress={() => consultarPermisoCamara()}>Ingresar</Button>
+          </VStack>
+        </Box>
+      )}
     </>
-  )
-}
+  );
+};
 
-export default ConectarPanalQr
+export default ConectarPanalQr;
