@@ -1,10 +1,12 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import ConectarPanal from '../components/ConectarPanal';
+import ConectarPanalQr from 'components/ConectarPanal/ConectarPanalQr';
 import colores from '../assets/theme/colores';
 
 export type RootStackParamList = {
   ConectarPanal: undefined;
+  ConectarPanalQr: undefined;
 };
 
 const ConectarPanalStackScreen: React.FC<any> = () => {
@@ -23,6 +25,13 @@ const ConectarPanalStackScreen: React.FC<any> = () => {
       <Stack.Screen
         name="ConectarPanal"
         component={ConectarPanal}
+        options={() => ({
+          title: 'Conectar panal',
+        })}
+      />
+      <Stack.Screen
+        name="ConectarPanalQr"
+        component={ConectarPanalQr}
         options={() => ({
           title: 'Conectar panal',
         })}
