@@ -34,13 +34,13 @@ const CambioImagen = () => {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
         {
-          title: 'Cool Photo App Camera Permission',
+          title: 'Permisos de cámara para Veeci',
           message:
-            'Cool Photo App needs access to your camera ' +
-            'so you can take awesome pictures.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
+            'Veeci necesita acceso a tu cámara ' +
+            'para que puedas tomar fotos increíbles.',
+          buttonNeutral: 'Preguntar después',
+          buttonNegative: 'Cancelar',
+          buttonPositive: 'Aceptar',
         },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {

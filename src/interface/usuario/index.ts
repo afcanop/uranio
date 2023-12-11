@@ -24,4 +24,6 @@ export interface Usuario {
   celda: string | null;
   tienda: boolean;
   oferta: boolean;
+  panalNombre: string;
+  ciudadNombre: string;
 }

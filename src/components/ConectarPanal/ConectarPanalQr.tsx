@@ -20,13 +20,13 @@ const ConectarPanalQr = () => {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
         {
-          title: 'Cool Photo App Camera Permission',
+          title: 'Permisos de cámara para leer QR en Veeci',
           message:
-            'Cool Photo App needs access to your camera ' +
-            'so you can take awesome pictures.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
+            'Veeci necesita acceso a tu cámara ' +
+            'para poder leer códigos QR y proporcionarte una mejor experiencia.',
+          buttonNeutral: 'Preguntar después',
+          buttonNegative: 'Cancelar',
+          buttonPositive: 'Aceptar',
         },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {

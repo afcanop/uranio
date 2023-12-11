@@ -27,6 +27,8 @@ const initialState: Usuario = {
   celda: '',
   tienda: false,
   oferta: false,
+  panalNombre: '',
+  ciudadNombre: '',
 };
 
 const usuarioInformacionSlice = createSlice({

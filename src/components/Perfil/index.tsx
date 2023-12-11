@@ -18,6 +18,7 @@ import {RootState} from 'store/reducers';
 import {useDispatch, useSelector} from 'react-redux';
 import {RespuestaUsuarioDesvincularPanal} from 'interface/api/usuario';
 import {actualizarUsuarioInformacion} from 'store/reducers/usuarioReducer';
+import colores from 'assets/theme/colores';
 
 const index = () => {
   const navigation = useNavigation();
@@ -29,9 +30,9 @@ const index = () => {
       codigo: state.usuario.codigo,
       nombre: state.usuario.nombre,
       celular: state.usuario.celular,
-      panal: state.usuario.codigoPanal,
+      panal: state.usuario.panalNombre,
       celda: state.usuario.codigoCelda,
-      ciudad: state.usuario.codigoCelda,
+      ciudad: state.usuario.ciudadNombre,
       imagen: state.usuario.urlImagen,
     };
   });
@@ -85,7 +86,9 @@ const index = () => {
           {usuario.nombre}
         </Avatar>
         <TouchableOpacity onPress={() => navigation.navigate('CambioImagen')}>
-          <Text>Cambiar foto del perfil</Text>
+          <Text fontSize={20} color={colores.primary}>
+            Cambiar foto del perfil
+          </Text>
         </TouchableOpacity>
       </Box>
       <Box
@@ -133,7 +136,9 @@ const index = () => {
                 Panel y celda
               </Heading>
               <TouchableOpacity onPress={() => confirmarDesvinculacionPanal()}>
-                <Text>Desvincular</Text>
+                <Text fontSize={20} color={colores.primary}>
+                  Desvincular
+                </Text>
               </TouchableOpacity>
             </HStack>
             <Row justifyContent={'space-between'}>
