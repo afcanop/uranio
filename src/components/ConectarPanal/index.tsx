@@ -152,6 +152,7 @@ const ConectarPanal = () => {
               placeholder="Seleccionar ciudad"
               _selectedItem={{
                 bg: 'teal.600',
+                color: 'white',
                 endIcon: <CheckIcon size="5" />,
               }}
               mt={1}
@@ -195,7 +196,9 @@ const ConectarPanal = () => {
           </Button>
           <Divider />
           <Center>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("ConectarPanalQr")}
+            >
               <Text>O leer qr</Text>
               <Ionicons
                 name={'qr-code-outline'}
