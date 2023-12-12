@@ -5,7 +5,7 @@ import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
 
 export type RootStackParamList = {
-    PQRS: undefined;
+  preguntas: undefined;
 };
 
 const PqrsStackScreen: React.FC<any> = () => {
@@ -21,9 +21,9 @@ const PqrsStackScreen: React.FC<any> = () => {
         headerShadowVisible: false,
         headerBackTitleVisible: false,
       }}>
-      <Stack.Screen 
-        name="PQRS"
-        component={Publicaciones} 
+      <Stack.Screen
+        name="preguntas"
+        component={Publicaciones}
         options={() => ({
           headerLeft: () => <IconoMenu />,
         })}

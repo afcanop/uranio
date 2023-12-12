@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React, {ReactNode} from 'react';
 import {
   createDrawerNavigator,
@@ -143,7 +144,7 @@ export default function MainDrawerScreen() {
                 bg={
                   index === props.state.index ? colores.primary : 'transparent'
                 }
-                onPress={event => {
+                onPress={() => {
                   props.navigation.navigate(name);
                 }}
                 key={index.toString()}>
@@ -205,56 +206,56 @@ export default function MainDrawerScreen() {
         )}
       </Drawer.Screen>
       <Drawer.Screen name="Entrega">
-        {props => (
+        {() => (
           <DrawerScreenContainer>
             <EntregasStackScreen />
           </DrawerScreenContainer>
         )}
       </Drawer.Screen>
       <Drawer.Screen name="Visita">
-        {props => (
+        {() => (
           <DrawerScreenContainer>
             <VisitasStackScreen />
           </DrawerScreenContainer>
         )}
       </Drawer.Screen>
       <Drawer.Screen name="Votacion">
-        {props => (
+        {() => (
           <DrawerScreenContainer>
             <VotacionStackScreen />
           </DrawerScreenContainer>
         )}
       </Drawer.Screen>
       <Drawer.Screen name="Reservas">
-        {props => (
+        {() => (
           <DrawerScreenContainer>
             <ReservasStackScreen />
           </DrawerScreenContainer>
         )}
       </Drawer.Screen>
       <Drawer.Screen name="Documentos">
-        {props => (
+        {() => (
           <DrawerScreenContainer>
             <DocumentosStackScreen />
           </DrawerScreenContainer>
         )}
       </Drawer.Screen>
       <Drawer.Screen name="Atenciones">
-        {props => (
+        {() => (
           <DrawerScreenContainer>
             <AtencionesStackScreen />
           </DrawerScreenContainer>
         )}
       </Drawer.Screen>
       <Drawer.Screen name="PQRS">
-        {props => (
+        {() => (
           <DrawerScreenContainer>
             <PqrsStackScreen />
           </DrawerScreenContainer>
         )}
       </Drawer.Screen>
       <Drawer.Screen name="Contactanos">
-        {props => (
+        {() => (
           <DrawerScreenContainer>
             <PqrsStackScreen />
           </DrawerScreenContainer>
