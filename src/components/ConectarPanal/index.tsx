@@ -197,8 +197,7 @@ const ConectarPanal = () => {
           <Divider />
           <Center>
             <TouchableOpacity
-              onPress={() => navigation.navigate("ConectarPanalQr")}
-            >
+              onPress={() => navigation.navigate('ConectarPanalQr')}>
               <Text>O leer qr</Text>
               <Ionicons
                 name={'qr-code-outline'}

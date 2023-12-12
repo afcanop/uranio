@@ -1,13 +1,73 @@
-import {Text, View} from 'react-native';
-import React from 'react';
+import React, {useCallback, useState} from 'react';
+import {Box, FlatList, HStack, VStack, Text} from 'native-base';
+import Contenedor from 'common/Contenedor';
+import {useFocusEffect} from '@react-navigation/native';
+import {consultarApi} from 'utils/api';
+import {useSelector} from 'react-redux';
+import {RootState} from 'store/reducers';
+import {Caso, respuestaCasoLista} from 'interface/api/pqrs';
 
-const index = () => {
+const Index = () => {
+  const [arrPqrs, setArrPqrs] = useState<Caso[]>([]);
+  const usuario = useSelector((state: RootState) => {
+    return {
+      codigo: state.usuario.codigo,
+      panal: state.usuario.codigoPanal,
+    };
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      const unsubscribe = () => consultarPqrs();
+      unsubscribe();
+    }, []),
+  );
+
+  const consultarPqrs = async () => {
+    const respuestaApiCiudadBuscar: respuestaCasoLista = await consultarApi(
+      'api/caso/lista/v1',
+      {
+        codigoPanal: usuario.panal,
+        codigoUsuario: usuario.codigo,
+      },
+    );
+    console.log(respuestaApiCiudadBuscar);
+
+    if (respuestaApiCiudadBuscar.error === false) {
+      setArrPqrs(respuestaApiCiudadBuscar.casos);
+    } else {
+    }
+  };
+
   return (
-    <View>
-      <Text>index</Text>
-    </View>
+    <Contenedor>
+      <FlatList
+        data={arrPqrs}
+        renderItem={({item}) => (
+          <Box
+            padding={2}
+            rounded="lg"
+            overflow="hidden"
+            borderColor="coolGray.200"
+            borderWidth="1"
+            justifyContent={'space-between'}>
+            <HStack>
+              <VStack space={2} flex={1}>
+                <Text>{item.fecha}</Text>
+                <Text>{item.codigoCasoPk}</Text>
+              </VStack>
+              <VStack space={2} flex={1} alignItems={'flex-end'}>
+                <Text>{item.estadoAtendido ? 'Atendido' : 'sin atender'}</Text>
+                <Text>{item.estadoCerrado ? 'Atendido' : 'sin cerrar'}</Text>
+              </VStack>
+            </HStack>
+            <Text mt={2}>{item.descripcion}</Text>
+          </Box>
+        )}
+        keyExtractor={item => `${item.codigoCasoPk}`}
+      />
+    </Contenedor>
   );
 };
 
-export default index;
-
+export default Index;
