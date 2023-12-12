@@ -1,11 +1,11 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import Publicaciones from '../components/Publicaciones';
+import Reservas from '../components/Reservas';
 import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
 
 export type RootStackParamList = {
-    Reservas: undefined;
+  Reservas: undefined;
 };
 
 const ReservasStackScreen: React.FC<any> = () => {
@@ -21,9 +21,9 @@ const ReservasStackScreen: React.FC<any> = () => {
         headerShadowVisible: false,
         headerBackTitleVisible: false,
       }}>
-      <Stack.Screen 
+      <Stack.Screen
         name="Reservas"
-        component={Publicaciones} 
+        component={Reservas}
         options={() => ({
           headerLeft: () => <IconoMenu />,
         })}

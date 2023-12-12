@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import Publicaciones from '../components/Publicaciones';
+import Tienda from '../components/Tienda';
 import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
 
@@ -23,7 +23,7 @@ const TiendaStackScreen: React.FC<any> = () => {
       }}>
       <Stack.Screen 
         name="Tienda"
-        component={Publicaciones} 
+        component={Tienda} 
         options={() => ({
           headerLeft: () => <IconoMenu />,
         })}

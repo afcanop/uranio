@@ -1,11 +1,11 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import Publicaciones from '../components/Publicaciones';
+import Entrega from '../components/Entregas';
 import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
 
 export type RootStackParamList = {
-    Entrega: undefined;
+  Entrega: undefined;
 };
 
 const EntregasStackScreen: React.FC<any> = () => {
@@ -21,9 +21,9 @@ const EntregasStackScreen: React.FC<any> = () => {
         headerShadowVisible: false,
         headerBackTitleVisible: false,
       }}>
-      <Stack.Screen 
+      <Stack.Screen
         name="Entrega"
-        component={Publicaciones} 
+        component={Entrega}
         options={() => ({
           headerLeft: () => <IconoMenu />,
         })}

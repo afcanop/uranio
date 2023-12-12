@@ -1,11 +1,11 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import Publicaciones from '../components/Publicaciones';
+import Documentos from '../components/Documentos';
 import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
 
 export type RootStackParamList = {
-    Documentos: undefined;
+  Documentos: undefined;
 };
 
 const DocumentosStackScreen: React.FC<any> = () => {
@@ -21,9 +21,9 @@ const DocumentosStackScreen: React.FC<any> = () => {
         headerShadowVisible: false,
         headerBackTitleVisible: false,
       }}>
-      <Stack.Screen 
+      <Stack.Screen
         name="Documentos"
-        component={Publicaciones} 
+        component={Documentos}
         options={() => ({
           headerLeft: () => <IconoMenu />,
         })}

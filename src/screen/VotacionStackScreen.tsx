@@ -1,11 +1,11 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import Publicaciones from '../components/Publicaciones';
+import Votaciones from '../components/Votaciones';
 import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
 
 export type RootStackParamList = {
-    Votaciones: undefined;
+  Votaciones: undefined;
 };
 
 const VotacionesStackScreen: React.FC<any> = () => {
@@ -21,9 +21,9 @@ const VotacionesStackScreen: React.FC<any> = () => {
         headerShadowVisible: false,
         headerBackTitleVisible: false,
       }}>
-      <Stack.Screen 
+      <Stack.Screen
         name="Votaciones"
-        component={Publicaciones} 
+        component={Votaciones}
         options={() => ({
           headerLeft: () => <IconoMenu />,
         })}

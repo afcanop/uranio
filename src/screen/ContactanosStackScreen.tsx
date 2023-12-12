@@ -1,11 +1,11 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import Publicaciones from '../components/Publicaciones';
+import Contactanos from '../components/Contacto';
 import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
 
 export type RootStackParamList = {
-    Contactanos: undefined;
+  Contactanos: undefined;
 };
 
 const ContactoStackScreen: React.FC<any> = () => {
@@ -21,9 +21,9 @@ const ContactoStackScreen: React.FC<any> = () => {
         headerShadowVisible: false,
         headerBackTitleVisible: false,
       }}>
-      <Stack.Screen 
+      <Stack.Screen
         name="Contactanos"
-        component={Publicaciones} 
+        component={Contactanos}
         options={() => ({
           headerLeft: () => <IconoMenu />,
         })}

@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import Publicaciones from '../components/Publicaciones';
+import Atenciones from '../components/Atenciones';
 import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
 
@@ -21,9 +21,9 @@ const AtencionStackScreen: React.FC<any> = () => {
         headerShadowVisible: false,
         headerBackTitleVisible: false,
       }}>
-      <Stack.Screen 
+      <Stack.Screen
         name="Atenciones"
-        component={Publicaciones} 
+        component={Atenciones}
         options={() => ({
           headerLeft: () => <IconoMenu />,
         })}

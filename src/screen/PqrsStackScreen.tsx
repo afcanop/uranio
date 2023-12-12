@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import Publicaciones from '../components/Publicaciones';
+import Pqrs from '../components/Pqrs';
 import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
 
@@ -23,7 +23,7 @@ const PqrsStackScreen: React.FC<any> = () => {
       }}>
       <Stack.Screen
         name="preguntas"
-        component={Publicaciones}
+        component={Pqrs}
         options={() => ({
           headerLeft: () => <IconoMenu />,
         })}
