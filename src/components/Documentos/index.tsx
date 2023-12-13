@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {useFocusEffect} from '@react-navigation/native';
 import {consultarApi} from 'utils/api';
-import {Contenido, RespuestaContenidoLista} from 'interface/api/Documento';
+import {Contenido, RespuestaContenidoLista} from 'interface/api/documento';
 import {
   Box,
   FlatList,
@@ -46,19 +46,19 @@ const Documento = () => {
   );
 
   const consultarPqrs = async () => {
-    const respuestaApiCiudadBuscar: RespuestaContenidoLista =
+    const respuestaApiContenidoLista: RespuestaContenidoLista =
       await consultarApi('api/contenido/lista', {
         codigoPanal: usuarioCodigoPanal,
       });
-    if (respuestaApiCiudadBuscar.error === false) {
+    if (respuestaApiContenidoLista.error === false) {
       if (recargarLista) {
         setRecargarLista(false);
       }
-      setArrDocumentos(respuestaApiCiudadBuscar.contenidos);
+      setArrDocumentos(respuestaApiContenidoLista.contenidos);
     } else {
       toast.show({
         title: 'Algo ha salido mal',
-        description: respuestaApiCiudadBuscar.errorMensaje,
+        description: respuestaApiContenidoLista.errorMensaje,
       });
     }
   };

@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unstable-nested-components */
-import React, {ReactNode} from 'react';
+import React from 'react';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -179,10 +179,6 @@ export default function MainDrawerScreen() {
     );
   };
 
-  const DrawerScreenContainer = ({children}) => {
-    return <>{children}</>;
-  };
-
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -199,67 +195,29 @@ export default function MainDrawerScreen() {
       }}
       drawerContent={props => <CustomDrawerContent {...props} />}>
       <Drawer.Screen name="Inicio">
-        {props => (
-          <DrawerScreenContainer>
-            <InicioTapStackScreen />
-          </DrawerScreenContainer>
-        )}
+        {() => <InicioTapStackScreen />}
       </Drawer.Screen>
       <Drawer.Screen name="Entrega">
-        {() => (
-          <DrawerScreenContainer>
-            <EntregasStackScreen />
-          </DrawerScreenContainer>
-        )}
+        {() => <EntregasStackScreen />}
       </Drawer.Screen>
       <Drawer.Screen name="Visita">
-        {() => (
-          <DrawerScreenContainer>
-            <VisitasStackScreen />
-          </DrawerScreenContainer>
-        )}
+        {() => <VisitasStackScreen />}
       </Drawer.Screen>
       <Drawer.Screen name="Votacion">
-        {() => (
-          <DrawerScreenContainer>
-            <VotacionStackScreen />
-          </DrawerScreenContainer>
-        )}
+        {() => <VotacionStackScreen />}
       </Drawer.Screen>
       <Drawer.Screen name="Reservas">
-        {() => (
-          <DrawerScreenContainer>
-            <ReservasStackScreen />
-          </DrawerScreenContainer>
-        )}
+        {() => <ReservasStackScreen />}
       </Drawer.Screen>
       <Drawer.Screen name="Documentos">
-        {() => (
-          <DrawerScreenContainer>
-            <DocumentosStackScreen />
-          </DrawerScreenContainer>
-        )}
+        {() => <DocumentosStackScreen />}
       </Drawer.Screen>
       <Drawer.Screen name="Atenciones">
-        {() => (
-          <DrawerScreenContainer>
-            <AtencionesStackScreen />
-          </DrawerScreenContainer>
-        )}
+        {() => <AtencionesStackScreen />}
       </Drawer.Screen>
-      <Drawer.Screen name="PQRS">
-        {() => (
-          <DrawerScreenContainer>
-            <PqrsStackScreen />
-          </DrawerScreenContainer>
-        )}
-      </Drawer.Screen>
+      <Drawer.Screen name="PQRS">{() => <PqrsStackScreen />}</Drawer.Screen>
       <Drawer.Screen name="Contactanos">
-        {() => (
-          <DrawerScreenContainer>
-            <PqrsStackScreen />
-          </DrawerScreenContainer>
-        )}
+        {() => <ContactanosStackScreen />}
       </Drawer.Screen>
     </Drawer.Navigator>
   );
