@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {Box, FlatList, HStack, VStack, Text} from 'native-base';
+import {Box, FlatList, HStack, VStack, Text, useToast} from 'native-base';
 import Contenedor from 'common/Contenedor';
 import {useFocusEffect} from '@react-navigation/native';
 import {consultarApi} from 'utils/api';
@@ -8,6 +8,7 @@ import {RootState} from 'store/reducers';
 import {Caso, respuestaCasoLista} from 'interface/api/pqrs';
 
 const Index = () => {
+  const toast = useToast();
   const [arrPqrs, setArrPqrs] = useState<Caso[]>([]);
   const usuario = useSelector((state: RootState) => {
     return {
@@ -31,11 +32,13 @@ const Index = () => {
         codigoUsuario: usuario.codigo,
       },
     );
-    console.log(respuestaApiCiudadBuscar);
-
     if (respuestaApiCiudadBuscar.error === false) {
       setArrPqrs(respuestaApiCiudadBuscar.casos);
     } else {
+      toast.show({
+        title: 'Algo ha salido mal',
+        description: respuestaApiCiudadBuscar.errorMensaje,
+      });
     }
   };
 
