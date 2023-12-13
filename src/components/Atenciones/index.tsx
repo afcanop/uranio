@@ -31,7 +31,7 @@ const Index = () => {
   const consultarPqrs = async () => {
     const respuestaApiContenidoLista: RespuestaAtencionLista =
       await consultarApi('api/atencion/lista', {
-        codigoCelda: 23,
+        codigoCelda: usuario.celda,
       });
     if (respuestaApiContenidoLista.error === false) {
       if (recargarLista) {
