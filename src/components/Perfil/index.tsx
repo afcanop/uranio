@@ -16,7 +16,7 @@ import {useNavigation} from '@react-navigation/native';
 import {consultarApi} from 'utils/api';
 import {RootState} from 'store/reducers';
 import {useDispatch, useSelector} from 'react-redux';
-import {RespuestaUsuarioDesvincularPanal} from 'interface/api/usuario';
+import {RespuestaUsuarioDesvincularPanal} from 'interface/usuario';
 import {actualizarUsuarioInformacion} from 'store/reducers/usuarioReducer';
 import colores from 'assets/theme/colores';
 

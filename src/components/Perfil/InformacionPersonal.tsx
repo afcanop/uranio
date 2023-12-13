@@ -3,7 +3,7 @@ import {Box, Button, FormControl, Input, VStack, useToast} from 'native-base';
 import {RootState} from 'store/reducers';
 import {useDispatch, useSelector} from 'react-redux';
 import {consultarApi} from 'utils/api';
-import {RespuestaUsuarioEditarinformacion} from 'interface/api/usuario';
+import {RespuestaUsuarioEditarinformacion} from 'interface/usuario';
 import {actualizarUsuarioInformacion} from 'store/reducers/usuarioReducer';
 
 const InformacionPersonal = () => {

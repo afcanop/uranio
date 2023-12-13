@@ -1,22 +1,27 @@
 import React, {useState} from 'react';
 import Contenedor from 'common/Contenedor';
 import {Button, FormControl, TextArea, VStack, useToast} from 'native-base';
-import {consultarApi} from 'utils/api';
-import {RespuestaSoporteNuevo} from 'interface/soporte';
-import {useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
+import {RespuestaAtencionNuevo} from 'interface/atencion';
+import {useSelector} from 'react-redux';
+import {consultarApi} from 'utils/api';
 
-const Contactanos = () => {
+const AtencionNuevo = () => {
   const toast = useToast();
   const [descripcion, setDescripcion] = useState<string>('');
-  const usuarioCodigo = useSelector((state: RootState) => state.usuario.codigo);
-
+  const usuario = useSelector((state: RootState) => {
+    return {
+      codigo: state.usuario.codigo,
+      celda: state.usuario.codigoCelda,
+    };
+  });
   const guardarSoporte = async () => {
     if (descripcion !== '') {
-      const respuestaApiCasoNuevo: RespuestaSoporteNuevo = await consultarApi(
-        'api/soporte/nuevo',
+      const respuestaApiCasoNuevo: RespuestaAtencionNuevo = await consultarApi(
+        'api/atencion/nuevo',
         {
-          codigoUsuario: usuarioCodigo,
+          codigoUsuario: usuario.codigo,
+          codigoCelda: usuario.celda,
           descripcion,
         },
       );
@@ -45,10 +50,9 @@ const Contactanos = () => {
     <Contenedor>
       <VStack space={3}>
         <FormControl>
-          <FormControl.Label isRequired>Descripción</FormControl.Label>
+          <FormControl.Label isRequired>Mensaje</FormControl.Label>
           <TextArea
             h={20}
-            placeholder="Proporciona detalles sobre el soporte técnico requerido. Por favor, incluya información relevante sobre el problema, cualquier mensaje de error recibido y cualquier paso previo tomado para resolver la situación. Cuanta más información proporcione, más fácil será para nuestro equipo de soporte identificar y abordar su solicitud. ¡Gracias por su colaboración!"
             onChangeText={text => setDescripcion(text)}
             value={descripcion}
             autoCompleteType={undefined}
@@ -62,4 +66,4 @@ const Contactanos = () => {
   );
 };
 
-export default Contactanos;
+export default AtencionNuevo;

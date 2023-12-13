@@ -14,7 +14,7 @@ import {validarCorreoElectronico} from '../../utils/funciones';
 import {consultarApi} from '../../utils/api';
 import {useNavigation} from '@react-navigation/native';
 import Contenedor from 'common/Contenedor';
-import {RespuestaUsuarioNuevo} from 'interface/api/usuario';
+import {RespuestaUsuarioNuevo} from 'interface/usuario';
 
 function CrearCuenta() {
   const toast = useToast();

@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {useFocusEffect} from '@react-navigation/native';
 import {consultarApi} from 'utils/api';
-import {Contenido, RespuestaContenidoLista} from 'interface/api/documento';
+import {Contenido, RespuestaContenidoLista} from 'interface/documento';
 import {
   Box,
   FlatList,
@@ -139,6 +139,7 @@ const Documento = () => {
     }
     return false;
   };
+
   return (
     <Contenedor>
       <FlatList

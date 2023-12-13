@@ -1,4 +1,7 @@
-import {Panal} from 'interface/panal';
+export interface Panal {
+  codigoPanalPk: number;
+  nombre: string;
+}
 
 export interface RespuestaPanelBuscar {
   error: boolean;

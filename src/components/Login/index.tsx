@@ -27,7 +27,7 @@ import {
 import {
   RespuestaUsuarioAutenticar,
   RespuestaUsuarioDetalle,
-} from 'interface/api/usuario';
+} from 'interface/usuario';
 import {
   actualizarRegistroFireBase,
   crearRegistroFireBase,

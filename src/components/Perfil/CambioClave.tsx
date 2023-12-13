@@ -6,7 +6,7 @@ import {RootState} from 'store/reducers';
 import {useSelector} from 'react-redux';
 import {consultarApi} from 'utils/api';
 import {useNavigation} from '@react-navigation/native';
-import {RespuestaUsuarioCambioClave} from 'interface/api/usuario';
+import {RespuestaUsuarioCambioClave} from 'interface/usuario';
 
 const CambioClave = () => {
   const toast = useToast();

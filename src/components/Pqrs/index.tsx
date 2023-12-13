@@ -5,7 +5,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {consultarApi} from 'utils/api';
 import {useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
-import {Caso, respuestaCasoLista} from 'interface/api/pqrs';
+import {Caso, respuestaCasoLista} from 'interface/pqrs';
 
 const Index = () => {
   const toast = useToast();

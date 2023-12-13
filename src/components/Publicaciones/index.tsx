@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import colores from 'assets/theme/colores';
-import {RespuestaCeldaAsignar, RespuestaCeldaLLave} from 'interface/api/celda';
+import {RespuestaCeldaAsignar, RespuestaCeldaLLave} from 'interface/celda';
 import {
   Box,
   Button,

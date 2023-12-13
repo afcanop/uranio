@@ -1,7 +1,7 @@
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Contenedor from 'common/Contenedor';
-import {respuestaCasoNuevo} from 'interface/api/pqrs';
-import {CasoTipo, respuestaCasoTipoLista} from 'interface/api/pqrsTipo';
+import {respuestaCasoNuevo} from 'interface/pqrs';
+import {CasoTipo, respuestaCasoTipoLista} from 'interface/pqrsTipo';
 import {
   Button,
   CheckIcon,

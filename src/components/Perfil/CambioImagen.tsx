@@ -11,7 +11,7 @@ import {consultarApi} from 'utils/api';
 import {actualizarUsuarioInformacion} from 'store/reducers/usuarioReducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
-import {RespuestaUsuarioCambioImagen} from 'interface/api/usuario';
+import {RespuestaUsuarioCambioImagen} from 'interface/usuario';
 
 const CambioImagen = () => {
   const dispatch = useDispatch();

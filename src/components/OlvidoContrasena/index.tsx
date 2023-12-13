@@ -13,7 +13,7 @@ import {validarCorreoElectronico} from '../../utils/funciones';
 import {consultarApi} from '../../utils/api';
 import Contenedor from 'common/Contenedor';
 import {useNavigation} from '@react-navigation/native';
-import {RespuestaUsuarioRecuperarClave} from 'interface/api/usuario';
+import {RespuestaUsuarioRecuperarClave} from 'interface/usuario';
 
 function OlvidoContrasena() {
   const toast = useToast();

@@ -20,7 +20,7 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {consultarApi} from 'utils/api';
 import {RespuestaCiudadBuscar} from 'interface/api/ciudad';
 import {Ciudad} from 'interface/Ciudad';
-import {RespuestaAsignarPanal, RespuestaPanelBuscar} from 'interface/api/panal';
+import {RespuestaAsignarPanal, RespuestaPanelBuscar} from 'interface/panal';
 import {Panal} from 'interface/panal';
 import colores from 'assets/theme/colores';
 import {useDispatch, useSelector} from 'react-redux';
