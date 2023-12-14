@@ -113,8 +113,6 @@ const ConectarPanal = () => {
         codigoCiudad: ciudad,
       },
     );
-    console.log(respuestaApiAsignarPanal);
-
     if (respuestaApiAsignarPanal.error === false) {
       dispatch(
         actualizarUsuarioInformacion({

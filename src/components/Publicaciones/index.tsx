@@ -103,9 +103,6 @@ export default function App() {
         llave: codigoConfirmacion,
       },
     );
-
-    console.log(respuestaApiCeldaLLave);
-
     if (respuestaApiCeldaLLave.error === false) {
       dispatch(
         actualizarUsuarioInformacion({

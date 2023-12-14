@@ -1,11 +1,17 @@
+/* eslint-disable react/no-unstable-nested-components */
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import Reservas from '../components/Reservas';
 import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
+import IconoNavegacion from 'common/IconoNavegacion';
+import ReservaNuevo from 'components/Reservas/ReservaNuevo';
+import ReservaDetalle from 'components/Reservas/ReservaDetalle';
 
 export type RootStackParamList = {
-  Reservas: undefined;
+  ReservaLista: undefined;
+  ReservaNuevo: undefined;
+  ReservaDetalle: undefined;
 };
 
 const ReservasStackScreen: React.FC<any> = () => {
@@ -22,10 +28,28 @@ const ReservasStackScreen: React.FC<any> = () => {
         headerBackTitleVisible: false,
       }}>
       <Stack.Screen
-        name="Reservas"
+        name="ReservaLista"
         component={Reservas}
         options={() => ({
           headerLeft: () => <IconoMenu />,
+          title: 'Reservas',
+          headerRight: () => (
+            <IconoNavegacion icon={'add-outline'} ruta={'ReservaNuevo'} />
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="ReservaNuevo"
+        component={ReservaNuevo}
+        options={() => ({
+          title: 'Reserva nuevo',
+        })}
+      />
+      <Stack.Screen
+        name="ReservaDetalle"
+        component={ReservaDetalle}
+        options={() => ({
+          title: 'Reserva detalle',
         })}
       />
     </Stack.Navigator>
