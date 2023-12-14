@@ -34,7 +34,7 @@ import {
   nombresDiaCorto,
 } from 'utils/const';
 import {fechaActual} from 'utils/funciones';
-import {MarkedDates} from 'react-native-calendars/src/types';
+import {DateData, MarkedDates} from 'react-native-calendars/src/types';
 import dayjs, {Dayjs} from 'dayjs';
 
 LocaleConfig.locales['es'] = {
@@ -162,6 +162,29 @@ const ReservaNuevo = () => {
     }
   };
 
+  const cambiosMes = async (fecha: DateData) => {
+    const fechaActual: Dayjs = dayjs();
+    const respuestaApiReservaReserva: respuestaReservaReserva =
+      await consultarApi('api/reserva/reserva', {
+        codigoReserva: reserva?.codigoReservaPk,
+        anio: fecha.year,
+        mes: fecha.month,
+      });
+    if (respuestaApiReservaReserva.error === false) {
+      respuestaApiReservaReserva.reservasDetalles.forEach(detalle => {
+        // Extraer la fecha de cada detalle
+        const nuevaFecha = detalle.fecha.slice(0, 10); // Tomar solo la parte de la fecha
+        // Llamar a la función para agregar o eliminar la fecha
+        agregarNuevoFechaMarcada(nuevaFecha, false);
+      });
+    } else {
+      toast.show({
+        title: 'Algo ha salido mal',
+        description: respuestaApiReservaReserva.errorMensaje,
+      });
+    }
+  };
+
   return (
     <Contenedor>
       {reserva ? (
@@ -188,6 +211,7 @@ const ReservaNuevo = () => {
             onDayPress={day => agregarNuevoFechaMarcada(day.dateString, true)}
             minDate={fechaActual().fecha}
             markedDates={fechasMarcadas}
+            onMonthChange={date => cambiosMes(date)}
           />
           <FormControl>
             <FormControl.Label>Comentario</FormControl.Label>
