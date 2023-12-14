@@ -25,7 +25,7 @@ const Index = () => {
   const consultarPqrs = async () => {
     const respuestaApiReservaDetalle: respuestaReservaDetalle =
       await consultarApi('api/reserva/detallelista', {
-        codigoCelda: 22,
+        codigoCelda: usuarioCodigoCelda,
       });
     if (respuestaApiReservaDetalle.error === false) {
       setArrReservas(respuestaApiReservaDetalle.reservaDetalles);
