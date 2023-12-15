@@ -101,3 +101,12 @@ export const nombresDiaCorto = [
   'Vie.',
   'Sáb.',
 ];
+
+export const urlCaja =
+  'https://semantica.sfo3.digitaloceanspaces.com/rodio/iconos/caja1.jpeg';
+
+export const urlSobre =
+  'https://semantica.sfo3.digitaloceanspaces.com/rodio/iconos/sobre1.jpeg';
+
+export const urlCajas =
+  'https://semantica.sfo3.digitaloceanspaces.com/rodio/iconos/caja2.jpeg';

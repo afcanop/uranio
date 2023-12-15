@@ -3,9 +3,12 @@ import React from 'react';
 import Entrega from '../components/Entregas';
 import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
+import EntregaDetalle from 'components/Entregas/EntregaDetalle';
+import {Entrega as interfaceEntrega} from 'interface/entrega';
 
 export type RootStackParamList = {
-  Entrega: undefined;
+  EntregaLista: undefined;
+  EntregaDetalle: {entrega: interfaceEntrega};
 };
 
 const EntregasStackScreen: React.FC<any> = () => {
@@ -22,10 +25,18 @@ const EntregasStackScreen: React.FC<any> = () => {
         headerBackTitleVisible: false,
       }}>
       <Stack.Screen
-        name="Entrega"
+        name="EntregaLista"
         component={Entrega}
         options={() => ({
           headerLeft: () => <IconoMenu />,
+          title: 'Entregas',
+        })}
+      />
+      <Stack.Screen
+        name="EntregaDetalle"
+        component={EntregaDetalle}
+        options={() => ({
+          title: 'Entrega detalle ',
         })}
       />
     </Stack.Navigator>
