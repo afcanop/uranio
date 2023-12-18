@@ -42,8 +42,8 @@ export default function MainDrawerScreen() {
     const iconos: any = {
       Inicio: 'home',
       Entrega: 'file-tray-full',
-      Visita: 'document-lock',
-      Votacion: 'people',
+      Visita: 'people',
+      Votacion: 'albums',
       Reservas: 'calendar',
       Documentos: 'document-text',
       Atenciones: 'alert',
