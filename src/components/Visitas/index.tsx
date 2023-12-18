@@ -55,6 +55,9 @@ const VisitaLista = () => {
       },
     );
     if (respuestaApiVisitaLista.error === false) {
+      if (recargarLista) {
+        setRecargarLista(false);
+      }
       setArrVisitas(respuestaApiVisitaLista.visitas);
     } else {
       toast.show({
@@ -199,6 +202,8 @@ const VisitaLista = () => {
             </Box>
           </Box>
         }
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       />
     </Contenedor>
   );

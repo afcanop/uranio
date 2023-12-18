@@ -253,6 +253,8 @@ const ReservaNuevo = () => {
             </TouchableOpacity>
           )}
           keyExtractor={item => `${item.codigoReservaPk}`}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
         />
       )}
     </Contenedor>

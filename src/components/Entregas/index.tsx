@@ -211,6 +211,8 @@ const EntregasLista = () => {
             </Box>
           </Box>
         }
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       />
     </Contenedor>
   );

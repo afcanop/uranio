@@ -98,6 +98,8 @@ const Index = () => {
             </Box>
           </Box>
         }
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       />
     </Contenedor>
   );

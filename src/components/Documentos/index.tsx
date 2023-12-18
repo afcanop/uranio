@@ -213,6 +213,8 @@ const Documento = () => {
             </Box>
           </Box>
         }
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       />
       <AlertDialog
         leastDestructiveRef={cancelRef}

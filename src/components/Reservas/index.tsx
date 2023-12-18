@@ -64,6 +64,8 @@ const Index = () => {
           </Box>
         )}
         keyExtractor={item => `${item.codigoReservaDetallePk}`}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       />
     </Contenedor>
   );

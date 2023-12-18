@@ -68,6 +68,8 @@ const Index = () => {
           </Box>
         )}
         keyExtractor={item => `${item.codigoCasoPk}`}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       />
     </Contenedor>
   );
