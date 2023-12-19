@@ -99,9 +99,9 @@ const Login = () => {
                 }
                 */
               dispatch(setUsuarioInformacion(informacionUsuario));
-              dispatch(
-                actualizarUsuarioInformacion(respuestaApiUsuarioDetalle),
-              );
+              // dispatch(
+              //   actualizarUsuarioInformacion(respuestaApiUsuarioDetalle),
+              // );
             } else {
               toast.show({
                 title: 'Algo ha salido mal',
