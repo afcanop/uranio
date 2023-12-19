@@ -55,6 +55,8 @@ const ReservaNuevo = () => {
   const [fechasMarcadas, setFechasMarcadas] = useState<MarkedDates>({});
   const [fechasMarcada, setFechasMarcada] = useState<string>('');
   const [comentario, setComentario] = useState<string>('');
+  const [mostrarAnimacionCargando, setMostrarAnimacionCargando] =
+    useState<boolean>(false);
 
   const usuarioCodigoCelda = useSelector(
     (state: RootState) => state.usuario.codigoCelda,
@@ -105,12 +107,15 @@ const ReservaNuevo = () => {
           disableTouchEvent: !seleccionadoUsuario ? true : false,
         },
       }));
-      setFechasMarcada(facha);
+      if (seleccionadoUsuario) {
+        setFechasMarcada(facha);
+      }
     } else {
       // retirar objeto al estado
       if (seleccionadoUsuario) {
         const {[facha]: fechaEliminada, ...nuevoEstado} = fechasMarcadas;
         setFechasMarcadas(nuevoEstado);
+        setFechasMarcada('');
       }
     }
   };
@@ -140,21 +145,30 @@ const ReservaNuevo = () => {
   };
 
   const guardarReserva = async () => {
-    if (reserva) {
+    setMostrarAnimacionCargando(true);
+    if (fechasMarcada !== '' && reserva !== null) {
       const respuestaApiReservaNueva: respuestaReservaNuevo =
         await consultarApi('api/reserva/detallenuevo', {
           codigoCelda: usuarioCodigoCelda,
           codigoReserva: reserva.codigoReservaPk,
           fecha: fechasMarcada,
         });
+
       if (respuestaApiReservaNueva.error === false) {
         navigation.goBack();
         toast.show({
           title: 'Exito',
           description: 'Reserva guarda con exito',
         });
+      } else {
+        setMostrarAnimacionCargando(false);
+        toast.show({
+          title: 'Algo ha salido mal',
+          description: respuestaApiReservaNueva.errorMensaje,
+        });
       }
     } else {
+      setMostrarAnimacionCargando(false);
       toast.show({
         title: 'Algo ha salido mal',
         description: 'Se requiere seleccionar una fecha',
@@ -223,7 +237,11 @@ const ReservaNuevo = () => {
               autoCompleteType={undefined}
             />
           </FormControl>
-          <Button mt="2" onPress={() => guardarReserva()}>
+          <Button
+            mt="2"
+            onPress={() => guardarReserva()}
+            isLoading={mostrarAnimacionCargando}
+            isLoadingText="Cargando">
             Confirmar
           </Button>
         </Box>

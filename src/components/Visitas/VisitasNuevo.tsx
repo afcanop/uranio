@@ -3,10 +3,10 @@ import Contenedor from 'common/Contenedor';
 import {Button, FormControl, Input, VStack, useToast} from 'native-base';
 import {consultarApi} from 'utils/api';
 import {RespuestaVisitaNuevo} from 'interface/visita';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store/reducers';
-import { useNavigation } from '@react-navigation/native';
-import { Alert } from 'react-native';
+import {useSelector} from 'react-redux';
+import {RootState} from 'store/reducers';
+import {useNavigation} from '@react-navigation/native';
+import {Alert} from 'react-native';
 
 const VisitasNuevo = () => {
   const toast = useToast();
@@ -15,6 +15,8 @@ const VisitasNuevo = () => {
   const [nombre, setNombre] = useState<string>('');
   const [numeroIdentificacion, setNumeroIdentificacion] = useState<string>('');
   const [placa, setPlaca] = useState<string>('');
+  const [mostrarAnimacionCargando, setMostrarAnimacionCargando] =
+    useState<boolean>(false);
   const usuario = useSelector((state: RootState) => {
     return {
       codigoCelda: state.usuario.codigoCelda,
@@ -23,6 +25,7 @@ const VisitasNuevo = () => {
   });
 
   const guardarVisitas = async () => {
+    setMostrarAnimacionCargando(true);
     if (nombre !== '' && numeroIdentificacion !== '') {
       const respuestaApiVisitaNuevo: RespuestaVisitaNuevo = await consultarApi(
         'api/visita/nuevo',
@@ -34,7 +37,6 @@ const VisitasNuevo = () => {
           placa,
         },
       );
-      console.log(respuestaApiVisitaNuevo);
 
       if (respuestaApiVisitaNuevo.error === false) {
         Alert.alert(
@@ -43,12 +45,14 @@ const VisitasNuevo = () => {
         );
         navigation.goBack();
       } else {
+        setMostrarAnimacionCargando(false);
         toast.show({
           title: 'Algo ha salido mal',
           description: respuestaApiVisitaNuevo.errorMensaje,
         });
       }
     } else {
+      setMostrarAnimacionCargando(false);
       toast.show({
         title: 'Algo ha salido mal',
         description:
@@ -81,7 +85,11 @@ const VisitasNuevo = () => {
             onChangeText={(text: string) => setPlaca(text)}
           />
         </FormControl>
-        <Button mt="2" onPress={() => guardarVisitas()}>
+        <Button
+          mt="2"
+          onPress={() => guardarVisitas()}
+          isLoading={mostrarAnimacionCargando}
+          isLoadingText="Cargando">
           Confirmar
         </Button>
       </VStack>
