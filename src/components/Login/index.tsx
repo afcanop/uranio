@@ -60,12 +60,11 @@ const Login = () => {
         if (clave.length >= 8) {
           try {
             const tokenFirebase = await obtenerTokenFirebase();
-
             const respuestaApiLogin: RespuestaUsuarioAutenticar =
               await consultarApi('api/usuario/autenticar', {
                 usuario,
                 clave,
-                ...{tokenFireBase: tokenFirebase},
+                ...{tokenFirebase},
               });
 
             if (respuestaApiLogin.autenticar) {
