@@ -57,6 +57,10 @@ const ReservaNuevo = () => {
   const [comentario, setComentario] = useState<string>('');
   const [mostrarAnimacionCargando, setMostrarAnimacionCargando] =
     useState<boolean>(false);
+  const [
+    mostrarAnimacionCargandoCalendario,
+    setMostrarAnimacionCargandoCalendario,
+  ] = useState<boolean>(false);
 
   const usuarioCodigoCelda = useSelector(
     (state: RootState) => state.usuario.codigoCelda,
@@ -64,12 +68,12 @@ const ReservaNuevo = () => {
 
   useFocusEffect(
     useCallback(() => {
-      const unsubscribe = () => consultarPqrs();
+      const unsubscribe = () => consultarReservaLista();
       unsubscribe();
     }, []),
   );
 
-  const consultarPqrs = async () => {
+  const consultarReservaLista = async () => {
     const respuestaApiReservaLista: respuestaReservaLista = await consultarApi(
       'api/reserva/lista',
       {
@@ -95,7 +99,7 @@ const ReservaNuevo = () => {
       // Agrega un nuevo objeto al estado
       const selectedColor = seleccionadoUsuario
         ? colores.primary
-        : colores.rojo['100'];
+        : colores.base['100'];
 
       setFechasMarcadas(prevEstado => ({
         ...prevEstado,
@@ -122,6 +126,7 @@ const ReservaNuevo = () => {
 
   const seleccionarReserva = async (item: Reserva) => {
     setReserva(item);
+    setMostrarAnimacionCargandoCalendario(true);
     const fechaActual: Dayjs = dayjs();
     const respuestaApiReservaReserva: respuestaReservaReserva =
       await consultarApi('api/reserva/reserva', {
@@ -136,7 +141,9 @@ const ReservaNuevo = () => {
         // Llamar a la función para agregar o eliminar la fecha
         agregarNuevoFechaMarcada(nuevaFecha, false);
       });
+      setMostrarAnimacionCargandoCalendario(false);
     } else {
+      setMostrarAnimacionCargandoCalendario(false);
       toast.show({
         title: 'Algo ha salido mal',
         description: respuestaApiReservaReserva.errorMensaje,
@@ -199,6 +206,18 @@ const ReservaNuevo = () => {
     }
   };
 
+  const renderCustomArrow = direction => {
+    // direction puede ser 'left' o 'right'
+    const icon =
+      direction === 'left' ? 'arrow-back-outline' : 'arrow-forward-outline';
+
+    return (
+      <Box>
+        <Ionicons name={icon} size={30} color={colores.base['600']} />
+      </Box>
+    );
+  };
+
   return (
     <Contenedor>
       {reserva ? (
@@ -226,6 +245,11 @@ const ReservaNuevo = () => {
             minDate={fechaActual().fecha}
             markedDates={fechasMarcadas}
             onMonthChange={date => cambiosMes(date)}
+            displayLoadingIndicator={mostrarAnimacionCargandoCalendario}
+            hideExtraDays={true}
+            enableSwipeMonths={true}
+            renderArrow={renderCustomArrow}
+            style={mostrarAnimacionCargandoCalendario ? {opacity: 0.5} : null}
           />
           <FormControl>
             <FormControl.Label>Comentario</FormControl.Label>
