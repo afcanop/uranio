@@ -5,7 +5,7 @@ import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
 
 export type RootStackParamList = {
-  Documentos: undefined;
+  DocumentosLista: undefined;
 };
 
 const DocumentosStackScreen: React.FC<any> = () => {
@@ -22,7 +22,7 @@ const DocumentosStackScreen: React.FC<any> = () => {
         headerBackTitleVisible: false,
       }}>
       <Stack.Screen
-        name="Documentos"
+        name="DocumentosLista"
         component={Documentos}
         options={() => ({
           headerLeft: () => <IconoMenu />,

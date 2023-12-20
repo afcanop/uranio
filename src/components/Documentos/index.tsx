@@ -40,12 +40,12 @@ const Documento = () => {
 
   useFocusEffect(
     useCallback(() => {
-      const unsubscribe = () => consultarPqrs();
+      const unsubscribe = () => consultarContenidos();
       unsubscribe();
     }, []),
   );
 
-  const consultarPqrs = async () => {
+  const consultarContenidos = async () => {
     const respuestaApiContenidoLista: RespuestaContenidoLista =
       await consultarApi('api/contenido/lista', {
         codigoPanal: usuarioCodigoPanal,
@@ -134,7 +134,8 @@ const Documento = () => {
 
   const validarExistenciaArchivo = async (nombre: String) => {
     const file = rnfs.DocumentDirectoryPath + `/${nombre}`;
-    if (await rnfs.exists(file)) {
+    const validarExistenciaArchivo = await rnfs.exists(file);
+    if (validarExistenciaArchivo) {
       return true;
     }
     return false;
@@ -192,7 +193,7 @@ const Documento = () => {
         refreshControl={
           <RefreshControl
             refreshing={recargarLista}
-            onRefresh={consultarPqrs}
+            onRefresh={consultarContenidos}
           />
         }
         ListEmptyComponent={

@@ -17,12 +17,12 @@ const Index = () => {
 
   useFocusEffect(
     useCallback(() => {
-      const unsubscribe = () => consultarPqrs();
+      const unsubscribe = () => consultarReservas();
       unsubscribe();
     }, []),
   );
 
-  const consultarPqrs = async () => {
+  const consultarReservas = async () => {
     const respuestaApiReservaDetalle: respuestaReservaDetalle =
       await consultarApi('api/reserva/detallelista', {
         codigoCelda: usuarioCodigoCelda,

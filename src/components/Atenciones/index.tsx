@@ -23,25 +23,25 @@ const Index = () => {
 
   useFocusEffect(
     useCallback(() => {
-      const unsubscribe = () => consultarPqrs();
+      const unsubscribe = () => consultarAtenciones();
       unsubscribe();
     }, []),
   );
 
-  const consultarPqrs = async () => {
-    const respuestaApiContenidoLista: RespuestaAtencionLista =
+  const consultarAtenciones = async () => {
+    const respuestaApiAtencionLista: RespuestaAtencionLista =
       await consultarApi('api/atencion/lista', {
         codigoCelda: usuario.celda,
       });
-    if (respuestaApiContenidoLista.error === false) {
+    if (respuestaApiAtencionLista.error === false) {
       if (recargarLista) {
         setRecargarLista(false);
       }
-      setArrAtenciones(respuestaApiContenidoLista.atenciones);
+      setArrAtenciones(respuestaApiAtencionLista.atenciones);
     } else {
       toast.show({
         title: 'Algo ha salido mal',
-        description: respuestaApiContenidoLista.errorMensaje,
+        description: respuestaApiAtencionLista.errorMensaje,
       });
     }
   };
@@ -77,7 +77,7 @@ const Index = () => {
         refreshControl={
           <RefreshControl
             refreshing={recargarLista}
-            onRefresh={consultarPqrs}
+            onRefresh={consultarAtenciones}
           />
         }
         ListEmptyComponent={
