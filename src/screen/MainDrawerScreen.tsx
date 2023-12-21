@@ -4,7 +4,13 @@ import {
   createDrawerNavigator,
   DrawerContentScrollView,
 } from '@react-navigation/drawer';
-import {Alert, StyleSheet} from 'react-native';
+import {
+  Alert,
+  PermissionsAndroid,
+  Platform,
+  StyleSheet,
+  Button,
+} from 'react-native';
 import {
   Avatar,
   Box,
@@ -32,11 +38,11 @@ import EntregasStackScreen from './EntregasStackScreen';
 import VisitasStackScreen from './VisitasStackScreen';
 import messaging from '@react-native-firebase/messaging';
 import {useNavigation} from '@react-navigation/native';
-import {
-  Notification,
-  NotificationCompletion,
-  Notifications,
-} from 'react-native-notifications';
+import notifee, {
+  AndroidImportance,
+  AndroidStyle,
+  EventType,
+} from '@notifee/react-native';
 
 export default function MainDrawerScreen() {
   const navigation = useNavigation();
@@ -51,81 +57,71 @@ export default function MainDrawerScreen() {
     (state: RootState) => state.usuario.urlImagen,
   );
 
-  Notifications.setNotificationChannel({
-    channelId: 'my-channel',
-    name: 'My Channel',
-    importance: 5,
-    description: 'My Description',
-    enableLights: true,
-    enableVibration: true,
-    groupId: 'my-group', // optional
-    groupName: 'My Group', // optional, will be presented in Android OS notification permission
-    showBadge: true,
-    soundFile: 'custom_sound.mp3', // place this in <project_root>/android/app/src/main/res/raw/custom_sound.mp3
-    vibrationPattern: [200, 1000, 500, 1000, 500],
-  });
-
   useEffect(() => {
-    const desuscribirEnMensaje = messaging().onMessage(async remoteMessage => {
-      // Manejar la notificación cuando la aplicación está en primer plano
-      Notifications.removeAllDeliveredNotifications();
-      toast.show({
-        render: () => {
-          return (
-            <Pressable
-              onPress={() => {
-                toast.closeAll();
-                navigation.navigate(remoteMessage.data.rutaApp, {
-                  screen: `${remoteMessage.data.rutaApp}Lista`,
-                  initial: false,
-                });
-              }}>
-              <HStack
-                bg="emerald.500"
-                px="2"
-                py="1"
-                rounded="sm"
-                mb={5}
-                justifyContent={'space-around'}>
-                <VStack>
-                  <Text bold> {remoteMessage.notification?.title}</Text>
-                  <Text> {remoteMessage.notification?.body} </Text>
-                </VStack>
-                <Image
-                  style={{width: 64, height: 64}}
-                  source={require('../assets/img/logo-fondo-blanco.png')}
-                />
-              </HStack>
-            </Pressable>
+    // Manejar las notificaciones
+    const unsubscribeFromNotifications = async () => {
+      if (Platform.OS === 'android') {
+        try {
+          await PermissionsAndroid.check(
+            PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
           );
-        },
-      });
-    });
+        } catch (error) {}
+      }
+    };
 
-    const desuscribirEnNotificacionAbierta =
-      messaging().onNotificationOpenedApp(remoteMessage => {
-        console.log(
-          'Notification caused app to open from background state:',
-          remoteMessage.notification,
-        );
-        navigation.navigate(remoteMessage.data.rutaApp);
-      });
+    messaging().onMessage(remoteMessage =>
+      onDisplayNotification(remoteMessage),
+    );
+    messaging().setBackgroundMessageHandler(remoteMessage =>
+      onDisplayNotification(remoteMessage),
+    );
 
-    const desuscribirNoficiacionAppCerrada =
-      messaging().setBackgroundMessageHandler(async remoteMessage => {
-        console.log('Message handled in the background!', remoteMessage);
-
-        // Navega a la pantalla de notificación cuando la aplicación se abra
-        setInitialRoute(remoteMessage.data.rutaApp);
-      });
     return () => {
-      desuscribirEnMensaje();
-      desuscribirEnNotificacionAbierta();
-      desuscribirNoficiacionAppCerrada();
+      // Limpieza al desmontar el componente
+      unsubscribeFromNotifications();
     };
   }, []);
 
-  Notifications.registerRemoteNotifications();
+  async function onDisplayNotification(remoteMessage) {
+    // Create a channel (required for Android)
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+      importance: AndroidImportance.HIGH,
+    });
+
+    // Display a notification
+    await notifee.displayNotification({
+      title: remoteMessage.notification.title,
+      body: remoteMessage.notification.body,
+      data: remoteMessage.data,
+      android: {
+        channelId,
+        color: colores.primary,
+        importance: AndroidImportance.HIGH,
+        style: {
+          type: AndroidStyle.BIGPICTURE,
+          picture:
+            'https://www.microtech.es/hubfs/Fotos%20blog/licencias_software.jpg',
+        },
+        actions: [
+          {
+            title: 'Ver',
+            pressAction: {id: 'ver', launchActivity: 'default'},
+          },
+          // Otras acciones...
+        ],
+      },
+    });
+
+    return notifee.onForegroundEvent(({type, detail}) => {
+      switch (type) {
+        case EventType.PRESS:
+          navigation.navigate(detail.notification?.data.rutaApp);
+          break;
+      }
+    });
+  }
 
   const mostrarMenuItem = (nombre: any, index: any, stateIndex: any) => {
     const iconos: any = {
