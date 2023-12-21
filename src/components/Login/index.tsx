@@ -108,8 +108,6 @@ const Login = () => {
               });
             }
           } catch (error) {
-            console.log(error);
-
             toast.show({
               title: 'Algo ha salido mal',
               description:
