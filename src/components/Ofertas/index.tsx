@@ -1,12 +1,41 @@
-import {Text, View} from 'react-native';
-import React, {useLayoutEffect} from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {Menu, Pressable} from 'native-base';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {
+  Box,
+  FlatList,
+  HStack,
+  Heading,
+  Menu,
+  Pressable,
+  Stack,
+  useToast,
+  Text,
+  AspectRatio,
+  Image,
+  Center,
+  VStack,
+} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import colores from 'assets/theme/colores';
+import {RefreshControl} from 'react-native-gesture-handler';
+import {Oferta, respuestaOfertaLista} from 'interface/ofertas';
+import {consultarApi} from 'utils/api';
+import {useSelector} from 'react-redux';
+import {RootState} from 'store/reducers';
+import {ScrollView, TouchableOpacity} from 'react-native';
+import {Categoria, respuestaCategoriaLista} from 'interface/categoria';
 
 const Index = () => {
+  const toast = useToast();
   const navigation = useNavigation();
+  const [arrOfertas, setArrOfertas] = useState<Oferta[]>([]);
+  const [arrCategorias, setArrCategorias] = useState<Categoria[]>([]);
+  const [recargarLista, setRecargarLista] = useState(false);
+  const usuario = useSelector((state: RootState) => {
+    return {
+      codigoPanal: state.usuario.codigoPanal,
+    };
+  });
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -45,10 +74,143 @@ const Index = () => {
     });
   }, [navigation]);
 
+  useFocusEffect(
+    useCallback(() => {
+      const unsubscribe = () => {
+        consultarCategorias();
+        consultarOfertas();
+      };
+      unsubscribe();
+    }, []),
+  );
+
+  const consultarCategorias = async () => {
+    const respuestaApiCategoriaLista: respuestaCategoriaLista =
+      await consultarApi('api/categoria/lista', null);
+    if (respuestaApiCategoriaLista.error === false) {
+      setArrCategorias(respuestaApiCategoriaLista.categorias);
+    } else {
+      toast.show({
+        title: 'Algo ha salido mal',
+        description: respuestaApiCategoriaLista.errorMensaje,
+      });
+    }
+  };
+
+  const consultarOfertas = async () => {
+    const respuestaApiOfertaLista: respuestaOfertaLista = await consultarApi(
+      'api/oferta/lista',
+      {
+        codigoPanal: 1,
+      },
+    );
+    if (respuestaApiOfertaLista.error === false) {
+      setArrOfertas(respuestaApiOfertaLista.ofertas);
+    } else {
+      toast.show({
+        title: 'Algo ha salido mal',
+        description: respuestaApiOfertaLista.errorMensaje,
+      });
+    }
+  };
+
+  const renderCategoria = (item: Categoria) => (
+    <Box
+      m={2}
+      p={2}
+      rounded="lg"
+      overflow="hidden"
+      borderColor="coolGray.200"
+      borderWidth="1"
+      alignItems="center"
+      key={item.codigoCatagoriaPk}>
+      <Image
+        source={{
+          uri: item.urlImagen,
+        }}
+        w={38}
+        h={38}
+        alt=""
+      />
+      <Text>{item.nombre}</Text>
+    </Box>
+  );
+
   return (
-    <View>
-      <Text>index</Text>
-    </View>
+    <VStack space={2}>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        {arrCategorias.map((item: Categoria) => renderCategoria(item))}
+      </ScrollView>
+      <FlatList
+        data={arrOfertas}
+        renderItem={({item}) => (
+          <Box width={'50%'} alignItems="center">
+            <TouchableOpacity>
+              <Box
+                m={2}
+                rounded="lg"
+                overflow="hidden"
+                borderColor="coolGray.200"
+                borderWidth="1">
+                <Box>
+                  <AspectRatio w="100%" ratio={17 / 10}>
+                    <Image
+                      source={{
+                        uri: item.urlImagen,
+                      }}
+                      alt="image"
+                    />
+                  </AspectRatio>
+                  <Center
+                    bg={colores.primary}
+                    position="absolute"
+                    bottom="0"
+                    px="3"
+                    py="1.5">
+                    <Text color="warmGray.50" fontWeight="700" fontSize="xs">
+                      $ {item.precio}
+                    </Text>
+                  </Center>
+                </Box>
+                <Stack p="2" space={3}>
+                  <Text fontWeight="400">{item.descripcion}</Text>
+                </Stack>
+              </Box>
+            </TouchableOpacity>
+          </Box>
+        )}
+        numColumns={2}
+        keyExtractor={item => `${item.codigoOfertaPk}`}
+        refreshControl={
+          <RefreshControl
+            colors={[colores.primary]}
+            tintColor={colores.primary}
+            refreshing={recargarLista}
+            onRefresh={consultarOfertas}
+          />
+        }
+        ListEmptyComponent={
+          <Box
+            margin={2}
+            rounded="lg"
+            overflow="hidden"
+            borderColor="coolGray.200"
+            borderWidth="1">
+            <Box>
+              <Stack p="4" space={3}>
+                <HStack space={2} justifyContent={'space-between'}>
+                  <Heading size="md" ml="-1">
+                    Sin ofertas
+                  </Heading>
+                </HStack>
+              </Stack>
+            </Box>
+          </Box>
+        }
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      />
+    </VStack>
   );
 };
 

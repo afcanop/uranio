@@ -12,7 +12,6 @@ const Encabezado = ({navigation, aplicaDetalle = false}) => {
 
   const despachoCodigo = false;
 
-
   return (
     <View style={styles.header}>
       {aplicaDetalle ? (
@@ -26,7 +25,7 @@ const Encabezado = ({navigation, aplicaDetalle = false}) => {
       ) : (
         <TouchableOpacity
           onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-          <Ionicons name="menu" size={30} color={colores.blanco} />
+          <Ionicons name="info" size={30} color={colores.primary} />
         </TouchableOpacity>
       )}
       <Menu

@@ -33,25 +33,6 @@ export const Tienda = [
 
 export const Ofertas = {};
 
-export const Categoria = [
-  'VEHICULOS',
-  'TV-AUDIO-VIDEO',
-  'MODA-BELLEZA',
-  'VIDEO JUEGOS',
-  'MASCOTAS',
-  'MAQUINARIA - HERRAMIENTAS',
-  'JUGUETES',
-  'HOBBIES',
-  'ORIPIEDADES- INMUEBLES',
-  'TELEFONTOS - TABLETS',
-  'MUEBLES',
-  'EMPLEOS',
-  'SERVICIOS',
-  'DEPORTES',
-  'ELECTRODOMESTICOS',
-  'COMPUTADORES',
-];
-
 export const mesNombres = [
   'Enero',
   'Febrero',
