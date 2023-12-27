@@ -137,7 +137,7 @@ const Index = () => {
   );
 
   return (
-    <VStack space={2}>
+    <>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {arrCategorias.map((item: Categoria) => renderCategoria(item))}
       </ScrollView>
@@ -145,7 +145,12 @@ const Index = () => {
         data={arrOfertas}
         renderItem={({item}) => (
           <Box width={'50%'} alignItems="center">
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('OfertaDetalle', {
+                  oferta: item,
+                })
+              }>
               <Box
                 m={2}
                 rounded="lg"
@@ -210,7 +215,7 @@ const Index = () => {
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
       />
-    </VStack>
+    </>
   );
 };
 

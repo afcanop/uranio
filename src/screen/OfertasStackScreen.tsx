@@ -6,10 +6,12 @@ import OfertaChat from '../components/Ofertas/OfertasChat';
 import OfertaNuevo from '../components/Ofertas/OfertasNuevo';
 import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
+import OfertaDetalle from 'components/Ofertas/OfertaDetalle';
 
 export type RootStackParamList = {
   OfertaLista: undefined;
   OfertaNuevo: undefined;
+  OfertaDetalle: undefined;
   OfertaChat: undefined;
   OfertaAnuncios: undefined;
 };
@@ -47,6 +49,13 @@ const OfertastackScreen: React.FC<any> = () => {
         component={OfertaChat}
         options={() => ({
           title: 'Oferta mensajes',
+        })}
+      />
+      <Stack.Screen
+        name="OfertaDetalle"
+        component={OfertaDetalle}
+        options={() => ({
+          title: 'Oferta detalle',
         })}
       />
       <Stack.Screen
