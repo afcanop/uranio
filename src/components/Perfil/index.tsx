@@ -20,7 +20,7 @@ import {RespuestaUsuarioDesvincularPanal} from 'interface/usuario';
 import {actualizarUsuarioInformacion} from 'store/reducers/usuarioReducer';
 import colores from 'assets/theme/colores';
 
-const index = () => {
+const Index = () => {
   const navigation = useNavigation();
   const toast = useToast();
   const dispatch = useDispatch();
@@ -181,4 +181,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

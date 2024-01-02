@@ -113,10 +113,8 @@ const OfertasNuevo = () => {
     // try {
     //   if (camera.current !== null) {
     //     const {uri} = await camera.current?.capture();
-    //     console.log(await camera.current.capture());
     //     // const {uri} = await camera.current.capture();
     //     // const base64 = await rnfs.readFile(uri, 'base64');
-    //     // console.log(base64);
     //     // setImageBase64(base64);
     //     setCapturarImagen(false);
     //   }
@@ -139,7 +137,6 @@ const OfertasNuevo = () => {
         precio,
       },
     );
-    console.log(respuestaApiOfertaNuevo);
 
     if (respuestaApiOfertaNuevo.error === false) {
       Alert.alert('Exito', 'Se registro su oferta');

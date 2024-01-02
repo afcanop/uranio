@@ -1,19 +1,51 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {
+  NativeStackScreenProps,
+  createNativeStackNavigator,
+} from '@react-navigation/native-stack';
 import React from 'react';
 import Tienda from '../components/Tienda';
+import TiendaDetalle from '../components/Tienda/TiendaDetalle';
+import CarritoCompras from '../components/Tienda/CarritoCompras';
+import BuscarProducto from '../components/Tienda/BuscarProducto';
 import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
 import IconoNavegacion from 'common/IconoNavegacion';
-import {HStack} from 'native-base';
+import {Badge, HStack, VStack} from 'native-base';
+import {useSelector} from 'react-redux';
+import {selectCantidadProductosEnCarrito} from 'store/reducers/tiendaReducer';
 
 export type RootStackParamList = {
   Tienda: undefined;
   TiendaBusqueda: undefined;
   TiendaCarrito: undefined;
+  TiendaDetalle: undefined;
 };
 
 const TiendaStackScreen: React.FC<any> = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
+  const cantidadEnCarrito = useSelector(selectCantidadProductosEnCarrito);
+
+  const navegarAlcarrito = () => (
+    <VStack>
+      {cantidadEnCarrito > 0 ? (
+        <Badge
+          mb={-4}
+          mr={-4}
+          colorScheme="danger"
+          rounded="full"
+          zIndex={1}
+          variant="subtle"
+          alignSelf="flex-end"
+          _text={{
+            fontSize: 10,
+          }}>
+          {cantidadEnCarrito}
+        </Badge>
+      ) : null}
+
+      <IconoNavegacion icon={'cart-outline'} ruta={'TiendaCarrito'} />
+    </VStack>
+  );
 
   return (
     <Stack.Navigator
@@ -31,25 +63,35 @@ const TiendaStackScreen: React.FC<any> = () => {
         options={() => ({
           headerLeft: () => <IconoMenu />,
           headerRight: () => (
-            <HStack space={5}>
-              <IconoNavegacion icon={'search-outline'} ruta={'VisitasNuevo'} />
-              <IconoNavegacion icon={'cart-outline'} ruta={'VisitasNuevo'} />
+            <HStack space={5} alignItems={'center'}>
+              <IconoNavegacion
+                icon={'search-outline'}
+                ruta={'TiendaBusqueda'}
+              />
+              {navegarAlcarrito()}
             </HStack>
           ),
         })}
       />
       <Stack.Screen
-        name="TiendaBusqueda"
-        component={Tienda}
+        name="TiendaDetalle"
+        component={TiendaDetalle}
         options={() => ({
-          headerRight: () => (
-            <IconoNavegacion icon={'cart-outline'} ruta={'VisitasNuevo'} />
-          ),
+          headerRight: () => <>{navegarAlcarrito()}</>,
+          title: 'Detalle',
+        })}
+      />
+      <Stack.Screen
+        name="TiendaBusqueda"
+        component={BuscarProducto}
+        options={() => ({
+          headerRight: () => <>{navegarAlcarrito()}</>,
+          title: 'Busqueda',
         })}
       />
       <Stack.Screen
         name="TiendaCarrito"
-        component={Tienda}
+        component={CarritoCompras}
         options={() => ({
           title: 'Carrito de compras',
         })}

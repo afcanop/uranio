@@ -1,13 +1,35 @@
-interface Producto {
-  id: number;
+export interface Producto {
+  codigoItemPk: number;
   nombre: string;
   precio: number;
-  // Agrega otros campos según sea necesario
+  agregadoAlCarrito: boolean;
 }
 
-interface TiendaState {
+export interface ProductoCategorizado {
+  [key: string]: {
+    nombre: string;
+    itemes: Producto[];
+  };
+}
+
+export interface Carrito extends Producto {
+  cantidadAgregada: number;
+  precioTotal: number;
+}
+
+export interface TiendaState {
   productos: Producto[];
-  carrito: Producto[];
+  carrito: Carrito[];
+  totalCarrito: number;
 }
 
-export {Producto, TiendaState};
+export interface RespuestaItemBuscarItem {
+  error: boolean;
+  errorMensaje?: string;
+  itemes: ProductoCategorizado;
+}
+export interface RespuestaItemLista {
+  error: boolean;
+  errorMensaje?: string;
+  itemes: ProductoCategorizado;
+}
