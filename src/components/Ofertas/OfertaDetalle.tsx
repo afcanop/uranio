@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   AspectRatio,
-  Box,
   Center,
   HStack,
   Heading,

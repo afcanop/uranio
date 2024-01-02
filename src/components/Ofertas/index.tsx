@@ -143,6 +143,7 @@ const Index = () => {
       </ScrollView>
       <FlatList
         data={arrOfertas}
+        style={{marginBottom: 50}}
         renderItem={({item}) => (
           <Box width={'50%'} alignItems="center">
             <TouchableOpacity
