@@ -1,15 +1,24 @@
 import React, {useState} from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Button, Image, Text, VStack} from 'native-base';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {agregarAlCarrito} from 'store/reducers/tiendaReducer';
 import AjusteDeCantidadInput from 'common/AjusteDeCantidadInput';
+import {RootState} from 'store/reducers';
+import {Carrito} from 'interface/tienda';
 
 const BuscarProductoItem = ({item}) => {
   const dispatch = useDispatch();
 
-  const [visializarBtnAgregarCarrito, setVisializarBtnAgregarCarrito] =
-    useState<boolean>(true);
+  const cantidadEnCarrito = useSelector((state: RootState) => {
+    const existeProductoEnCarrito = state.tienda.carrito.find(
+      (producto: Carrito) => producto.codigoItemPk === item.codigoItemPk,
+    );
+    return {
+      existeProductoEnCarrito: existeProductoEnCarrito ? true : false,
+      cantidad: existeProductoEnCarrito?.cantidadAgregada,
+    };
+  });
 
   return (
     <TouchableOpacity key={`${item.nombre}`}>
@@ -31,20 +40,19 @@ const BuscarProductoItem = ({item}) => {
         <VStack flex={1} space={2}>
           <Text>{item.nombre}</Text>
           <Text>${item.precio}</Text>
-          {visializarBtnAgregarCarrito ? (
+          <Text>{cantidadEnCarrito.cantidad}</Text>
+          {cantidadEnCarrito.existeProductoEnCarrito ? (
+            <AjusteDeCantidadInput
+              productoId={item.codigoItemPk}
+              catidadInicial={cantidadEnCarrito.cantidad}
+            />
+          ) : (
             <Button
               onPress={() => {
-                setVisializarBtnAgregarCarrito(false);
                 dispatch(agregarAlCarrito(item));
               }}>
               Agregar al carro
             </Button>
-          ) : (
-            <AjusteDeCantidadInput
-              productoId={item.codigoItemPk}
-              catidadInicial={'0'}
-              sinCantidad={() => setVisializarBtnAgregarCarrito(true)}
-            />
           )}
         </VStack>
       </VStack>

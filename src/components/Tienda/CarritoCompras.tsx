@@ -49,12 +49,12 @@ const CarritoCompras = () => {
                 alignItems={'center'}
                 justifyContent={'space-between'}>
                 <Box flex={1}>
-                  <Text>$1000</Text>
+                  <Text>$ {item.precio}</Text>
                 </Box>
                 <VStack flex={1} space={2}>
                   <AjusteDeCantidadInput
                     productoId={item.codigoItemPk}
-                    catidadInicial={`${item.cantidadAgregada}`}
+                    catidadInicial={item.cantidadAgregada}
                   />
                   <Button
                     colorScheme="secondary"

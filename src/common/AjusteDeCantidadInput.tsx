@@ -1,16 +1,18 @@
 import React, {useState} from 'react';
-import {Input, Pressable} from 'native-base';
+import {Input, Pressable, Text} from 'native-base';
 import colores from 'assets/theme/colores';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   actualizarCantidadEnCarrito,
   retirarDelCarrito,
 } from 'store/reducers/tiendaReducer';
+import {RootState} from 'store/reducers';
+import {Carrito} from 'interface/tienda';
 
 interface AjusteDeCantidadInputProps {
-  catidadInicial: string;
   productoId: number;
+  catidadInicial: number;
   sinCantidad?: () => void;
 }
 
@@ -19,18 +21,16 @@ const AjusteDeCantidadInput: React.FC<AjusteDeCantidadInputProps> = ({
   sinCantidad,
   productoId,
 }) => {
-  const [cantidad, setCantidad] = useState<string>(catidadInicial);
   const dispatch = useDispatch();
 
   const decrementar = () => {
-    const nuevaCantidad = Math.max(parseInt(cantidad, 10) - 1, 0);
+    const nuevaCantidad = catidadInicial - 1;
     if (nuevaCantidad <= 0) {
       dispatch(retirarDelCarrito(productoId));
       if (sinCantidad) {
         sinCantidad();
       }
     } else {
-      setCantidad(nuevaCantidad.toString());
       dispatch(
         actualizarCantidadEnCarrito({
           productoId,
@@ -41,8 +41,7 @@ const AjusteDeCantidadInput: React.FC<AjusteDeCantidadInputProps> = ({
   };
 
   const incrementar = () => {
-    const nuevaCantidad = parseInt(cantidad, 10) + 1;
-    setCantidad(nuevaCantidad.toString());
+    const nuevaCantidad = catidadInicial + 1;
     dispatch(
       actualizarCantidadEnCarrito({
         productoId,
@@ -52,31 +51,33 @@ const AjusteDeCantidadInput: React.FC<AjusteDeCantidadInputProps> = ({
   };
 
   return (
-    <Input
-      value={cantidad.toString()}
-      keyboardType="numeric"
-      type="text"
-      textAlign={'right'}
-      onChangeText={(text: string) => setCantidad(text)}
-      InputLeftElement={
-        <Pressable ml={2} onPress={() => decrementar()}>
-          <Ionicons
-            name={'remove-circle-outline'}
-            size={25}
-            color={colores.gris}
-          />
-        </Pressable>
-      }
-      InputRightElement={
-        <Pressable mr={2} onPress={() => incrementar()}>
-          <Ionicons
-            name={'add-circle-outline'}
-            size={25}
-            color={colores.gris}
-          />
-        </Pressable>
-      }
-    />
+    <>
+      <Input
+        value={catidadInicial.toString()}
+        keyboardType="numeric"
+        type="text"
+        textAlign={'right'}
+        onChangeText={(text: string) => setCantidad(parseInt(text, 10))}
+        InputLeftElement={
+          <Pressable ml={2} onPress={() => decrementar()}>
+            <Ionicons
+              name={'remove-circle-outline'}
+              size={25}
+              color={colores.gris}
+            />
+          </Pressable>
+        }
+        InputRightElement={
+          <Pressable mr={2} onPress={() => incrementar()}>
+            <Ionicons
+              name={'add-circle-outline'}
+              size={25}
+              color={colores.gris}
+            />
+          </Pressable>
+        }
+      />
+    </>
   );
 };
 
