@@ -11,7 +11,6 @@ import colores from 'assets/theme/colores';
 const CarritoCompras = () => {
   const dispatch = useDispatch();
   const tienda = useSelector((state: RootState) => {
-    console.log(state);
     return {
       carrito: state.tienda.carrito,
       totalCarrito: state.tienda.totalCarrito,

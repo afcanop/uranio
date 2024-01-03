@@ -1,19 +1,40 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import PublicacionesStackScreen from './PublicacionesStackScreen';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import OfertasStackScreen from './OfertasStackScreen';
 import TiendaStackScreen from './TiendaStackScreen';
 import PerfilStackScreen from './PerfilStackScreen';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import colores from 'assets/theme/colores';
+import PublicacionesStackScreen from './PublicacionesStackScreen';
+import ConectarCelda from 'components/ConectarCelda/ConectarCelda';
+import {useSelector} from 'react-redux';
+import {RootState} from 'store/reducers';
 
 const Tab = createBottomTabNavigator();
 
 export default function InicioTapStackScreen() {
+  const usuarioAutenticado = useSelector((state: RootState) => {
+    return {
+      codigoCelda: state.usuario.codigoCelda,
+    };
+  });
+
+  const visualizarInicio = () => {
+    return (
+      <>
+        {usuarioAutenticado.codigoCelda === null ? (
+          <ConectarCelda />
+        ) : (
+          <PublicacionesStackScreen />
+        )}
+      </>
+    );
+  };
+
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={({route}) => ({
         headerShown: false,
         tabBarShowLabel: false,
         tabBarActiveTintColor: colores.blanco,
@@ -25,7 +46,7 @@ export default function InicioTapStackScreen() {
           position: 'absolute',
           borderTopWidth: 0,
         },
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({focused, color, size}) => {
           switch (route.name) {
             case 'InicioTap':
               return (
@@ -62,7 +83,7 @@ export default function InicioTapStackScreen() {
           }
         },
       })}>
-      <Tab.Screen name="InicioTap" component={PublicacionesStackScreen} />
+      <Tab.Screen name="InicioTap" component={() => visualizarInicio()} />
       <Tab.Screen name="OfertasTap" component={OfertasStackScreen} />
       <Tab.Screen name="TiendaTap" component={TiendaStackScreen} />
       <Tab.Screen name="PerfilTap" component={PerfilStackScreen} />
