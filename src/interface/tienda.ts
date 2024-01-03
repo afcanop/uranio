@@ -2,6 +2,7 @@ export interface Producto {
   codigoItemPk: number;
   nombre: string;
   precio: number;
+  subtotal: number;
   agregadoAlCarrito: boolean;
 }
 
@@ -14,7 +15,6 @@ export interface ProductoCategorizado {
 
 export interface Carrito extends Producto {
   cantidadAgregada: number;
-  precioTotal: number;
 }
 
 export interface TiendaState {

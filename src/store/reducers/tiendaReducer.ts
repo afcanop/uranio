@@ -22,6 +22,7 @@ const tiendaSlice = createSlice({
           ...action.payload,
           ...{
             cantidadAgregada: 0,
+            subtotal: 0,
           },
         });
       }
@@ -38,11 +39,15 @@ const tiendaSlice = createSlice({
       if (productoEnCarrito) {
         // Si el producto ya está en el carrito, actualiza su cantidad
         productoEnCarrito.cantidadAgregada = cantidadAgregada;
-        // Actualizar el total del carrito después de actualizar la cantidad
+        // Si el producto ya está en el carrito, actualiza el subtotal
+        productoEnCarrito.subtotal =
+          cantidadAgregada * productoEnCarrito.precio;
+        //Actualizar el total del carrito
         state.totalCarrito = state.carrito.reduce(
-          (total, producto) => total + producto.precioTotal,
+          (total, producto) => total + producto.subtotal,
           0,
         );
+        //state.totalCarrito = 1000;
       } else {
         // Si el producto no está en el carrito, agrégalo con la cantidad proporcionada
         const producto = state.productos.find(
@@ -52,12 +57,12 @@ const tiendaSlice = createSlice({
           state.carrito.push({
             ...producto,
             cantidadAgregada,
-            precioTotal: 100 * cantidadAgregada,
+            subtotal: 0,
           });
 
           // Actualizar el total del carrito después de agregar un nuevo producto
           state.totalCarrito = state.carrito.reduce(
-            (total, producto) => total + producto.precioTotal,
+            (total, item) => total + item.subtotal,
             0,
           );
         }
@@ -70,7 +75,7 @@ const tiendaSlice = createSlice({
       );
       // Actualizar el total del carrito después de retirar un producto
       state.totalCarrito = state.carrito.reduce(
-        (total, producto) => total + producto.precioTotal,
+        (total, producto) => total + producto.subtotal,
         0,
       );
     },

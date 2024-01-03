@@ -1,12 +1,10 @@
-import {
-  NativeStackScreenProps,
-  createNativeStackNavigator,
-} from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import Tienda from '../components/Tienda';
 import TiendaDetalle from '../components/Tienda/TiendaDetalle';
 import CarritoCompras from '../components/Tienda/CarritoCompras';
 import BuscarProducto from '../components/Tienda/BuscarProducto';
+import TiendaProductoDetalle from '../components/Tienda/TiendaProductoDetalle';
 import colores from '../assets/theme/colores';
 import IconoMenu from '../common/IconoMenu';
 import IconoNavegacion from 'common/IconoNavegacion';
@@ -19,6 +17,7 @@ export type RootStackParamList = {
   TiendaBusqueda: undefined;
   TiendaCarrito: undefined;
   TiendaDetalle: undefined;
+  TiendaProductoDetalle: undefined;
 };
 
 const TiendaStackScreen: React.FC<any> = () => {
@@ -78,7 +77,7 @@ const TiendaStackScreen: React.FC<any> = () => {
         component={TiendaDetalle}
         options={() => ({
           headerRight: () => <>{navegarAlcarrito()}</>,
-          title: 'Detalle',
+          title: 'Lista',
         })}
       />
       <Stack.Screen
@@ -94,6 +93,14 @@ const TiendaStackScreen: React.FC<any> = () => {
         component={CarritoCompras}
         options={() => ({
           title: 'Carrito de compras',
+        })}
+      />
+      <Stack.Screen
+        name="TiendaProductoDetalle"
+        component={TiendaProductoDetalle}
+        options={() => ({
+          headerRight: () => <>{navegarAlcarrito()}</>,
+          title: 'Detalle',
         })}
       />
     </Stack.Navigator>
