@@ -7,10 +7,11 @@ import {useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {consultarApi} from 'utils/api';
 import PublicacionesItem from './PublicacionesItem';
-import {useToast} from 'native-base';
+import {Actionsheet, useDisclose, useToast} from 'native-base';
 
 const Index = () => {
   const toast = useToast();
+  const {isOpen, onOpen, onClose} = useDisclose();
   const [publicaciones, setPublicaciones] = useState<Publicacion[]>([]);
   const [cargando, setCargando] = useState<boolean>(false);
   const [pagina, setPagina] = useState<number>(1);
@@ -57,19 +58,43 @@ const Index = () => {
   };
 
   const renderFooter = () => {
-    return cargando ? <ActivityIndicator size="large" color="#0000ff" /> : null;
+    return cargando ? (
+      <ActivityIndicator size="large" color={colores.primary} />
+    ) : null;
+  };
+
+  const acciones = (codigoPublicacionPk: number) => {
+    onOpen();
   };
 
   return (
-    <FlatList
-      data={publicaciones}
-      renderItem={({item}) => <PublicacionesItem item={item} />}
-      keyExtractor={item => item.codigoPublicacionPk.toString()}
-      onEndReached={cargarMasContanido}
-      onEndReachedThreshold={0.1}
-      ListFooterComponent={renderFooter}
-      style={{marginBottom: 50}}
-    />
+    <>
+      <FlatList
+        data={publicaciones}
+        renderItem={({item}) => (
+          <PublicacionesItem
+            item={item}
+            acciones={codigoPublicacionPk => acciones(codigoPublicacionPk)}
+          />
+        )}
+        keyExtractor={item => item.codigoPublicacionPk.toString()}
+        onEndReached={cargarMasContanido}
+        onEndReachedThreshold={0.1}
+        ListFooterComponent={renderFooter}
+        style={{marginBottom: 50}}
+      />
+      <Actionsheet isOpen={isOpen} onClose={onClose}>
+        <Actionsheet.Content>
+          <Actionsheet.Item>Reportar publicación</Actionsheet.Item>
+          <Actionsheet.Item
+            _text={{
+              color: colores.rojo['500'],
+            }}>
+            Bloquear usuario
+          </Actionsheet.Item>
+        </Actionsheet.Content>
+      </Actionsheet>
+    </>
   );
 };
 

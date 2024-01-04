@@ -13,9 +13,15 @@ import colores from 'assets/theme/colores';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Publicacion} from 'interface/publicacion';
 
-const PublicacionesItem = ({item}: {item: Publicacion}) => {
-  console.log(item);
+interface PublicacionesItemProps {
+  item: Publicacion;
+  acciones: (codigoPublicacionPk: number) => void;
+}
 
+const PublicacionesItem: React.FC<PublicacionesItemProps> = ({
+  item,
+  acciones,
+}) => {
   const [megusta, setMegusta] = useState<boolean>(false);
   const [cantidadMegusta, setCantidadMegusta] = useState<number>(
     item.reacciones,
@@ -50,7 +56,7 @@ const PublicacionesItem = ({item}: {item: Publicacion}) => {
             <Text>{item.usuarioNombre}</Text>
           </HStack>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => acciones(item.codigoUsuarioFk)}>
             <Ionicons
               name={'ellipsis-vertical'}
               size={32}
