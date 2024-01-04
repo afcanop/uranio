@@ -91,3 +91,20 @@ export const urlSobre =
 
 export const urlCajas =
   'https://semantica.sfo3.digitaloceanspaces.com/rodio/iconos/caja2.jpeg';
+
+  export const PublicacionTipoReposte = [
+  'Desnudos',
+  'Violencia',
+  'Acoso',
+  'Información false',
+  'Span',
+  'Venta no aotorizada',
+  'Lenguaje no autorizado',
+  'Lenguaje no apropiado',
+  'Terrorismo',
+  'Bullying',
+  'Suicidio o autolesión',
+  'Transtorno alimenticio',
+  'Contenido relaciones con menores de edad',
+  'Otro',
+];

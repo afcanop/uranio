@@ -12,6 +12,7 @@ import {TouchableOpacity} from 'react-native';
 import colores from 'assets/theme/colores';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Publicacion} from 'interface/publicacion';
+import {useNavigation} from '@react-navigation/native';
 
 interface PublicacionesItemProps {
   item: Publicacion;
@@ -22,6 +23,7 @@ const PublicacionesItem: React.FC<PublicacionesItemProps> = ({
   item,
   acciones,
 }) => {
+  const navigation = useNavigation();
   const [megusta, setMegusta] = useState<boolean>(false);
   const [cantidadMegusta, setCantidadMegusta] = useState<number>(
     item.reacciones,
@@ -55,8 +57,7 @@ const PublicacionesItem: React.FC<PublicacionesItemProps> = ({
             />
             <Text>{item.usuarioNombre}</Text>
           </HStack>
-
-          <TouchableOpacity onPress={() => acciones(item.codigoUsuarioFk)}>
+          <TouchableOpacity onPress={() => acciones(item.codigoPublicacionPk)}>
             <Ionicons
               name={'ellipsis-vertical'}
               size={32}
@@ -73,7 +74,7 @@ const PublicacionesItem: React.FC<PublicacionesItemProps> = ({
           />
         </AspectRatio>
       </Box>
-      <Stack p="2" space={3}>
+      <Stack p="2" space={1}>
         <HStack space={2}>
           <TouchableOpacity onPress={() => darMegusta()}>
             <Ionicons
@@ -82,7 +83,12 @@ const PublicacionesItem: React.FC<PublicacionesItemProps> = ({
               color={megusta ? colores.rojo['500'] : colores.primary}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('PublicacionesComentarios', {
+                codigoPublicacionPk: item.codigoPublicacionPk,
+              });
+            }}>
             <Ionicons
               name={'chatbox-outline'}
               size={25}
@@ -100,20 +106,24 @@ const PublicacionesItem: React.FC<PublicacionesItemProps> = ({
             {cantidadMegusta} Reacciones
           </Text>
         ) : null}
-
         <Text fontWeight="400">{item.comentario}</Text>
-        <HStack alignItems="center" space={4} justifyContent="space-between">
-          <HStack alignItems="center">
+        {item.comentarios ? (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('PublicacionesComentarios', {
+                codigoPublicacionPk: item.codigoPublicacionPk,
+              });
+            }}>
             <Text
               color="coolGray.600"
               _dark={{
                 color: 'warmGray.200',
               }}
               fontWeight="400">
-              6 mins ago
+              {item.comentarios} Comentarios
             </Text>
-          </HStack>
-        </HStack>
+          </TouchableOpacity>
+        ) : null}
       </Stack>
     </Box>
   );
