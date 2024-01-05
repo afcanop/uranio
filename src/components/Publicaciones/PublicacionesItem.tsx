@@ -55,7 +55,7 @@ const PublicacionesItem: React.FC<PublicacionesItemProps> = ({
                 uri: item.usuarioUrlImagen,
               }}
             />
-            <Text>{item.usuarioNombre}</Text>
+            <Text fontWeight={'bold'}>{item.usuarioNombre}</Text>
           </HStack>
           <TouchableOpacity onPress={() => acciones(item.codigoPublicacionPk)}>
             <Ionicons
@@ -83,18 +83,20 @@ const PublicacionesItem: React.FC<PublicacionesItemProps> = ({
               color={megusta ? colores.rojo['500'] : colores.primary}
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('PublicacionesComentarios', {
-                codigoPublicacionPk: item.codigoPublicacionPk,
-              });
-            }}>
-            <Ionicons
-              name={'chatbox-outline'}
-              size={25}
-              color={colores.primary}
-            />
-          </TouchableOpacity>
+          {item.permiteComentario ? (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('PublicacionesComentarios', {
+                  codigoPublicacionPk: item.codigoPublicacionPk,
+                });
+              }}>
+              <Ionicons
+                name={'chatbox-outline'}
+                size={25}
+                color={colores.primary}
+              />
+            </TouchableOpacity>
+          ) : null}
         </HStack>
         {cantidadMegusta ? (
           <Text
@@ -106,7 +108,11 @@ const PublicacionesItem: React.FC<PublicacionesItemProps> = ({
             {cantidadMegusta} Reacciones
           </Text>
         ) : null}
-        <Text fontWeight="400">{item.comentario}</Text>
+        <HStack space={1}>
+          <Text fontWeight="bold">{item.usuarioNombre}</Text>
+          <Text fontWeight="400">{item.comentario}</Text>
+        </HStack>
+
         {item.comentarios ? (
           <TouchableOpacity
             onPress={() => {

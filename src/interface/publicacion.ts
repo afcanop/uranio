@@ -17,3 +17,9 @@ export interface respuestaPublicacionLista {
   errorMensaje?: string;
   publicaciones: Publicacion[];
 }
+
+export interface respuestaPublicacionNuevo {
+  error: boolean;
+  errorMensaje?: string;
+  codigoPublicacion: number;
+}
