@@ -39,6 +39,7 @@
     "react-native-screens": "^3.27.0",
     "react-native-step-indicator": "^1.0.3",
     "react-native-svg": "^12.1.1",
+    "react-native-uuid": "^2.0.1",
     "react-native-vector-icons": "^10.0.2",
     "react-redux": "^9.0.1",
     "redux-persist": "^6.0.0"

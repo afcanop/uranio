@@ -127,7 +127,9 @@ const PublicacionNuevo = () => {
         title: 'Correcto',
         description: 'Publicación registrada',
       });
-      navigation.goBack();
+      navigation.navigate('Publicaciones', {
+        nuevaPublicacion: true,
+      });
     } else {
       toast.show({
         title: 'Error',

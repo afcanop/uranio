@@ -1,4 +1,9 @@
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+/* eslint-disable react/no-unstable-nested-components */
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import colores from 'assets/theme/colores';
 import {Publicacion, respuestaPublicacionLista} from 'interface/publicacion';
 import React, {useCallback, useState} from 'react';
@@ -7,15 +12,25 @@ import {shallowEqual, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {consultarApi} from 'utils/api';
 import PublicacionesItem from './PublicacionesItem';
-import {Actionsheet, useDisclose, useToast} from 'native-base';
+import {Actionsheet, Heading, useDisclose, useToast} from 'native-base';
 import ConectarCelda from 'components/ConectarCelda/ConectarCelda';
+import uuid from 'react-native-uuid';
+import {RefreshControl} from 'react-native-gesture-handler';
+
+type Params = {
+  nuevaPublicacion: boolean;
+};
 
 const Index = () => {
   const toast = useToast();
   const {isOpen, onOpen, onClose} = useDisclose();
   const navigation = useNavigation();
+  const {nuevaPublicacion}: Params = (useRoute().params ?? {
+    consultarPagina: false,
+  }) as Params;
+
   const [publicaciones, setPublicaciones] = useState<Publicacion[]>([]);
-  const [cargando, setCargando] = useState<boolean>(false);
+  const [cargando] = useState<boolean>(false);
   const [pagina, setPagina] = useState<number>(1);
   const [codigoPublicacionPk, setCodigoPublicacionPk] = useState<number>(0);
   const usuario = useSelector((state: RootState) => {
@@ -27,13 +42,18 @@ const Index = () => {
 
   useFocusEffect(
     useCallback(() => {
-      const unsubscribe = () => consultarPublicaciones();
+      const unsubscribe = () => {
+        consultarPublicaciones();
+      };
       unsubscribe();
     }, []),
   );
 
   const consultarPublicaciones = async () => {
-    const respuestaApiReservaDetalle: respuestaPublicacionLista =
+
+    //Organizar paginación, no regarga la lista cuando se se crea una nueva publicacion
+
+    const respuestaApiPublicacionLista: respuestaPublicacionLista =
       await consultarApi(
         `api/publicacion/lista/${usuario.codigo}/${pagina}`,
         null,
@@ -43,21 +63,28 @@ const Index = () => {
         },
       );
 
-    if (respuestaApiReservaDetalle.error === false) {
-      setPublicaciones(publicaconesPrevias => [
-        ...publicaconesPrevias,
-        ...respuestaApiReservaDetalle.publicaciones,
-      ]);
+    if (respuestaApiPublicacionLista.error === false) {
+      if (respuestaApiPublicacionLista.publicaciones.length > 0) {
+        if (pagina === 1) {
+          setPublicaciones(respuestaApiPublicacionLista.publicaciones);
+          setPagina(pagina + 1);
+        } else {
+          setPublicaciones(publicaconesPrevias => [
+            ...publicaconesPrevias,
+            ...respuestaApiPublicacionLista.publicaciones,
+          ]);
+          setPagina(pagina + 1);
+        }
+      }
     } else {
       toast.show({
         title: 'Algo ha salido mal',
-        description: respuestaApiReservaDetalle.errorMensaje,
+        description: respuestaApiPublicacionLista.errorMensaje,
       });
     }
   };
 
   const cargarMasContanido = () => {
-    setPagina(pagina + 1);
     consultarPublicaciones();
   };
 
@@ -79,8 +106,14 @@ const Index = () => {
     });
   };
 
+  const regresacarPublicaciones = () => {
+    setPagina(1);
+    consultarPublicaciones();
+  };
+
   const PublicacionesLista = () => (
     <>
+      <Heading>{pagina}</Heading>
       <FlatList
         data={publicaciones}
         renderItem={({item}) => (
@@ -89,11 +122,17 @@ const Index = () => {
             acciones={codigoPublicacionPk => acciones(codigoPublicacionPk)}
           />
         )}
-        keyExtractor={item => item.codigoPublicacionPk.toString()}
+        keyExtractor={() => `${uuid.v4()}`}
         onEndReached={cargarMasContanido}
         onEndReachedThreshold={0.1}
         ListFooterComponent={renderFooter}
         style={{marginBottom: 50}}
+        refreshControl={
+          <RefreshControl
+            refreshing={cargando}
+            onRefresh={regresacarPublicaciones}
+          />
+        }
       />
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
