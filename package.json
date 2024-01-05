@@ -12,6 +12,7 @@
   "dependencies": {
     "@notifee/react-native": "^7.8.2",
     "@react-native-async-storage/async-storage": "^1.21.0",
+    "@react-native-camera-roll/camera-roll": "^7.3.0",
     "@react-native-firebase/app": "^18.7.1",
     "@react-native-firebase/database": "^18.7.1",
     "@react-native-firebase/messaging": "^18.7.1",

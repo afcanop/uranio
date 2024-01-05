@@ -1,6 +1,10 @@
 import {Text, PermissionsAndroid, Linking, StyleSheet} from 'react-native';
 import React, {useCallback, useRef, useState} from 'react';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {
   Box,
   Button,
@@ -19,19 +23,26 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import colores from 'assets/theme/colores';
 import rnfs from 'react-native-fs';
 import {consultarApi} from 'utils/api';
-import {actualizarUsuarioInformacion} from 'store/reducers/usuarioReducer';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
-import {RespuestaUsuarioCambioImagen} from 'interface/usuario';
 import Contenedor from 'common/Contenedor';
 import {respuestaPublicacionNuevo} from 'interface/publicacion';
 
-const CambioImagen = () => {
-  const dispatch = useDispatch();
+type ImageParams = {
+  imagenBase64?: string;
+  imagenNombre?: string;
+};
+
+const PublicacionNuevo = () => {
   const toast = useToast();
   const navigation = useNavigation();
-  const [imagenBase64, setImagenBase64] = useState<string>('');
-  const [imagenNombre, setImagenNombre] = useState<string>('');
+  const route = useRoute();
+  const {
+    imagenBase64: imagenGaleriaBase64 = '',
+    imagenNombre: imagenGaleriaNombre = '',
+  }: ImageParams = (route.params || {}) as ImageParams;
+  const [imagenBase64, setImagenBase64] = useState<string | undefined>('');
+  const [imagenNombre, setImagenNombre] = useState<string | undefined>('');
   const [comentario, setComentario] = useState<string>('');
   const [permiteComentario, setPermiteComentario] = useState<Boolean>(false);
   const [accesoCamara, setAccesoCamara] = useState<Boolean>(false);
@@ -41,9 +52,13 @@ const CambioImagen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      const unsubscribe = () => consultarPermisoCamara();
+      const unsubscribe = () => {
+        consultarPermisoCamara();
+        setImagenBase64(imagenGaleriaBase64);
+        setImagenNombre(imagenGaleriaNombre);
+      };
       unsubscribe();
-    }, []),
+    }, [imagenGaleriaBase64, imagenGaleriaNombre]),
   );
 
   const consultarPermisoCamara = async () => {
@@ -81,6 +96,7 @@ const CambioImagen = () => {
       camaraTipo === CameraType.Back ? CameraType.Front : CameraType.Back,
     );
   };
+
   const tomarFoto = async () => {
     try {
       if (camera.current !== null) {
@@ -115,7 +131,7 @@ const CambioImagen = () => {
     } else {
       toast.show({
         title: 'Error',
-        description: respuestaApiCambiarImagen.errorMensaje,
+        description: respuestaApiPublicacionNuevo.errorMensaje,
       });
     }
   };
@@ -154,10 +170,14 @@ const CambioImagen = () => {
                   style={styles.btnCapturarImagen}
                 />
                 <TouchableOpacity
-                  onPress={() => navigation.goBack()}
+                  onPress={() => {
+                    navigation.navigate('ModalGaleriaScreen', {
+                      RutaAnterior: 'PublicacionNuevo',
+                    });
+                  }}
                   style={styles.margenCamara}>
                   <Ionicons
-                    name="close-outline"
+                    name="image-outline"
                     size={55}
                     color={colores.gris}
                   />
@@ -179,6 +199,19 @@ const CambioImagen = () => {
                     width={'100%'}
                     resizeMode="stretch"
                   />
+                  <Box style={{position: 'absolute', top: 10, right: 10}}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setImagenBase64('');
+                        setImagenBase64('');
+                      }}>
+                      <Ionicons
+                        name="close-outline"
+                        size={30}
+                        color={colores.rojo['500']}
+                      />
+                    </TouchableOpacity>
+                  </Box>
                   <FormControl>
                     <FormControl.Label isRequired>Comentario</FormControl.Label>
                     <TextArea
@@ -222,7 +255,7 @@ const CambioImagen = () => {
   );
 };
 
-export default CambioImagen;
+export default PublicacionNuevo;
 
 const styles = StyleSheet.create({
   margenCamara: {
