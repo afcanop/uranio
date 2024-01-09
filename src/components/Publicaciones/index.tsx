@@ -3,15 +3,14 @@
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import colores from 'assets/theme/colores';
 import {Publicacion, respuestaPublicacionLista} from 'interface/publicacion';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {ActivityIndicator, FlatList} from 'react-native';
 import {shallowEqual, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {consultarApi} from 'utils/api';
 import PublicacionesItem from './PublicacionesItem';
-import {Actionsheet, Heading, useDisclose, useToast} from 'native-base';
+import {Actionsheet, useDisclose, useToast} from 'native-base';
 import ConectarCelda from 'components/ConectarCelda/ConectarCelda';
-import uuid from 'react-native-uuid';
 import {RefreshControl} from 'react-native-gesture-handler';
 
 const Index = () => {
@@ -49,7 +48,6 @@ const Index = () => {
   };
 
   const consultarPublicaciones = async () => {
-    console.log(pagina);
     const respuestaApiPublicacionLista: respuestaPublicacionLista =
       await consultarApi(
         `api/publicacion/lista/${usuario.codigo}/${pagina}`,
@@ -99,7 +97,6 @@ const Index = () => {
 
   const PublicacionesLista = () => (
     <>
-      <Heading>{pagina}</Heading>
       <FlatList
         data={publicaciones}
         renderItem={({item}) => (
@@ -108,11 +105,13 @@ const Index = () => {
             acciones={codigoPublicacionPk => acciones(codigoPublicacionPk)}
           />
         )}
-        keyExtractor={() => `${uuid.v4()}`}
+        //keyExtractor={() => `${uuid.v4()}`}
+        //keyExtractor={(item, index) => index.toString()} // Utilizar el índice como clave
         onEndReached={cargarMasContanido}
-        onEndReachedThreshold={0.1}
+        onEndReachedThreshold={0.8}
         ListFooterComponent={renderFooter}
         style={{marginBottom: 50}}
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             refreshing={cargando}
