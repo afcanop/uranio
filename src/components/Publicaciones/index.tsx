@@ -1,12 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unstable-nested-components */
-import {
-  useFocusEffect,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import colores from 'assets/theme/colores';
 import {Publicacion, respuestaPublicacionLista} from 'interface/publicacion';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList} from 'react-native';
 import {shallowEqual, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
@@ -17,18 +14,10 @@ import ConectarCelda from 'components/ConectarCelda/ConectarCelda';
 import uuid from 'react-native-uuid';
 import {RefreshControl} from 'react-native-gesture-handler';
 
-type Params = {
-  nuevaPublicacion: boolean;
-};
-
 const Index = () => {
   const toast = useToast();
   const {isOpen, onOpen, onClose} = useDisclose();
   const navigation = useNavigation();
-  const {nuevaPublicacion}: Params = (useRoute().params ?? {
-    consultarPagina: false,
-  }) as Params;
-
   const [publicaciones, setPublicaciones] = useState<Publicacion[]>([]);
   const [cargando] = useState<boolean>(false);
   const [pagina, setPagina] = useState<number>(1);
@@ -49,10 +38,18 @@ const Index = () => {
     }, []),
   );
 
+  const consultarPublicacionesPaginaUno = () => {
+    setPagina(1);
+    consultarPublicaciones();
+  };
+
+  const cargarMasContanido = () => {
+    setPagina(pagina + 1);
+    consultarPublicaciones();
+  };
+
   const consultarPublicaciones = async () => {
-
-    //Organizar paginación, no regarga la lista cuando se se crea una nueva publicacion
-
+    console.log(pagina);
     const respuestaApiPublicacionLista: respuestaPublicacionLista =
       await consultarApi(
         `api/publicacion/lista/${usuario.codigo}/${pagina}`,
@@ -67,13 +64,11 @@ const Index = () => {
       if (respuestaApiPublicacionLista.publicaciones.length > 0) {
         if (pagina === 1) {
           setPublicaciones(respuestaApiPublicacionLista.publicaciones);
-          setPagina(pagina + 1);
         } else {
-          setPublicaciones(publicaconesPrevias => [
-            ...publicaconesPrevias,
+          setPublicaciones(prevPublicaciones => [
+            ...prevPublicaciones,
             ...respuestaApiPublicacionLista.publicaciones,
           ]);
-          setPagina(pagina + 1);
         }
       }
     } else {
@@ -82,10 +77,6 @@ const Index = () => {
         description: respuestaApiPublicacionLista.errorMensaje,
       });
     }
-  };
-
-  const cargarMasContanido = () => {
-    consultarPublicaciones();
   };
 
   const renderFooter = () => {
@@ -104,11 +95,6 @@ const Index = () => {
     navigation.navigate('PublicacionesReporte', {
       codigoPublicacionPk: codigoPublicacionPk.toString(),
     });
-  };
-
-  const regresacarPublicaciones = () => {
-    setPagina(1);
-    consultarPublicaciones();
   };
 
   const PublicacionesLista = () => (
@@ -130,7 +116,7 @@ const Index = () => {
         refreshControl={
           <RefreshControl
             refreshing={cargando}
-            onRefresh={regresacarPublicaciones}
+            onRefresh={consultarPublicacionesPaginaUno}
           />
         }
       />
