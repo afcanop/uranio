@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "torio.app"
-               BlueprintName = "torio"
-               ReferencedContainer = "container:torio.xcodeproj">
+               BuildableName = "uranio.app"
+               BlueprintName = "uranio"
+               ReferencedContainer = "container:uranio.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
                BuildableName = "torioTests.xctest"
                BlueprintName = "torioTests"
-               ReferencedContainer = "container:torio.xcodeproj">
+               ReferencedContainer = "container:uranio.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "torio.app"
-            BlueprintName = "torio"
-            ReferencedContainer = "container:torio.xcodeproj">
+            BuildableName = "uranio.app"
+            BlueprintName = "uranio"
+            ReferencedContainer = "container:uranio.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "torio.app"
-            BlueprintName = "torio"
-            ReferencedContainer = "container:torio.xcodeproj">
+            BuildableName = "uranio.app"
+            BlueprintName = "uranio"
+            ReferencedContainer = "container:uranio.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

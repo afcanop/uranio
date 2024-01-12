@@ -1,4 +1,4 @@
-package com.torio;
+package com.uranio;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
