@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
-import {CameraRoll} from '@react-native-camera-roll/camera-roll';
+//import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import {Box, Image, Text} from 'native-base';
 import {
   useFocusEffect,
@@ -78,11 +78,12 @@ const GaleriaScreen = () => {
   };
 
   const fetchPhotos = useCallback(async () => {
-    const res = await CameraRoll.getPhotos({
-      first: 20,
-      assetType: 'Photos',
-    });
-    setPhotos(res?.edges);
+    Alert("error consultando galeria");
+    // const res = await CameraRoll.getPhotos({
+    //   first: 20,
+    //   assetType: 'Photos',
+    // });
+    // setPhotos(res?.edges);
   }, []);
 
   const seleccionarImagen = async (item: any) => {
