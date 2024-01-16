@@ -48,7 +48,6 @@ export default function MainDrawerScreen() {
   const navigation = useNavigation();
   const Drawer = createDrawerNavigator();
   const dispatch = useDispatch();
-  const toast = useToast();
   const [initialRoute, setInitialRoute] = useState('Inicio');
 
   const codigoUsuario = useSelector((state: RootState) => state.usuario.codigo);
@@ -58,6 +57,19 @@ export default function MainDrawerScreen() {
   );
 
   useEffect(() => {
+    if (Platform.OS === 'android') {
+      const solicitarPermisos = async () => {
+        try {
+          await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+          );
+        } catch (err) {
+          return true;
+        }
+      };
+      solicitarPermisos();
+    }
+
     // Manejar las notificaciones
     const unsubscribeFromNotifications = async () => {
       if (Platform.OS === 'android') {
