@@ -85,7 +85,7 @@ const EntregaDetalle = () => {
                   fontSize={'3xl'}
                   fontWeight={'bold'}
                   color={colores.primary}>
-                  Ingreso
+                  entrega
                 </Text>
               </Center>
               <Image
@@ -95,7 +95,7 @@ const EntregaDetalle = () => {
                 alt="No presenta imagen de entrega"
                 size={'2xl'}
                 width={'100%'}
-                resizeMode="stretch"
+                resizeMode="cover"
               />
             </Box>
           ) : null}
