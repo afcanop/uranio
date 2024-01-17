@@ -14,6 +14,7 @@ import {consultarApi} from '../../utils/api';
 import Contenedor from 'common/Contenedor';
 import {useNavigation} from '@react-navigation/native';
 import {RespuestaUsuarioRecuperarClave} from 'interface/usuario';
+import Animated, {FadeInDown} from 'react-native-reanimated';
 
 function OlvidoContrasena() {
   const toast = useToast();
@@ -51,34 +52,40 @@ function OlvidoContrasena() {
     <Contenedor>
       <VStack space={2}>
         <Box mt="5" alignItems="center" justifyContent="center">
-          <Image
-            style={{width: 128, height: 128}}
-            source={require('../../assets/img/logo-fondo-blanco.png')}
-          />
+          <Animated.View
+            entering={FadeInDown.delay(100).duration(1000).springify()}>
+            <Image
+              style={{width: 128, height: 128}}
+              source={require('../../assets/img/logo-fondo-blanco.png')}
+            />
+          </Animated.View>
         </Box>
         <ScrollView>
-          <FormControl isRequired={true}>
-            <FormControl.Label
-              _text={{
-                color: 'coolGray.800',
-                fontSize: 'md',
-                fontWeight: 500,
-              }}>
-              Correo
-            </FormControl.Label>
-            <Input
-              keyboardType={'email-address'}
-              onChangeText={valor => setUsuario(valor)}
-            />
-          </FormControl>
+          <Animated.View
+            entering={FadeInDown.delay(200).duration(1000).springify()}>
+            <FormControl isRequired={true}>
+              <FormControl.Label
+                _text={{
+                  color: 'coolGray.800',
+                  fontSize: 'md',
+                  fontWeight: 500,
+                }}>
+                Correo
+              </FormControl.Label>
+              <Input
+                keyboardType={'email-address'}
+                onChangeText={valor => setUsuario(valor)}
+              />
+            </FormControl>
+            <Button
+              mt="2"
+              isDisabled={habilitarBtnGuardar}
+              onPress={() => recuperarContrasena()}>
+              Guardar
+            </Button>
+          </Animated.View>
         </ScrollView>
       </VStack>
-      <Button
-        mt="2"
-        isDisabled={habilitarBtnGuardar}
-        onPress={() => recuperarContrasena()}>
-        Guardar
-      </Button>
     </Contenedor>
   );
 }

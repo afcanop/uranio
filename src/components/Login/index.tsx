@@ -34,6 +34,7 @@ import {
   obtenerTokenFirebase,
 } from 'utils/services/firebase';
 import database from '@react-native-firebase/database';
+import Animated, {FadeInDown, FadeInUp} from 'react-native-reanimated';
 
 const Login = () => {
   const toast = useToast();
@@ -141,69 +142,75 @@ const Login = () => {
           <Contenedor>
             <VStack space={3} mt="5">
               <Box mt="5" alignItems="center" justifyContent="center">
-                <Image
-                  style={{width: 128, height: 128}}
-                  source={require('../../assets/img/logo-fondo-blanco.png')}
-                />
+                <Animated.View
+                  entering={FadeInDown.delay(100).duration(1000).springify()}>
+                  <Image
+                    style={{width: 128, height: 128}}
+                    source={require('../../assets/img/logo-fondo-blanco.png')}
+                  />
+                </Animated.View>
               </Box>
             </VStack>
-            <FormControl>
-              <FormControl.Label
-                _text={{
-                  color: 'coolGray.800',
-                  fontSize: 'md',
-                  fontWeight: 500,
-                }}>
-                Correo electronico
-              </FormControl.Label>
-              <Input
-                type="text"
-                onChangeText={valor => setUsuario(valor)}
-                autoCapitalize={'none'}
-              />
-            </FormControl>
-            <FormControl>
-              <FormControl.Label
-                _text={{
-                  color: 'coolGray.800',
-                  fontSize: 'md',
-                  fontWeight: 500,
-                }}>
-                Contraseña
-              </FormControl.Label>
-              <Input
-                type={mostrarClave ? 'text' : 'password'}
-                onChangeText={valor => setClave(valor)}
-                InputRightElement={
-                  <TouchableOpacity
-                    onPress={() => setMostrarClave(!mostrarClave)}
-                    style={{marginHorizontal: 5}}>
-                    {mostrarClave == false ? (
-                      <Ionicons name={'eye-off-outline'} size={25} />
-                    ) : (
-                      <Ionicons
-                        name={'eye-outline'}
-                        size={25}
-                        color={'coolGray.800'}
-                      />
-                    )}
-                  </TouchableOpacity>
-                }
-              />
-            </FormControl>
-            <VStack space={3} mt={2}>
-              <Button onPress={() => iniciarSesion()}>Ingresar</Button>
-              <Button
-                onPress={() => navigation.navigate('CrearCuenta')}
-                variant="link">
-                Crear cuenta
-              </Button>
-              <Button
-                onPress={() => navigation.navigate('OlvidoClave')}
-                variant="link">
-                ¿Olvidaste la contraseña?
-              </Button>
-            </VStack>
+            <Animated.View
+              entering={FadeInDown.delay(200).duration(1000).springify()}>
+              <FormControl>
+                <FormControl.Label
+                  _text={{
+                    color: 'coolGray.800',
+                    fontSize: 'md',
+                    fontWeight: 500,
+                  }}>
+                  Correo electronico
+                </FormControl.Label>
+                <Input
+                  type="text"
+                  onChangeText={valor => setUsuario(valor)}
+                  autoCapitalize={'none'}
+                />
+              </FormControl>
+              <FormControl>
+                <FormControl.Label
+                  _text={{
+                    color: 'coolGray.800',
+                    fontSize: 'md',
+                    fontWeight: 500,
+                  }}>
+                  Contraseña
+                </FormControl.Label>
+                <Input
+                  type={mostrarClave ? 'text' : 'password'}
+                  onChangeText={valor => setClave(valor)}
+                  InputRightElement={
+                    <TouchableOpacity
+                      onPress={() => setMostrarClave(!mostrarClave)}
+                      style={{marginHorizontal: 5}}>
+                      {mostrarClave == false ? (
+                        <Ionicons name={'eye-off-outline'} size={25} />
+                      ) : (
+                        <Ionicons
+                          name={'eye-outline'}
+                          size={25}
+                          color={'coolGray.800'}
+                        />
+                      )}
+                    </TouchableOpacity>
+                  }
+                />
+              </FormControl>
+              <VStack space={3} mt={2}>
+                <Button onPress={() => iniciarSesion()}>Ingresar</Button>
+                <Button
+                  onPress={() => navigation.navigate('CrearCuenta')}
+                  variant="link">
+                  Crear cuenta
+                </Button>
+                <Button
+                  onPress={() => navigation.navigate('OlvidoClave')}
+                  variant="link">
+                  ¿Olvidaste la contraseña?
+                </Button>
+              </VStack>
+            </Animated.View>
           </Contenedor>
         </ScrollView>
       </KeyboardAvoidingView>
