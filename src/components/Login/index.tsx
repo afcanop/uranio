@@ -20,10 +20,7 @@ import {consultarApi} from '../../utils/api';
 import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import Contenedor from '../../common/Contenedor';
-import {
-  actualizarUsuarioInformacion,
-  setUsuarioInformacion,
-} from '../../store/reducers/usuarioReducer';
+import {setUsuarioInformacion} from '../../store/reducers/usuarioReducer';
 import {
   RespuestaUsuarioAutenticar,
   RespuestaUsuarioDetalle,
@@ -34,7 +31,7 @@ import {
   obtenerTokenFirebase,
 } from 'utils/services/firebase';
 import database from '@react-native-firebase/database';
-import Animated, {FadeInDown, FadeInUp} from 'react-native-reanimated';
+import ContenedorAnimado from 'common/ContendorAnimado';
 
 const Login = () => {
   const toast = useToast();
@@ -43,7 +40,6 @@ const Login = () => {
   const [usuario, setUsuario] = useState('');
   const [clave, setClave] = useState('');
   const [mostrarClave, setMostrarClave] = useState(false);
-  const [inicioOffline, setInicioOffline] = useState([]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -142,17 +138,15 @@ const Login = () => {
           <Contenedor>
             <VStack space={3} mt="5">
               <Box mt="5" alignItems="center" justifyContent="center">
-                <Animated.View
-                  entering={FadeInDown.delay(100).duration(1000).springify()}>
+                <ContenedorAnimado delay={100}>
                   <Image
                     style={{width: 128, height: 128}}
                     source={require('../../assets/img/logo-fondo-blanco.png')}
                   />
-                </Animated.View>
+                </ContenedorAnimado>
               </Box>
             </VStack>
-            <Animated.View
-              entering={FadeInDown.delay(200).duration(1000).springify()}>
+            <ContenedorAnimado delay={200}>
               <FormControl>
                 <FormControl.Label
                   _text={{
@@ -210,7 +204,7 @@ const Login = () => {
                   ¿Olvidaste la contraseña?
                 </Button>
               </VStack>
-            </Animated.View>
+            </ContenedorAnimado>
           </Contenedor>
         </ScrollView>
       </KeyboardAvoidingView>

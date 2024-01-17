@@ -5,6 +5,7 @@ import {consultarApi} from 'utils/api';
 import {RespuestaSoporteNuevo} from 'interface/soporte';
 import {useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
+import ContenedorAnimado from 'common/ContendorAnimado';
 
 const Contactanos = () => {
   const toast = useToast();
@@ -43,21 +44,23 @@ const Contactanos = () => {
 
   return (
     <Contenedor>
-      <VStack space={3}>
-        <FormControl>
-          <FormControl.Label isRequired>Descripción</FormControl.Label>
-          <TextArea
-            h={20}
-            placeholder="Proporciona detalles sobre el soporte técnico requerido. Por favor, incluya información relevante sobre el problema, cualquier mensaje de error recibido y cualquier paso previo tomado para resolver la situación. Cuanta más información proporcione, más fácil será para nuestro equipo de soporte identificar y abordar su solicitud. ¡Gracias por su colaboración!"
-            onChangeText={text => setDescripcion(text)}
-            value={descripcion}
-            autoCompleteType={undefined}
-          />
-        </FormControl>
-        <Button mt="2" onPress={() => guardarSoporte()}>
-          Confirmar
-        </Button>
-      </VStack>
+      <ContenedorAnimado>
+        <VStack space={3}>
+          <FormControl>
+            <FormControl.Label isRequired>Descripción</FormControl.Label>
+            <TextArea
+              h={'48'}
+              placeholder="Proporciona detalles sobre el soporte técnico requerido. Por favor, incluya información relevante sobre el problema, cualquier mensaje de error recibido y cualquier paso previo tomado para resolver la situación. Cuanta más información proporcione, más fácil será para nuestro equipo de soporte identificar y abordar su solicitud. ¡Gracias por su colaboración!"
+              onChangeText={text => setDescripcion(text)}
+              value={descripcion}
+              autoCompleteType={undefined}
+            />
+          </FormControl>
+          <Button mt="2" onPress={() => guardarSoporte()}>
+            Confirmar
+          </Button>
+        </VStack>
+      </ContenedorAnimado>
     </Contenedor>
   );
 };

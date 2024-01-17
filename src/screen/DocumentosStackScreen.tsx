@@ -26,6 +26,7 @@ const DocumentosStackScreen: React.FC<any> = () => {
         component={Documentos}
         options={() => ({
           headerLeft: () => <IconoMenu />,
+          title: 'Documentos',
         })}
       />
     </Stack.Navigator>

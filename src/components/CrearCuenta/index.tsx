@@ -15,7 +15,7 @@ import {consultarApi} from '../../utils/api';
 import {useNavigation} from '@react-navigation/native';
 import Contenedor from 'common/Contenedor';
 import {RespuestaUsuarioNuevo} from 'interface/usuario';
-import Animated, {FadeInDown} from 'react-native-reanimated';
+import ContenedorAnimado from 'common/ContendorAnimado';
 
 function CrearCuenta() {
   const toast = useToast();
@@ -68,16 +68,14 @@ function CrearCuenta() {
         <Contenedor>
           <VStack space={3} mt="5">
             <Box mt="5" alignItems="center" justifyContent="center">
-              <Animated.View
-                entering={FadeInDown.delay(100).duration(1000).springify()}>
+              <ContenedorAnimado delay={100}>
                 <Image
                   style={{width: 128, height: 128}}
                   source={require('../../assets/img/logo-fondo-blanco.png')}
                 />
-              </Animated.View>
+              </ContenedorAnimado>
             </Box>
-            <Animated.View
-              entering={FadeInDown.delay(200).duration(1000).springify()}>
+            <ContenedorAnimado delay={200}>
               <FormControl isRequired={true}>
                 <FormControl.Label
                   _text={{
@@ -141,7 +139,7 @@ function CrearCuenta() {
                 onPress={() => crearUsuario()}>
                 Guardar
               </Button>
-            </Animated.View>
+            </ContenedorAnimado>
           </VStack>
         </Contenedor>
       </ScrollView>

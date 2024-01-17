@@ -23,6 +23,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import rnfs from 'react-native-fs';
 import FileViewer from 'react-native-file-viewer';
 import {RefreshControl} from 'react-native-gesture-handler';
+import ContenedorAnimado from 'common/ContendorAnimado';
 
 const Documento = () => {
   const toast = useToast();
@@ -132,62 +133,49 @@ const Documento = () => {
     }
   };
 
-  const validarExistenciaArchivo = async (nombre: String) => {
-    const file = rnfs.DocumentDirectoryPath + `/${nombre}`;
-    const validarExistenciaArchivo = await rnfs.exists(file);
-    if (validarExistenciaArchivo) {
-      return true;
-    }
-    return false;
-  };
-
   return (
     <Contenedor>
       <FlatList
         data={arrDocumentos}
-        renderItem={({item}) => (
-          <Box
-            padding={2}
-            rounded="lg"
-            overflow="hidden"
-            borderColor="coolGray.200"
-            borderWidth="1"
-            justifyContent={'space-between'}>
-            <HStack>
-              <VStack space={2} flex={1}>
-                <Text>{item.nombre}</Text>
-                {validarExistenciaArchivo(item.nombreArchivo) ? (
+        renderItem={({item, index}) => (
+          <ContenedorAnimado delay={50 * index}>
+            <Box
+              padding={2}
+              rounded="lg"
+              overflow="hidden"
+              borderColor="coolGray.200"
+              borderWidth="1"
+              justifyContent={'space-between'}>
+              <HStack>
+                <VStack space={2} flex={1}>
+                  <Text>{item.nombre}</Text>
+                </VStack>
+                <HStack
+                  flexDirection={'row-reverse'}
+                  space={4}
+                  flex={1}
+                  alignContent={'flex-end'}>
                   <TouchableOpacity
-                    onPress={() => abrirDocumento(item.nombreArchivo)}>
-                    <Badge colorScheme="success">Descargado abrir</Badge>
+                    onPress={() =>
+                      descargarDocumento(item.url, item.nombreArchivo)
+                    }>
+                    <Ionicons
+                      name={'download-outline'}
+                      size={50}
+                      color={'coolGray.800'}
+                    />
                   </TouchableOpacity>
-                ) : null}
-              </VStack>
-              <HStack
-                flexDirection={'row-reverse'}
-                space={4}
-                flex={1}
-                alignContent={'flex-end'}>
-                <TouchableOpacity
-                  onPress={() =>
-                    descargarDocumento(item.url, item.nombreArchivo)
-                  }>
-                  <Ionicons
-                    name={'download-outline'}
-                    size={50}
-                    color={'coolGray.800'}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => abrirURLDocumento(item.url)}>
-                  <Ionicons
-                    name={'eye-outline'}
-                    size={50}
-                    color={'coolGray.800'}
-                  />
-                </TouchableOpacity>
+                  <TouchableOpacity onPress={() => abrirURLDocumento(item.url)}>
+                    <Ionicons
+                      name={'eye-outline'}
+                      size={50}
+                      color={'coolGray.800'}
+                    />
+                  </TouchableOpacity>
+                </HStack>
               </HStack>
-            </HStack>
-          </Box>
+            </Box>
+          </ContenedorAnimado>
         )}
         keyExtractor={item => `${item.codigoContenidoPk}`}
         refreshControl={

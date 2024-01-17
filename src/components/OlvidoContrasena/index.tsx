@@ -14,7 +14,7 @@ import {consultarApi} from '../../utils/api';
 import Contenedor from 'common/Contenedor';
 import {useNavigation} from '@react-navigation/native';
 import {RespuestaUsuarioRecuperarClave} from 'interface/usuario';
-import Animated, {FadeInDown} from 'react-native-reanimated';
+import ContenedorAnimado from 'common/ContendorAnimado';
 
 function OlvidoContrasena() {
   const toast = useToast();
@@ -52,17 +52,15 @@ function OlvidoContrasena() {
     <Contenedor>
       <VStack space={2}>
         <Box mt="5" alignItems="center" justifyContent="center">
-          <Animated.View
-            entering={FadeInDown.delay(100).duration(1000).springify()}>
+          <ContenedorAnimado delay={100}>
             <Image
               style={{width: 128, height: 128}}
               source={require('../../assets/img/logo-fondo-blanco.png')}
             />
-          </Animated.View>
+          </ContenedorAnimado>
         </Box>
         <ScrollView>
-          <Animated.View
-            entering={FadeInDown.delay(200).duration(1000).springify()}>
+          <ContenedorAnimado delay={200}>
             <FormControl isRequired={true}>
               <FormControl.Label
                 _text={{
@@ -83,7 +81,7 @@ function OlvidoContrasena() {
               onPress={() => recuperarContrasena()}>
               Guardar
             </Button>
-          </Animated.View>
+          </ContenedorAnimado>
         </ScrollView>
       </VStack>
     </Contenedor>

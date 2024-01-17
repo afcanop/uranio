@@ -7,6 +7,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {useNavigation} from '@react-navigation/native';
 import {Alert} from 'react-native';
+import ContenedorAnimado from 'common/ContendorAnimado';
 
 const VisitasNuevo = () => {
   const toast = useToast();
@@ -63,36 +64,38 @@ const VisitasNuevo = () => {
 
   return (
     <Contenedor>
-      <VStack space={3} mt="5">
-        <FormControl>
-          <FormControl.Label isRequired>Nombre</FormControl.Label>
-          <Input
-            value={nombre}
-            onChangeText={(text: string) => setNombre(text)}
-          />
-        </FormControl>
-        <FormControl>
-          <FormControl.Label isRequired>Identificación</FormControl.Label>
-          <Input
-            value={numeroIdentificacion}
-            onChangeText={(text: string) => setNumeroIdentificacion(text)}
-          />
-        </FormControl>
-        <FormControl>
-          <FormControl.Label>Placa</FormControl.Label>
-          <Input
-            value={placa}
-            onChangeText={(text: string) => setPlaca(text)}
-          />
-        </FormControl>
-        <Button
-          mt="2"
-          onPress={() => guardarVisitas()}
-          isLoading={mostrarAnimacionCargando}
-          isLoadingText="Cargando">
-          Confirmar
-        </Button>
-      </VStack>
+      <ContenedorAnimado>
+        <VStack space={3} mt="5">
+          <FormControl>
+            <FormControl.Label isRequired>Nombre</FormControl.Label>
+            <Input
+              value={nombre}
+              onChangeText={(text: string) => setNombre(text)}
+            />
+          </FormControl>
+          <FormControl>
+            <FormControl.Label isRequired>Identificación</FormControl.Label>
+            <Input
+              value={numeroIdentificacion}
+              onChangeText={(text: string) => setNumeroIdentificacion(text)}
+            />
+          </FormControl>
+          <FormControl>
+            <FormControl.Label>Placa</FormControl.Label>
+            <Input
+              value={placa}
+              onChangeText={(text: string) => setPlaca(text)}
+            />
+          </FormControl>
+          <Button
+            mt="2"
+            onPress={() => guardarVisitas()}
+            isLoading={mostrarAnimacionCargando}
+            isLoadingText="Cargando">
+            Confirmar
+          </Button>
+        </VStack>
+      </ContenedorAnimado>
     </Contenedor>
   );
 };

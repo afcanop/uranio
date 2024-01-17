@@ -6,10 +6,8 @@ import {
   Box,
   FlatList,
   HStack,
-  Heading,
   Image,
   Spinner,
-  Stack,
   Text,
   VStack,
   useToast,
@@ -24,7 +22,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import colores from 'assets/theme/colores';
 import {urlCaja, urlCajas, urlSobre} from 'utils/const';
 import TextoFecha from 'common/TextoFecha';
-import Animated, {FadeInDown} from 'react-native-reanimated';
 import ContenedorAnimado from 'common/ContendorAnimado';
 type Autorizacion = 'N' | 'S' | 'P';
 
@@ -63,12 +60,14 @@ const EntregasLista = () => {
 
         setArrEntregas(respuestaApiEntregaLista.entregas);
       } else {
+        setMostrarAnimacionCargando(false);
         toast.show({
           title: 'Algo ha salido mal',
           description: respuestaApiEntregaLista.errorMensaje,
         });
       }
     } catch (error) {
+      setMostrarAnimacionCargando(false);
       console.error('Error al consultar entregas:', error);
     } finally {
       setMostrarAnimacionCargando(false);
@@ -121,99 +120,102 @@ const EntregasLista = () => {
 
   return (
     <Contenedor>
-      {mostrarAnimacionCargando && <Spinner size={'lg'} />}
-      <FlatList
-        data={arrEntregas}
-        renderItem={({item, index}) => (
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('EntregaDetalle', {
-                entrega: item,
-              })
-            }>
-            <ContenedorAnimado delay={50 * index}>
-              <Box
-                marginBottom={2}
-                padding={2}
-                rounded="lg"
-                overflow="hidden"
-                borderColor="coolGray.200"
-                borderWidth="1">
-                <HStack
-                  flexDirection={'row'}
-                  flex={2}
-                  space={2}
-                  justifyContent={'space-between'}>
-                  <HStack space={2}>
-                    <Image
-                      source={{
-                        uri: obtenerUrlTipoEntrega(item.codigoEntregaTipoFk),
-                      }}
-                      alt="Alternate Text"
-                      size={'sm'}
-                    />
-                    <VStack space={2}>
-                      <Text>{item.codigoEntregaTipoFk}</Text>
-                      <TextoFecha fecha={item.fechaIngreso} />
-                      <Text>{item.descripcion}</Text>
-                    </VStack>
-                  </HStack>
-                  {item.estadoAutorizado === 'P' ? (
-                    <HStack
-                      flexDirection={'row'}
-                      space={4}
-                      flex={1}
-                      alignContent={'center'}
-                      alignItems={'center'}
-                      justifyContent={'flex-end'}>
-                      <TouchableOpacity
-                        onPress={() =>
-                          entregaAutorizar(`${item.codigoEntregaPk}`, 'S')
-                        }>
-                        <Ionicons
-                          name={'checkmark-outline'}
-                          size={50}
-                          color={colores.verde['500']}
-                        />
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() =>
-                          entregaAutorizar(`${item.codigoEntregaPk}`, 'N')
-                        }>
-                        <Ionicons
-                          name={'close-outline'}
-                          size={50}
-                          color={colores.rojo['500']}
-                        />
-                      </TouchableOpacity>
+      {mostrarAnimacionCargando ? (
+        <Spinner size={'lg'} />
+      ) : (
+        <FlatList
+          data={arrEntregas}
+          renderItem={({item, index}) => (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('EntregaDetalle', {
+                  entrega: item,
+                })
+              }>
+              <ContenedorAnimado delay={50 * index}>
+                <Box
+                  marginBottom={2}
+                  padding={2}
+                  rounded="lg"
+                  overflow="hidden"
+                  borderColor="coolGray.200"
+                  borderWidth="1">
+                  <HStack
+                    flexDirection={'row'}
+                    flex={2}
+                    space={2}
+                    justifyContent={'space-between'}>
+                    <HStack space={2}>
+                      <Image
+                        source={{
+                          uri: obtenerUrlTipoEntrega(item.codigoEntregaTipoFk),
+                        }}
+                        alt="Alternate Text"
+                        size={'sm'}
+                      />
+                      <VStack space={2}>
+                        <Text>{item.codigoEntregaTipoFk}</Text>
+                        <TextoFecha fecha={item.fechaIngreso} />
+                        <Text>{item.descripcion}</Text>
+                      </VStack>
                     </HStack>
-                  ) : (
-                    <VStack alignItems={'flex-end'}>
-                      <>{entregaTipoEstado(`${item.estadoAutorizado}`)}</>
-                      <Text color={colores.primary}>
-                        {item.estadoCerrado
-                          ? item.estadoAutorizado === 'S'
-                            ? 'Entregado'
-                            : 'cerrado'
-                          : 'Pendiente'}
-                      </Text>
-                    </VStack>
-                  )}
-                </HStack>
-              </Box>
-            </ContenedorAnimado>
-          </TouchableOpacity>
-        )}
-        keyExtractor={item => `${item.codigoEntregaPk}`}
-        refreshControl={
-          <RefreshControl
-            refreshing={recargarLista}
-            onRefresh={consultarEntregas}
-          />
-        }
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      />
+                    {item.estadoAutorizado === 'P' ? (
+                      <HStack
+                        flexDirection={'row'}
+                        space={4}
+                        flex={1}
+                        alignContent={'center'}
+                        alignItems={'center'}
+                        justifyContent={'flex-end'}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            entregaAutorizar(`${item.codigoEntregaPk}`, 'S')
+                          }>
+                          <Ionicons
+                            name={'checkmark-outline'}
+                            size={50}
+                            color={colores.verde['500']}
+                          />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() =>
+                            entregaAutorizar(`${item.codigoEntregaPk}`, 'N')
+                          }>
+                          <Ionicons
+                            name={'close-outline'}
+                            size={50}
+                            color={colores.rojo['500']}
+                          />
+                        </TouchableOpacity>
+                      </HStack>
+                    ) : (
+                      <VStack alignItems={'flex-end'}>
+                        <>{entregaTipoEstado(`${item.estadoAutorizado}`)}</>
+                        <Text color={colores.primary}>
+                          {item.estadoCerrado
+                            ? item.estadoAutorizado === 'S'
+                              ? 'Entregado'
+                              : 'cerrado'
+                            : 'Pendiente'}
+                        </Text>
+                      </VStack>
+                    )}
+                  </HStack>
+                </Box>
+              </ContenedorAnimado>
+            </TouchableOpacity>
+          )}
+          keyExtractor={item => `${item.codigoEntregaPk}`}
+          refreshControl={
+            <RefreshControl
+              refreshing={recargarLista}
+              onRefresh={consultarEntregas}
+            />
+          }
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+        />
+      )}
     </Contenedor>
   );
 };

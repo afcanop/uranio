@@ -5,6 +5,7 @@ import {RootState} from 'store/reducers';
 import {RespuestaAtencionNuevo} from 'interface/atencion';
 import {useSelector} from 'react-redux';
 import {consultarApi} from 'utils/api';
+import ContenedorAnimado from 'common/ContendorAnimado';
 
 const AtencionNuevo = () => {
   const toast = useToast();
@@ -48,20 +49,22 @@ const AtencionNuevo = () => {
 
   return (
     <Contenedor>
-      <VStack space={3}>
-        <FormControl>
-          <FormControl.Label isRequired>Mensaje</FormControl.Label>
-          <TextArea
-            h={20}
-            onChangeText={text => setDescripcion(text)}
-            value={descripcion}
-            autoCompleteType={undefined}
-          />
-        </FormControl>
-        <Button mt="2" onPress={() => guardarSoporte()}>
-          Confirmar
-        </Button>
-      </VStack>
+      <ContenedorAnimado>
+        <VStack space={3}>
+          <FormControl>
+            <FormControl.Label isRequired>Mensaje</FormControl.Label>
+            <TextArea
+              h={20}
+              onChangeText={text => setDescripcion(text)}
+              value={descripcion}
+              autoCompleteType={undefined}
+            />
+          </FormControl>
+          <Button mt="2" onPress={() => guardarSoporte()}>
+            Confirmar
+          </Button>
+        </VStack>
+      </ContenedorAnimado>
     </Contenedor>
   );
 };

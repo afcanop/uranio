@@ -1,4 +1,5 @@
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import ContenedorAnimado from 'common/ContendorAnimado';
 import Contenedor from 'common/Contenedor';
 import {respuestaCasoNuevo} from 'interface/pqrs';
 import {CasoTipo, respuestaCasoTipoLista} from 'interface/pqrsTipo';
@@ -80,39 +81,44 @@ const PqrsNuevo = () => {
 
   return (
     <Contenedor>
-      <VStack space={3} mt="5">
-        <FormControl>
-          <FormControl.Label isRequired>Tipo</FormControl.Label>
-          <Select
-            accessibilityLabel="Seleccionar tipo"
-            placeholder="Seleccionar tipo"
-            _selectedItem={{
-              bg: 'teal.600',
-              color: 'white',
-              endIcon: <CheckIcon size="5" />,
-            }}
-            mt={1}
-            onValueChange={itemValue => {
-              setPqrsTipo(itemValue);
-            }}>
-            {arrPqrsTipo.map((item: CasoTipo) => (
-              <Select.Item label={item.nombre} value={item.codigoCasoTipoPk} />
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl>
-          <FormControl.Label isRequired>Descripción</FormControl.Label>
-          <TextArea
-            h={20}
-            placeholder="Comparte tus experiencias, preguntas o sugerencias con nosotros a través de nuestro sistema de PQRS."
-            onChangeText={text => setDescripcion(text)}
-            autoCompleteType={undefined}
-          />
-        </FormControl>
-        <Button mt="2" onPress={() => guardarPqrs()}>
-          Confirmar
-        </Button>
-      </VStack>
+      <ContenedorAnimado>
+        <VStack space={3} mt="5">
+          <FormControl>
+            <FormControl.Label isRequired>Tipo</FormControl.Label>
+            <Select
+              accessibilityLabel="Seleccionar tipo"
+              placeholder="Seleccionar tipo"
+              _selectedItem={{
+                bg: 'teal.600',
+                color: 'white',
+                endIcon: <CheckIcon size="5" />,
+              }}
+              mt={1}
+              onValueChange={itemValue => {
+                setPqrsTipo(itemValue);
+              }}>
+              {arrPqrsTipo.map((item: CasoTipo) => (
+                <Select.Item
+                  label={item.nombre}
+                  value={item.codigoCasoTipoPk}
+                />
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl>
+            <FormControl.Label isRequired>Descripción</FormControl.Label>
+            <TextArea
+              h={20}
+              placeholder="Comparte tus experiencias, preguntas o sugerencias con nosotros a través de nuestro sistema de PQRS."
+              onChangeText={text => setDescripcion(text)}
+              autoCompleteType={undefined}
+            />
+          </FormControl>
+          <Button mt="2" onPress={() => guardarPqrs()}>
+            Confirmar
+          </Button>
+        </VStack>
+      </ContenedorAnimado>
     </Contenedor>
   );
 };

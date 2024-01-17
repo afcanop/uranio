@@ -36,6 +36,7 @@ import {
 import {fechaActual} from 'utils/funciones';
 import {DateData, MarkedDates} from 'react-native-calendars/src/types';
 import dayjs, {Dayjs} from 'dayjs';
+import ContenedorAnimado from 'common/ContendorAnimado';
 
 LocaleConfig.locales['es'] = {
   monthNames: mesNombres,
@@ -206,7 +207,7 @@ const ReservaNuevo = () => {
     }
   };
 
-  const renderCustomArrow = direction => {
+  const renderCustomArrow = (direction: 'left' | 'right') => {
     // direction puede ser 'left' o 'right'
     const icon =
       direction === 'left' ? 'arrow-back-outline' : 'arrow-forward-outline';
@@ -221,78 +222,85 @@ const ReservaNuevo = () => {
   return (
     <Contenedor>
       {reserva ? (
-        <Box
-          marginBottom={2}
-          padding={2}
-          rounded="lg"
-          overflow="hidden"
-          borderColor="coolGray.200"
-          borderWidth="1">
-          <HStack justifyContent={'space-between'}>
-            <Text fontSize={'3xl'} fontWeight={'bold'} color={colores.primary}>
-              {reserva.nombre}
-            </Text>
-            <TouchableOpacity onPress={() => setReserva(null)}>
-              <Ionicons
-                name="close-outline"
-                size={50}
-                color={colores.rojo['500']}
-              />
-            </TouchableOpacity>
-          </HStack>
-          <Calendar
-            onDayPress={day => agregarNuevoFechaMarcada(day.dateString, true)}
-            minDate={fechaActual().fecha}
-            markedDates={fechasMarcadas}
-            onMonthChange={date => cambiosMes(date)}
-            displayLoadingIndicator={mostrarAnimacionCargandoCalendario}
-            hideExtraDays={true}
-            enableSwipeMonths={true}
-            renderArrow={renderCustomArrow}
-            style={mostrarAnimacionCargandoCalendario ? {opacity: 0.5} : null}
-          />
-          <FormControl>
-            <FormControl.Label>Comentario</FormControl.Label>
-            <TextArea
-              h={20}
-              placeholder="Ejemplo: Personas: [Número], Hora Inicio: HH:MM AM/PM, Hora Fin: HH:MM AM/PM."
-              onChangeText={text => setComentario(text)}
-              value={comentario}
-              autoCompleteType={undefined}
+        <ContenedorAnimado>
+          <Box
+            marginBottom={2}
+            padding={2}
+            rounded="lg"
+            overflow="hidden"
+            borderColor="coolGray.200"
+            borderWidth="1">
+            <HStack justifyContent={'space-between'}>
+              <Text
+                fontSize={'3xl'}
+                fontWeight={'bold'}
+                color={colores.primary}>
+                {reserva.nombre}
+              </Text>
+              <TouchableOpacity onPress={() => setReserva(null)}>
+                <Ionicons
+                  name="close-outline"
+                  size={50}
+                  color={colores.rojo['500']}
+                />
+              </TouchableOpacity>
+            </HStack>
+            <Calendar
+              onDayPress={day => agregarNuevoFechaMarcada(day.dateString, true)}
+              minDate={fechaActual().fecha}
+              markedDates={fechasMarcadas}
+              onMonthChange={date => cambiosMes(date)}
+              displayLoadingIndicator={mostrarAnimacionCargandoCalendario}
+              hideExtraDays={true}
+              enableSwipeMonths={true}
+              renderArrow={renderCustomArrow}
+              style={mostrarAnimacionCargandoCalendario ? {opacity: 0.5} : null}
             />
-          </FormControl>
-          <Button
-            mt="2"
-            onPress={() => guardarReserva()}
-            isLoading={mostrarAnimacionCargando}
-            isLoadingText="Cargando">
-            Confirmar
-          </Button>
-        </Box>
+            <FormControl>
+              <FormControl.Label>Comentario</FormControl.Label>
+              <TextArea
+                h={20}
+                placeholder="Ejemplo: Personas: [Número], Hora Inicio: HH:MM AM/PM, Hora Fin: HH:MM AM/PM."
+                onChangeText={text => setComentario(text)}
+                value={comentario}
+                autoCompleteType={undefined}
+              />
+            </FormControl>
+            <Button
+              mt="2"
+              onPress={() => guardarReserva()}
+              isLoading={mostrarAnimacionCargando}
+              isLoadingText="Cargando">
+              Confirmar
+            </Button>
+          </Box>
+        </ContenedorAnimado>
       ) : (
         <FlatList
           data={arrReservas}
-          renderItem={({item}) => (
-            <TouchableOpacity onPress={() => seleccionarReserva(item)}>
-              <Box
-                marginBottom={2}
-                padding={2}
-                rounded="lg"
-                overflow="hidden"
-                borderColor="coolGray.200"
-                borderWidth="1"
-                justifyContent={'space-between'}>
-                <Center>
-                  <Text
-                    fontSize={'3xl'}
-                    fontWeight={'bold'}
-                    color={colores.primary}>
-                    {item.nombre}
-                  </Text>
-                </Center>
-                <Text mt={2}>{item.descripcion}</Text>
-              </Box>
-            </TouchableOpacity>
+          renderItem={({item, index}) => (
+            <ContenedorAnimado delay={50 * index}>
+              <TouchableOpacity onPress={() => seleccionarReserva(item)}>
+                <Box
+                  marginBottom={2}
+                  padding={2}
+                  rounded="lg"
+                  overflow="hidden"
+                  borderColor="coolGray.200"
+                  borderWidth="1"
+                  justifyContent={'space-between'}>
+                  <Center>
+                    <Text
+                      fontSize={'3xl'}
+                      fontWeight={'bold'}
+                      color={colores.primary}>
+                      {item.nombre}
+                    </Text>
+                  </Center>
+                  <Text mt={2}>{item.descripcion}</Text>
+                </Box>
+              </TouchableOpacity>
+            </ContenedorAnimado>
           )}
           keyExtractor={item => `${item.codigoReservaPk}`}
           showsVerticalScrollIndicator={false}
