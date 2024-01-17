@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Contenedor from 'common/Contenedor';
 import {Entrega, RespuestaEntregaLista} from 'interface/entrega';
@@ -7,6 +8,7 @@ import {
   HStack,
   Heading,
   Image,
+  Spinner,
   Stack,
   Text,
   VStack,
@@ -22,13 +24,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import colores from 'assets/theme/colores';
 import {urlCaja, urlCajas, urlSobre} from 'utils/const';
 import TextoFecha from 'common/TextoFecha';
+import Animated, {FadeInDown} from 'react-native-reanimated';
+import ContenedorAnimado from 'common/ContendorAnimado';
 type Autorizacion = 'N' | 'S' | 'P';
 
 const EntregasLista = () => {
   const toast = useToast();
   const navigation = useNavigation();
   const [arrEntregas, setArrEntregas] = useState<Entrega[]>([]);
-  const [recargarLista, setRecargarLista] = useState(false);
+  const [recargarLista] = useState<boolean>(false);
+  const [mostrarAnimacionCargando, setMostrarAnimacionCargando] =
+    useState<boolean>(false);
 
   const usuario = useSelector((state: RootState) => {
     return {
@@ -36,27 +42,36 @@ const EntregasLista = () => {
       celda: state.usuario.codigoCelda,
     };
   });
+
   useFocusEffect(
     useCallback(() => {
       const unsubscribe = () => consultarEntregas();
       unsubscribe();
-    }, []),
+    }, [navigation]),
   );
 
   const consultarEntregas = async () => {
-    const respuestaApiEntregaLista: RespuestaEntregaLista = await consultarApi(
-      'api/entrega/lista',
-      {
-        codigoCelda: usuario.celda,
-      },
-    );
-    if (respuestaApiEntregaLista.error === false) {
-      setArrEntregas(respuestaApiEntregaLista.entregas);
-    } else {
-      toast.show({
-        title: 'Algo ha salido mal',
-        description: respuestaApiEntregaLista.errorMensaje,
-      });
+    try {
+      setMostrarAnimacionCargando(true);
+      const respuestaApiEntregaLista: RespuestaEntregaLista =
+        await consultarApi('api/entrega/lista', {
+          codigoCelda: usuario.celda,
+        });
+
+      if (respuestaApiEntregaLista.error === false) {
+        setMostrarAnimacionCargando(false);
+
+        setArrEntregas(respuestaApiEntregaLista.entregas);
+      } else {
+        toast.show({
+          title: 'Algo ha salido mal',
+          description: respuestaApiEntregaLista.errorMensaje,
+        });
+      }
+    } catch (error) {
+      console.error('Error al consultar entregas:', error);
+    } finally {
+      setMostrarAnimacionCargando(false);
     }
   };
 
@@ -106,84 +121,87 @@ const EntregasLista = () => {
 
   return (
     <Contenedor>
+      {mostrarAnimacionCargando && <Spinner size={'lg'} />}
       <FlatList
         data={arrEntregas}
-        renderItem={({item}) => (
+        renderItem={({item, index}) => (
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('EntregaDetalle', {
                 entrega: item,
               })
             }>
-            <Box
-              marginBottom={2}
-              padding={2}
-              rounded="lg"
-              overflow="hidden"
-              borderColor="coolGray.200"
-              borderWidth="1">
-              <HStack
-                flexDirection={'row'}
-                flex={2}
-                space={2}
-                justifyContent={'space-between'}>
-                <HStack space={2}>
-                  <Image
-                    source={{
-                      uri: obtenerUrlTipoEntrega(item.codigoEntregaTipoFk),
-                    }}
-                    alt="Alternate Text"
-                    size={'sm'}
-                  />
-                  <VStack space={2}>
-                    <Text>{item.codigoEntregaTipoFk}</Text>
-                    <TextoFecha fecha={item.fechaIngreso} />
-                    <Text>{item.descripcion}</Text>
-                  </VStack>
-                </HStack>
-                {item.estadoAutorizado === 'P' ? (
-                  <HStack
-                    flexDirection={'row'}
-                    space={4}
-                    flex={1}
-                    alignContent={'center'}
-                    alignItems={'center'}
-                    justifyContent={'flex-end'}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        entregaAutorizar(`${item.codigoEntregaPk}`, 'S')
-                      }>
-                      <Ionicons
-                        name={'checkmark-outline'}
-                        size={50}
-                        color={colores.verde['500']}
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() =>
-                        entregaAutorizar(`${item.codigoEntregaPk}`, 'N')
-                      }>
-                      <Ionicons
-                        name={'close-outline'}
-                        size={50}
-                        color={colores.rojo['500']}
-                      />
-                    </TouchableOpacity>
+            <ContenedorAnimado delay={50 * index}>
+              <Box
+                marginBottom={2}
+                padding={2}
+                rounded="lg"
+                overflow="hidden"
+                borderColor="coolGray.200"
+                borderWidth="1">
+                <HStack
+                  flexDirection={'row'}
+                  flex={2}
+                  space={2}
+                  justifyContent={'space-between'}>
+                  <HStack space={2}>
+                    <Image
+                      source={{
+                        uri: obtenerUrlTipoEntrega(item.codigoEntregaTipoFk),
+                      }}
+                      alt="Alternate Text"
+                      size={'sm'}
+                    />
+                    <VStack space={2}>
+                      <Text>{item.codigoEntregaTipoFk}</Text>
+                      <TextoFecha fecha={item.fechaIngreso} />
+                      <Text>{item.descripcion}</Text>
+                    </VStack>
                   </HStack>
-                ) : (
-                  <VStack alignItems={'flex-end'}>
-                    <>{entregaTipoEstado(`${item.estadoAutorizado}`)}</>
-                    <Text color={colores.primary}>
-                      {item.estadoCerrado
-                        ? item.estadoAutorizado === 'S'
-                          ? 'Entregado'
-                          : 'cerrado'
-                        : 'Pendiente'}
-                    </Text>
-                  </VStack>
-                )}
-              </HStack>
-            </Box>
+                  {item.estadoAutorizado === 'P' ? (
+                    <HStack
+                      flexDirection={'row'}
+                      space={4}
+                      flex={1}
+                      alignContent={'center'}
+                      alignItems={'center'}
+                      justifyContent={'flex-end'}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          entregaAutorizar(`${item.codigoEntregaPk}`, 'S')
+                        }>
+                        <Ionicons
+                          name={'checkmark-outline'}
+                          size={50}
+                          color={colores.verde['500']}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() =>
+                          entregaAutorizar(`${item.codigoEntregaPk}`, 'N')
+                        }>
+                        <Ionicons
+                          name={'close-outline'}
+                          size={50}
+                          color={colores.rojo['500']}
+                        />
+                      </TouchableOpacity>
+                    </HStack>
+                  ) : (
+                    <VStack alignItems={'flex-end'}>
+                      <>{entregaTipoEstado(`${item.estadoAutorizado}`)}</>
+                      <Text color={colores.primary}>
+                        {item.estadoCerrado
+                          ? item.estadoAutorizado === 'S'
+                            ? 'Entregado'
+                            : 'cerrado'
+                          : 'Pendiente'}
+                      </Text>
+                    </VStack>
+                  )}
+                </HStack>
+              </Box>
+            </ContenedorAnimado>
           </TouchableOpacity>
         )}
         keyExtractor={item => `${item.codigoEntregaPk}`}
@@ -192,24 +210,6 @@ const EntregasLista = () => {
             refreshing={recargarLista}
             onRefresh={consultarEntregas}
           />
-        }
-        ListEmptyComponent={
-          <Box
-            margin={2}
-            rounded="lg"
-            overflow="hidden"
-            borderColor="coolGray.200"
-            borderWidth="1">
-            <Box>
-              <Stack p="4" space={3}>
-                <HStack space={2} justifyContent={'space-between'}>
-                  <Heading size="md" ml="-1">
-                    Sin Entregras
-                  </Heading>
-                </HStack>
-              </Stack>
-            </Box>
-          </Box>
         }
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
