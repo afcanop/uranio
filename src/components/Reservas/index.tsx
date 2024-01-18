@@ -8,9 +8,12 @@ import {useFocusEffect} from '@react-navigation/native';
 import {ReservaDetalle, respuestaReservaDetalle} from 'interface/reserva';
 import colores from 'assets/theme/colores';
 import ContenedorAnimado from 'common/ContendorAnimado';
+import TextoFecha from 'common/TextoFecha';
+import {RefreshControl} from 'react-native-gesture-handler';
 
 const Index = () => {
   const toast = useToast();
+  const [recargarLista] = useState<boolean>(false);
   const [arrReservas, setArrReservas] = useState<ReservaDetalle[]>([]);
   const usuarioCodigoCelda = useSelector(
     (state: RootState) => state.usuario.codigoCelda,
@@ -61,14 +64,20 @@ const Index = () => {
                 </Text>
               </Center>
               <Text mt={2}>{item.reservaDescripcion}</Text>
-              <Text mt={2}>Comentario: {item.comentario}</Text>
-              <Text mt={2}>{item.fecha}</Text>
+              <Text mt={2}>Comentario: {item.comentario ?? 'No aplica'}</Text>
+              <TextoFecha fecha={item.fecha} />
             </Box>
           </ContenedorAnimado>
         )}
         keyExtractor={item => `${item.codigoReservaDetallePk}`}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={recargarLista}
+            onRefresh={consultarReservas}
+          />
+        }
       />
     </Contenedor>
   );

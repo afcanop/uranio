@@ -24,7 +24,8 @@ const PqrsNuevo = () => {
   const navigation = useNavigation();
   const toast = useToast();
   const usuarioCodigo = useSelector((state: RootState) => state.usuario.codigo);
-
+  const [mostrarAnimacionCargando, setMostrarAnimacionCargando] =
+    useState<boolean>(false);
   useFocusEffect(
     useCallback(() => {
       const unsubscribe = () => consultarPqrsTipo();
@@ -49,6 +50,7 @@ const PqrsNuevo = () => {
   };
 
   const guardarPqrs = async () => {
+    setMostrarAnimacionCargando(true);
     if (pqrsTipo !== '' && descripcion !== '') {
       const respuestaApiCasoNuevo: respuestaCasoNuevo = await consultarApi(
         'api/caso/nuevo',
@@ -66,12 +68,14 @@ const PqrsNuevo = () => {
           description: 'La PQRS registrada con éxito',
         });
       } else {
+        setMostrarAnimacionCargando(true);
         toast.show({
           title: 'Algo ha salido mal',
           description: respuestaApiCasoNuevo.errorMensaje,
         });
       }
     } else {
+      setMostrarAnimacionCargando(true);
       toast.show({
         title: 'Algo ha salido mal',
         description: 'Los campos tipo y descripción son obligatorios',
@@ -114,7 +118,11 @@ const PqrsNuevo = () => {
               autoCompleteType={undefined}
             />
           </FormControl>
-          <Button mt="2" onPress={() => guardarPqrs()}>
+          <Button
+            mt="2"
+            onPress={() => guardarPqrs()}
+            isLoading={mostrarAnimacionCargando}
+            isLoadingText="Cargando">
             Confirmar
           </Button>
         </VStack>

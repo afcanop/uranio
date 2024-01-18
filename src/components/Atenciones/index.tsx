@@ -13,7 +13,8 @@ import ContenedorAnimado from 'common/ContendorAnimado';
 
 const Index = () => {
   const [arrAtenciones, setArrAtenciones] = useState<Atencion[]>([]);
-  const [recargarLista, setRecargarLista] = useState(false);
+  const [recargarLista, setRecargarLista] = useState<boolean>(false);
+
   const toast = useToast();
   const usuario = useSelector((state: RootState) => {
     return {
@@ -82,24 +83,6 @@ const Index = () => {
             refreshing={recargarLista}
             onRefresh={consultarAtenciones}
           />
-        }
-        ListEmptyComponent={
-          <Box
-            margin={2}
-            rounded="lg"
-            overflow="hidden"
-            borderColor="coolGray.200"
-            borderWidth="1">
-            <Box>
-              <Stack p="4" space={3}>
-                <HStack space={2} justifyContent={'space-between'}>
-                  <Heading size="md" ml="-1">
-                    Sin Atenciones
-                  </Heading>
-                </HStack>
-              </Stack>
-            </Box>
-          </Box>
         }
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}

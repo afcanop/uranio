@@ -7,10 +7,12 @@ import {useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {Caso, respuestaCasoLista} from 'interface/pqrs';
 import ContenedorAnimado from 'common/ContendorAnimado';
+import {RefreshControl} from 'react-native-gesture-handler';
 
 const Index = () => {
   const toast = useToast();
   const [arrPqrs, setArrPqrs] = useState<Caso[]>([]);
+  const [recargarLista] = useState<boolean>(false);
   const usuario = useSelector((state: RootState) => {
     return {
       codigo: state.usuario.codigo,
@@ -75,6 +77,12 @@ const Index = () => {
         keyExtractor={item => `${item.codigoCasoPk}`}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={recargarLista}
+            onRefresh={consultarPqrs}
+          />
+        }
       />
     </Contenedor>
   );

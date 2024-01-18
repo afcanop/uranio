@@ -11,8 +11,11 @@ const Contactanos = () => {
   const toast = useToast();
   const [descripcion, setDescripcion] = useState<string>('');
   const usuarioCodigo = useSelector((state: RootState) => state.usuario.codigo);
+  const [mostrarAnimacionCargando, setMostrarAnimacionCargando] =
+    useState<boolean>(false);
 
   const guardarSoporte = async () => {
+    setMostrarAnimacionCargando(true);
     if (descripcion !== '') {
       const respuestaApiCasoNuevo: RespuestaSoporteNuevo = await consultarApi(
         'api/soporte/nuevo',
@@ -23,18 +26,24 @@ const Contactanos = () => {
       );
 
       if (respuestaApiCasoNuevo.error === false) {
+        setMostrarAnimacionCargando(false);
+
         setDescripcion('');
         toast.show({
           title: 'Éxito',
           description: 'El soporte registrado con éxito',
         });
       } else {
+        setMostrarAnimacionCargando(false);
+
         toast.show({
           title: 'Algo ha salido mal',
           description: respuestaApiCasoNuevo.errorMensaje,
         });
       }
     } else {
+      setMostrarAnimacionCargando(false);
+
       toast.show({
         title: 'Algo ha salido mal',
         description: 'El campo descripción es obligatorio',
@@ -56,7 +65,11 @@ const Contactanos = () => {
               autoCompleteType={undefined}
             />
           </FormControl>
-          <Button mt="2" onPress={() => guardarSoporte()}>
+          <Button
+            mt="2"
+            onPress={() => guardarSoporte()}
+            isLoading={mostrarAnimacionCargando}
+            isLoadingText="Cargando">
             Confirmar
           </Button>
         </VStack>
