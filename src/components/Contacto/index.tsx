@@ -6,6 +6,7 @@ import {RespuestaSoporteNuevo} from 'interface/soporte';
 import {useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import ContenedorAnimado from 'common/ContendorAnimado';
+import { Keyboard } from 'react-native';
 
 const Contactanos = () => {
   const toast = useToast();
@@ -16,6 +17,7 @@ const Contactanos = () => {
 
   const guardarSoporte = async () => {
     setMostrarAnimacionCargando(true);
+    Keyboard.dismiss();
     if (descripcion !== '') {
       const respuestaApiCasoNuevo: RespuestaSoporteNuevo = await consultarApi(
         'api/soporte/nuevo',

@@ -52,7 +52,8 @@ const Index = () => {
         renderItem={({item, index}) => (
           <ContenedorAnimado delay={50 * index}>
             <Box
-              padding={2}
+              mb={'2'}
+              padding={'2'}
               rounded="lg"
               overflow="hidden"
               borderColor="coolGray.200"

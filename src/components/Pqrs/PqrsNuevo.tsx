@@ -13,6 +13,7 @@ import {
   useToast,
 } from 'native-base';
 import React, {useCallback, useState} from 'react';
+import { Keyboard } from 'react-native';
 import {useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {consultarApi} from 'utils/api';
@@ -51,6 +52,7 @@ const PqrsNuevo = () => {
 
   const guardarPqrs = async () => {
     setMostrarAnimacionCargando(true);
+    Keyboard.dismiss();
     if (pqrsTipo !== '' && descripcion !== '') {
       const respuestaApiCasoNuevo: respuestaCasoNuevo = await consultarApi(
         'api/caso/nuevo',

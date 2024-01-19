@@ -24,6 +24,8 @@ import rnfs from 'react-native-fs';
 import FileViewer from 'react-native-file-viewer';
 import {RefreshControl} from 'react-native-gesture-handler';
 import ContenedorAnimado from 'common/ContendorAnimado';
+import Animated, {useSharedValue, withSpring} from 'react-native-reanimated';
+import colores from 'assets/theme/colores';
 
 const Documento = () => {
   const toast = useToast();
@@ -34,6 +36,7 @@ const Documento = () => {
   const cerrarModal = () => setAbrirModal(false);
   const cancelRef = useRef(null);
   const [recargarLista, setRecargarLista] = useState(false);
+  const width = useSharedValue(0);
 
   const usuarioCodigoPanal = useSelector(
     (state: RootState) => state.usuario.codigoPanal,
@@ -77,30 +80,36 @@ const Documento = () => {
     }
   }, []);
 
-  const descargarDocumento = (url: string, nombreArchivo: string) => {
+  const descargarDocumento = async (url: string, nombreArchivo: string) => {
     setNombreDocumento(nombreArchivo);
     setAbrirModal(true);
+    width.value = width.value - 100;
     const filePath = rnfs.DocumentDirectoryPath + `/${nombreArchivo}`;
-
-    rnfs
-      .downloadFile({
-        fromUrl: url,
-        toFile: filePath,
-        background: true, // Enable downloading in the background (iOS only)
-        discretionary: true, // Allow the OS to control the timing and speed (iOS only)
-        progress: res => {
-          // Handle download progress updates if needed
-          const progress = (res.bytesWritten / res.contentLength) * 100;
-          setProgreso(parseInt(progress.toFixed(0), 10));
-        },
-      })
-      .promise.then(response => {
-        setProgreso(100);
-        console.log('File downloaded!', response);
-      })
-      .catch(err => {
-        console.log('Download error:', err);
-      });
+    if (await rnfs.exists(filePath)) {
+      setProgreso(100);
+    } else {
+      rnfs
+        .downloadFile({
+          fromUrl: url,
+          toFile: filePath,
+          background: true, // Enable downloading in the background (iOS only)
+          discretionary: true, // Allow the OS to control the timing and speed (iOS only)
+          progress: res => {
+            // Handle download progress updates if needed
+            const progress = (res.bytesWritten / res.contentLength) * 100;
+            console.log(progress);
+            width.value = parseInt(progress.toFixed(0), 10);
+          },
+        })
+        .promise.then(async () => {
+          setProgreso(100);
+          width.value = 100;
+          await rnfs.writeFile(filePath, 'Lorem ipsum dolor sit amet', 'utf8');
+        })
+        .catch(err => {
+          console.log('Download error:', err);
+        });
+    }
   };
 
   const abrirDocumentoDescargado = () => {
@@ -109,21 +118,6 @@ const Documento = () => {
       FileViewer.open(filePath)
         .then(() => {
           cerrarModal();
-        })
-        .catch(_err => {
-          console.log(_err);
-        });
-    } else {
-      console.log('El archivo aún no ha sido descargado.');
-    }
-  };
-
-  const abrirDocumento = (nombre: String) => {
-    const filePath = rnfs.DocumentDirectoryPath + `/${nombre}`;
-    if (filePath) {
-      FileViewer.open(filePath)
-        .then(() => {
-          console.log('Success');
         })
         .catch(_err => {
           console.log(_err);
@@ -226,8 +220,14 @@ const Documento = () => {
               </>
             ) : (
               <>
-                <Text>{progreso}/100</Text>
-                <Progress value={progreso} mx="4" />
+                <Animated.View
+                  style={{
+                    width,
+                    height: 10,
+                    backgroundColor: colores.primary,
+                    borderRadius: 10 / 2,
+                  }}
+                />
               </>
             )}
           </AlertDialog.Body>
