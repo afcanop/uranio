@@ -153,10 +153,11 @@ const EntregasLista = () => {
                         alt="Alternate Text"
                         size={'sm'}
                       />
-                      <VStack space={2}>
+                      <VStack space={1}>
                         <Text>{item.codigoEntregaTipoFk}</Text>
+                        <Text>{item.codigoEntregaPk}</Text>
                         <TextoFecha fecha={item.fechaIngreso} />
-                        <Text>{item.descripcion}</Text>
+                        <Text>{item.descripcion ?? 'Sin descripción'}</Text>
                       </VStack>
                     </HStack>
                     {item.estadoAutorizado === 'P' ? (

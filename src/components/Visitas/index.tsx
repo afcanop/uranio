@@ -26,7 +26,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import colores from 'assets/theme/colores';
 import {consultarApi} from 'utils/api';
 import ContenedorAnimado from 'common/ContendorAnimado';
-import { Pressable } from 'react-native';
+import {Pressable} from 'react-native';
 
 type Autorizacion = 'N' | 'S' | 'P';
 
@@ -142,7 +142,8 @@ const VisitaLista = () => {
                     space={2}
                     justifyContent={'space-between'}>
                     <HStack space={2}>
-                      <VStack space={2}>
+                      <VStack space={1}>
+                        <Text>{item.codigoVisitaPk}</Text>
                         <Text>{item.numeroIdentificacion}</Text>
                         <TextoFecha fecha={item.fecha} />
                         <Text>Placa veiculo: {item.placa}</Text>
