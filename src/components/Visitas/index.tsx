@@ -26,6 +26,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import colores from 'assets/theme/colores';
 import {consultarApi} from 'utils/api';
 import ContenedorAnimado from 'common/ContendorAnimado';
+import { Pressable } from 'react-native';
 
 type Autorizacion = 'N' | 'S' | 'P';
 
@@ -155,26 +156,42 @@ const VisitaLista = () => {
                         alignContent={'center'}
                         alignItems={'center'}
                         justifyContent={'flex-end'}>
-                        <TouchableOpacity
+                        <Pressable
                           onPress={() =>
                             visitaAutorizar(`${item.codigoVisitaPk}`, 'S')
-                          }>
+                          }
+                          style={({pressed}) => [
+                            {
+                              backgroundColor: pressed
+                                ? colores.verde['100']
+                                : colores.blanco,
+                              borderRadius: 50 / 2,
+                            },
+                          ]}>
                           <Ionicons
                             name={'checkmark-outline'}
                             size={50}
                             color={colores.verde['500']}
                           />
-                        </TouchableOpacity>
-                        <TouchableOpacity
+                        </Pressable>
+                        <Pressable
                           onPress={() =>
                             visitaAutorizar(`${item.codigoVisitaPk}`, 'N')
-                          }>
+                          }
+                          style={({pressed}) => [
+                            {
+                              backgroundColor: pressed
+                                ? colores.rojo['100']
+                                : colores.blanco,
+                              borderRadius: 50 / 2,
+                            },
+                          ]}>
                           <Ionicons
                             name={'close-outline'}
                             size={50}
                             color={colores.rojo['500']}
                           />
-                        </TouchableOpacity>
+                        </Pressable>
                       </HStack>
                     ) : (
                       <VStack alignItems={'flex-end'}>

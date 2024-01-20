@@ -13,7 +13,7 @@ import {
   useToast,
 } from 'native-base';
 import React, {useCallback, useState} from 'react';
-import {TouchableOpacity} from 'react-native';
+import {Pressable, TouchableOpacity} from 'react-native';
 import {RefreshControl} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
@@ -167,26 +167,42 @@ const EntregasLista = () => {
                         alignContent={'center'}
                         alignItems={'center'}
                         justifyContent={'flex-end'}>
-                        <TouchableOpacity
+                        <Pressable
                           onPress={() =>
                             entregaAutorizar(`${item.codigoEntregaPk}`, 'S')
-                          }>
+                          }
+                          style={({pressed}) => [
+                            {
+                              backgroundColor: pressed
+                                ? colores.verde['100']
+                                : colores.blanco,
+                              borderRadius: 50 / 2,
+                            },
+                          ]}>
                           <Ionicons
                             name={'checkmark-outline'}
                             size={50}
                             color={colores.verde['500']}
                           />
-                        </TouchableOpacity>
-                        <TouchableOpacity
+                        </Pressable>
+                        <Pressable
                           onPress={() =>
                             entregaAutorizar(`${item.codigoEntregaPk}`, 'N')
-                          }>
+                          }
+                          style={({pressed}) => [
+                            {
+                              backgroundColor: pressed
+                                ? colores.rojo['100']
+                                : colores.blanco,
+                              borderRadius: 50 / 2,
+                            },
+                          ]}>
                           <Ionicons
                             name={'close-outline'}
                             size={50}
                             color={colores.rojo['500']}
                           />
-                        </TouchableOpacity>
+                        </Pressable>
                       </HStack>
                     ) : (
                       <VStack alignItems={'flex-end'}>
