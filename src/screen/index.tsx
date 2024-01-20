@@ -1,5 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import LoginStackScreen from './LoginStackScreen';
 import MainDrawerScreen from './MainDrawerScreen';
@@ -21,7 +21,7 @@ const AppNavigator: React.FC<any> = () => {
       autentificacion: state.usuario.autentificacion,
       codigoPanal: state.usuario.codigoPanal,
     };
-  });
+  }, shallowEqual);
 
   return (
     <NavigationContainer theme={themeApp}>
