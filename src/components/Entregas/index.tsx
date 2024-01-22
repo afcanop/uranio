@@ -176,7 +176,7 @@ const EntregasLista = () => {
                             {
                               backgroundColor: pressed
                                 ? colores.verde['100']
-                                : colores.blanco,
+                                : 'transparent',
                               borderRadius: 50 / 2,
                             },
                           ]}>
@@ -194,7 +194,7 @@ const EntregasLista = () => {
                             {
                               backgroundColor: pressed
                                 ? colores.rojo['100']
-                                : colores.blanco,
+                                : 'transparent',
                               borderRadius: 50 / 2,
                             },
                           ]}>

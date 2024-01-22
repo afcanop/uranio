@@ -50,7 +50,6 @@ export default function MainDrawerScreen() {
   const dispatch = useDispatch();
   const [initialRoute, setInitialRoute] = useState('Inicio');
 
-  const codigoUsuario = useSelector((state: RootState) => state.usuario.codigo);
   const usuarioNombre = useSelector((state: RootState) => state.usuario.nombre);
   const usuarioImagen = useSelector(
     (state: RootState) => state.usuario.urlImagen,
@@ -84,6 +83,7 @@ export default function MainDrawerScreen() {
     messaging().onMessage(remoteMessage =>
       onDisplayNotification(remoteMessage),
     );
+
     messaging().setBackgroundMessageHandler(remoteMessage =>
       onDisplayNotification(remoteMessage),
     );
@@ -95,11 +95,14 @@ export default function MainDrawerScreen() {
   }, []);
 
   async function onDisplayNotification(remoteMessage) {
+    console.log(remoteMessage);
+    
     // Create a channel (required for Android)
     const channelId = await notifee.createChannel({
       id: 'default',
       name: 'Default Channel',
       importance: AndroidImportance.HIGH,
+      badge: true,
     });
 
     // Display a notification
