@@ -17,11 +17,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {consultarApi} from 'utils/api';
 import {RootState} from 'store/reducers';
-import {useDispatch, useSelector} from 'react-redux';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {RespuestaUsuarioDesvincularPanal} from 'interface/usuario';
 import {actualizarUsuarioInformacion} from 'store/reducers/usuarioReducer';
 import colores from 'assets/theme/colores';
 import Contenedor from 'common/Contenedor';
+import {ToastTituloError} from 'utils/const';
 
 const Index = () => {
   const navigation = useNavigation();
@@ -29,16 +30,17 @@ const Index = () => {
   const dispatch = useDispatch();
 
   const usuario = useSelector((state: RootState) => {
+    console.log(state.usuario);
     return {
-      codigo: state.usuario.codigo,
+      codigo: state.usuario.id,
       nombre: state.usuario.nombre,
       celular: state.usuario.celular,
       panal: state.usuario.panalNombre,
-      celda: state.usuario.codigoCelda,
+      celda: state.usuario.celdaId,
       ciudad: state.usuario.ciudadNombre,
       imagen: state.usuario.urlImagen,
     };
-  });
+  }, shallowEqual);
 
   const confirmarDesvinculacionPanal = () => {
     Alert.alert(
@@ -56,23 +58,27 @@ const Index = () => {
   };
 
   const desvinculacionPanal = async () => {
-    const respuestaApiDesvincularPanal: RespuestaUsuarioDesvincularPanal =
-      await consultarApi('api/usuario/desvincular', {
-        codigoUsuario: usuario.codigo,
-      });
-    if (respuestaApiDesvincularPanal.error === false) {
-      dispatch(
-        actualizarUsuarioInformacion({
-          codigoCiudad: null,
-          codigoPanal: null,
-          oferta: false,
-          tienda: false,
-        }),
+    try {
+      const {status} = await consultarApi<RespuestaUsuarioDesvincularPanal>(
+        'api/celda/desvincular',
+        {
+          codigoUsuario: usuario.codigo,
+        },
       );
-    } else {
+      if (status === 200) {
+        dispatch(
+          actualizarUsuarioInformacion({
+            ciudadId: null,
+            panalId: null,
+            oferta: false,
+            tienda: false,
+          }),
+        );
+      }
+    } catch (error: any) {
       toast.show({
-        title: 'Algo ha salido mal',
-        description: respuestaApiDesvincularPanal.errorMensaje,
+        title: ToastTituloError,
+        description: error.response.data.mensaje,
       });
     }
   };
