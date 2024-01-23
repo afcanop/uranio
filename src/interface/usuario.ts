@@ -1,36 +1,35 @@
 export interface Usuario {
   autentificacion: boolean;
-  codigo: number | null;
+  celda: string | null;
+  celdaId: number | null;
+  celular: string | null;
+  ciudadId: number | null;
+  ciudadNombre: string;
+  codigoOperacion: number | null;
+  calidadImagen: string | null;
+  correo: string | null;
   estadoHabilitado: any | null;
   fechaHabilitacion: any | null;
-  operador: string | null;
-  correo: string | null;
-  celular: string | null;
-  urlFoto: string | null;
-  tokenFireBase: string | null;
+  habilitadoConfiguracion: boolean;
+  id: number | null;
   nombre: string | null;
-  codigoOperacion: number | null;
+  oferta: boolean;
+  operador: string | null;
   operadorActual: string;
+  panalId: number | null;
+  panalNombre: string;
   puntoServicio: string;
   puntoServicioToken: string;
-  urlImagen: string;
-  habilitadoConfiguracion: boolean;
-  codigoCelda: number | null;
-  codigoPanal: number | null;
-  codigoCiudad: number | null;
-  codigoPuesto: number | null;
-  codigoTercero: number | null;
-  calidadImagen: string | null;
-  celda: string | null;
   tienda: boolean;
-  oferta: boolean;
-  panalNombre: string;
-  ciudadNombre: string;
+  tokenFireBase: string | null;
+  tokenJwt: string | null;
+  urlFoto: string | null;
+  urlImagen: string;
 }
 export interface RespuestaUsuarioAutenticar {
   error: boolean;
   errorMensaje?: string;
-  autenticar: boolean;
+  token: string;
   usuario: Usuario;
 }
 

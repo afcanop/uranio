@@ -1,5 +1,5 @@
 export interface Ciudad {
-  codigoCiudadPk: number;
+  id: number;
   nombre: string;
 }
 
