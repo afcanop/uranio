@@ -97,7 +97,6 @@ const Documento = () => {
           progress: res => {
             // Handle download progress updates if needed
             const progress = (res.bytesWritten / res.contentLength) * 100;
-            console.log(progress);
             width.value = parseInt(progress.toFixed(0), 10);
           },
         })
