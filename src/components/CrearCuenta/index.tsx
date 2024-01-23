@@ -16,51 +16,73 @@ import {useNavigation} from '@react-navigation/native';
 import Contenedor from 'common/Contenedor';
 import {RespuestaUsuarioNuevo} from 'interface/usuario';
 import ContenedorAnimado from 'common/ContendorAnimado';
+import {ToastTituloError, ToastTituloExito} from 'utils/const';
 
 function CrearCuenta() {
   const toast = useToast();
   const [usuario, setUsuario] = useState('');
   const [clave, setClave] = useState('');
   const [celular, setCelular] = useState('');
-  const [mostrarclave, setMostrarContrasena] = useState(false);
+  const [mostrarclave, setMostrarContrasena] = useState<boolean>(false);
+  const [mostrarAnimacionCargando, setMostrarAnimacionCargando] =
+    useState<boolean>(false);
   const navigation = useNavigation();
 
   const crearUsuario = async () => {
-    if (validarCorreoElectronico(usuario)) {
-      if (clave.length >= 8) {
-        const respuestaApiUsuarioNuevo: RespuestaUsuarioNuevo =
-          await consultarApi('api/usuario/nuevo', {
-            usuario,
-            clave,
-            celular,
-          });
-        if (respuestaApiUsuarioNuevo.error === false) {
-          navigation.goBack();
-          toast.show({
-            title: 'Correcto',
-            description: 'Creación de usuario exitoso',
-          });
+    setMostrarAnimacionCargando(true);
+
+    if (usuario !== '' || clave !== '' || celular !== '') {
+      if (validarCorreoElectronico(usuario)) {
+        if (clave.length >= 8) {
+          try {
+            const {status} = await consultarApi<RespuestaUsuarioNuevo>(
+              'api/registro',
+              {
+                email: usuario,
+                password: clave,
+                celular,
+              },
+              {
+                requiereToken: false,
+              },
+            );
+            if (status === 200) {
+              navigation.goBack();
+              toast.show({
+                title: ToastTituloExito,
+                description: 'Creación de usuario exitoso',
+              });
+            }
+          } catch (error: any) {
+            setMostrarAnimacionCargando(false);
+            toast.show({
+              title: ToastTituloError,
+              description: error.response.data.mensaje,
+            });
+          }
         } else {
+          setMostrarAnimacionCargando(false);
           toast.show({
-            title: 'Algo ha salido mal',
-            description: respuestaApiUsuarioNuevo.errorMensaje,
+            title: ToastTituloError,
+            description: 'La clave debe de tener más 8 caracteres',
           });
         }
       } else {
+        setMostrarAnimacionCargando(false);
         toast.show({
-          title: 'Algo ha salido mal',
-          description: 'La clave debe de tener más 8 caracteres',
+          title: ToastTituloError,
+          description: 'El no correo válido',
         });
       }
     } else {
+      setMostrarAnimacionCargando(false);
       toast.show({
-        title: 'Algo ha salido mal',
-        description: 'El no correo válido',
+        title: ToastTituloError,
+        description:
+          'Por favor, completa al menos uno de los siguientes campos: Usuario, Clave o Número de Celular.',
       });
     }
   };
-
-  const habilitarBtnGuardar = usuario === '' || clave === '' || celular === '';
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -135,7 +157,8 @@ function CrearCuenta() {
               </FormControl>
               <Button
                 mt="2"
-                isDisabled={habilitarBtnGuardar}
+                isLoading={mostrarAnimacionCargando}
+                isLoadingText="Cargando"
                 onPress={() => crearUsuario()}>
                 Guardar
               </Button>
