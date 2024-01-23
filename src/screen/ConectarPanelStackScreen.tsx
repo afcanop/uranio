@@ -26,14 +26,14 @@ const ConectarPanalStackScreen: React.FC<any> = () => {
         name="ConectarPanal"
         component={ConectarPanal}
         options={() => ({
-          title: 'Conectar panal',
+          title: 'Asignar panal',
         })}
       />
       <Stack.Screen
         name="ConectarPanalQr"
         component={ConectarPanalQr}
         options={() => ({
-          title: 'Conectar panal',
+          title: 'Asignar panal',
         })}
       />
     </Stack.Navigator>
