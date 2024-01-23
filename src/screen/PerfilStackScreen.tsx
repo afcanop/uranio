@@ -6,12 +6,14 @@ import IconoMenu from '../common/IconoMenu';
 import InformacionPersonal from 'components/Perfil/InformacionPersonal';
 import CambioClave from 'components/Perfil/CambioClave';
 import CambioImagen from 'components/Perfil/CambioImagen';
+import EliminarCuenta from 'components/Perfil/EliminarCuenta';
 
 export type RootStackParamList = {
   Perfil: undefined;
   InformacionPersonal: undefined;
   CambioClave: undefined;
   CambioImagen: undefined;
+  EliminarCuenta: undefined;
 };
 
 const PerfilStackScreen: React.FC<any> = () => {
@@ -54,6 +56,13 @@ const PerfilStackScreen: React.FC<any> = () => {
         component={CambioImagen}
         options={() => ({
           title: 'Cambio de imagen',
+        })}
+      />
+      <Stack.Screen
+        name="EliminarCuenta"
+        component={EliminarCuenta}
+        options={() => ({
+          title: 'Gestión cuenta',
         })}
       />
     </Stack.Navigator>

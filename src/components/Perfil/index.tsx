@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import {Alert, TouchableOpacity} from 'react-native';
+import {Alert, Pressable, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {
   Avatar,
@@ -7,8 +7,10 @@ import {
   HStack,
   Heading,
   Row,
+  ScrollView,
   Stack,
   Text,
+  VStack,
   useToast,
 } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -19,6 +21,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RespuestaUsuarioDesvincularPanal} from 'interface/usuario';
 import {actualizarUsuarioInformacion} from 'store/reducers/usuarioReducer';
 import colores from 'assets/theme/colores';
+import Contenedor from 'common/Contenedor';
 
 const Index = () => {
   const navigation = useNavigation();
@@ -44,7 +47,7 @@ const Index = () => {
       [
         {
           text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
+          onPress: () => null,
           style: 'cancel',
         },
         {text: 'Confirmar', onPress: () => desvinculacionPanal()},
@@ -75,8 +78,8 @@ const Index = () => {
   };
 
   return (
-    <>
-      <Box margin={2} alignItems={'center'} justifyContent={'center'}>
+    <Contenedor>
+      <Box alignItems={'center'} justifyContent={'center'}>
         <Avatar
           bg="cyan.500"
           size={'2xl'}
@@ -91,14 +94,13 @@ const Index = () => {
           </Text>
         </TouchableOpacity>
       </Box>
-      <Box
-        margin={2}
-        rounded="lg"
-        overflow="hidden"
-        borderColor="coolGray.200"
-        borderWidth="1">
-        <Box>
-          <Stack p="4" space={3}>
+      <VStack space={2}>
+        <Box
+          rounded="lg"
+          overflow="hidden"
+          borderColor="coolGray.200"
+          borderWidth="1">
+          <Stack p="3" space={2}>
             <HStack space={2} justifyContent={'space-between'}>
               <Heading size="md" ml="-1">
                 Datos personales
@@ -122,62 +124,90 @@ const Index = () => {
             </Row>
           </Stack>
         </Box>
-      </Box>
-      <Box
-        margin={2}
-        rounded="lg"
-        overflow="hidden"
-        borderColor="coolGray.200"
-        borderWidth="1">
-        <Box>
-          <Stack p="4" space={3}>
-            <HStack space={2} justifyContent={'space-between'}>
-              <Heading size="md" ml="-1">
-                Panel y celda
-              </Heading>
-              <TouchableOpacity onPress={() => confirmarDesvinculacionPanal()}>
-                <Text fontSize={20} color={colores.primary}>
-                  Desvincular
-                </Text>
-              </TouchableOpacity>
-            </HStack>
-            <Row justifyContent={'space-between'}>
-              <Text fontWeight="400">Ciudad:</Text>
-              <Text fontWeight="400">{usuario.ciudad}</Text>
-            </Row>
-            <Row justifyContent={'space-between'}>
-              <Text fontWeight="400">Panel:</Text>
-              <Text fontWeight="400">{usuario.panal}</Text>
-            </Row>
-            <Row justifyContent={'space-between'}>
-              <Text fontWeight="400">Celda:</Text>
-              <Text fontWeight="400">{usuario.celda}</Text>
-            </Row>
-          </Stack>
+        <Box
+          rounded="lg"
+          overflow="hidden"
+          borderColor="coolGray.200"
+          borderWidth="1">
+          <Box>
+            <Stack p="3" space={2}>
+              <HStack space={2} justifyContent={'space-between'}>
+                <Heading size="md" ml="-1">
+                  Panel y celda
+                </Heading>
+                <TouchableOpacity
+                  onPress={() => confirmarDesvinculacionPanal()}>
+                  <Text fontSize={20} color={colores.primary}>
+                    Desvincular
+                  </Text>
+                </TouchableOpacity>
+              </HStack>
+              <Row justifyContent={'space-between'}>
+                <Text fontWeight="400">Ciudad:</Text>
+                <Text fontWeight="400">{usuario.ciudad}</Text>
+              </Row>
+              <Row justifyContent={'space-between'}>
+                <Text fontWeight="400">Panel:</Text>
+                <Text fontWeight="400">{usuario.panal}</Text>
+              </Row>
+              <Row justifyContent={'space-between'}>
+                <Text fontWeight="400">Celda:</Text>
+                <Text fontWeight="400">{usuario.celda}</Text>
+              </Row>
+            </Stack>
+          </Box>
         </Box>
-      </Box>
-      <Box
-        margin={2}
-        rounded="lg"
-        overflow="hidden"
-        borderColor="coolGray.200"
-        borderWidth="1">
-        <Box>
-          <Stack p="4" space={3}>
+        <Box
+          rounded="lg"
+          overflow="hidden"
+          borderColor="coolGray.200"
+          borderWidth="1">
+          <Stack p="3" space={2}>
             <HStack space={2} justifyContent={'space-between'}>
               <Heading size="md" ml="-1">
                 Seguridad
               </Heading>
               <TouchableOpacity
                 onPress={() => navigation.navigate('CambioClave')}>
-                <Ionicons name={'pencil'} size={25} />
+                <Ionicons
+                  name={'pencil'}
+                  size={25}
+                  color={colores.gris['600']}
+                />
               </TouchableOpacity>
             </HStack>
             <Text fontWeight="400">Cambiar clave</Text>
           </Stack>
         </Box>
-      </Box>
-    </>
+        <Box
+          rounded="lg"
+          overflow="hidden"
+          borderColor="coolGray.200"
+          borderWidth="1">
+          <Box>
+            <Pressable onPress={() => navigation.navigate('EliminarCuenta')}>
+              <Stack p="3" space={2}>
+                <HStack space={2} justifyContent={'space-between'}>
+                  <Box>
+                    <Heading size="md" ml="-1">
+                      ¿Eliminar o desactivar cuanta?
+                    </Heading>
+                    <Text>
+                      Averigua como puedes ¿Eliminar o desactivar cuanta?
+                    </Text>
+                  </Box>
+                  <Ionicons
+                    name={'arrow-forward-sharp'}
+                    size={30}
+                    color={colores.gris['600']}
+                  />
+                </HStack>
+              </Stack>
+            </Pressable>
+          </Box>
+        </Box>
+      </VStack>
+    </Contenedor>
   );
 };
 
