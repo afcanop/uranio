@@ -15,23 +15,18 @@ import {
   useToast,
 } from 'native-base';
 import HojaDeEstiloGenerales from '../../assets/HojaDeEstiloGenerales';
-import {fechaActual, validarCorreoElectronico} from '../../utils/funciones';
+import {validarCorreoElectronico} from '../../utils/funciones';
 import {consultarApi} from '../../utils/api';
 import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import Contenedor from '../../common/Contenedor';
-import {setUsuarioInformacion} from '../../store/reducers/usuarioReducer';
-import {
-  RespuestaUsuarioAutenticar,
-  RespuestaUsuarioDetalle,
-} from 'interface/usuario';
-import {
-  actualizarRegistroFireBase,
-  crearRegistroFireBase,
-  obtenerTokenFirebase,
-} from 'utils/services/firebase';
-import database from '@react-native-firebase/database';
+import {RespuestaUsuarioAutenticar} from 'interface/usuario';
+import {obtenerTokenFirebase} from 'utils/services/firebase';
 import ContenedorAnimado from 'common/ContendorAnimado';
+import {setUsuarioInformacion} from 'store/reducers/usuarioReducer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ToastTituloError} from 'utils/const';
+import colores from 'assets/theme/colores';
 
 const Login = () => {
   const toast = useToast();
@@ -39,7 +34,9 @@ const Login = () => {
   const navigation = useNavigation();
   const [usuario, setUsuario] = useState('');
   const [clave, setClave] = useState('');
-  const [mostrarClave, setMostrarClave] = useState(false);
+  const [mostrarClave, setMostrarClave] = useState<boolean>(false);
+  const [mostrarAnimacionCargando, setMostrarAnimacionCargando] =
+    useState<boolean>(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -52,81 +49,86 @@ const Login = () => {
   }, [navigation]);
 
   const iniciarSesion = async () => {
+    setMostrarAnimacionCargando(true);
     if (usuario !== '' && clave !== '') {
       if (validarCorreoElectronico(usuario)) {
         if (clave.length >= 8) {
           try {
-            const tokenFirebase = await obtenerTokenFirebase();
-            const respuestaApiLogin: RespuestaUsuarioAutenticar =
-              await consultarApi('api/usuario/autenticar', {
-                usuario,
-                clave,
-                ...{tokenFirebase},
-              });
-
-            if (respuestaApiLogin.autenticar) {
-              let informacionUsuario = {
-                ...respuestaApiLogin.usuario,
-                tokenFireBase: tokenFirebase,
-              };
-
-              const respuestaApiUsuarioDetalle: RespuestaUsuarioDetalle =
-                await consultarApi('api/usuario/detalle', {
-                  codigoUsuario: respuestaApiLogin.usuario.codigo,
-                });
-
-              /*
-                let consultaFireBase = await database()
-                  .ref(`/session/${informacionUsuario.codigo}`)
-                  .once('value');
-                const informacionFirebase = await consultaFireBase._snapshot.value;
-                if (informacionFirebase) {
-                  actualizarRegistroFireBase(informacionUsuario.codigo, {
-                    fechaAutenticacion: `${fechaActual().fecha} ${
-                      fechaActual().hora
-                    }`,
-                    token: tokenFirebase,
-                  });
-                } else {
-                  crearRegistroFireBase(
-                    informacionUsuario.codigo,
-                    tokenFirebase,
-                  );
-                }
-                */
-              dispatch(setUsuarioInformacion(informacionUsuario));
-              // dispatch(
-              //   actualizarUsuarioInformacion(respuestaApiUsuarioDetalle),
-              // );
+            const {status, respuesta} =
+              await consultarApi<RespuestaUsuarioAutenticar>(
+                'api/login_check',
+                {
+                  username: usuario,
+                  password: clave,
+                },
+                {
+                  method: 'post',
+                  requiereToken: false,
+                },
+              );
+            if (status === 200) {
+              //guardar token
+              await AsyncStorage.setItem('jwtToken', respuesta.token);
+              consultarUsuarioDetalle();
             } else {
               toast.show({
-                title: 'Algo ha salido mal',
+                title: ToastTituloError,
                 description: 'error al autenticar',
               });
             }
-          } catch (error) {
+          } catch (error: any) {
+            setMostrarAnimacionCargando(false);
             toast.show({
-              title: 'Algo ha salido mal',
-              description:
-                'Error al conectar al servidor, por favor comprobar su conexión a internet',
+              title: ToastTituloError,
+              description: error.response.data.mensaje,
             });
           }
         } else {
+          setMostrarAnimacionCargando(false);
           toast.show({
-            title: 'Algo ha salido mal',
+            title: ToastTituloError,
             description: 'La clave debe tener 8 o más caracteres',
           });
         }
       } else {
+        setMostrarAnimacionCargando(false);
         toast.show({
-          title: 'Algo ha salido mal',
+          title: ToastTituloError,
           description: 'El usuario no es un correo válido',
         });
       }
     } else {
+      setMostrarAnimacionCargando(false);
       Toast.show({
-        title: 'Algo ha salido mal',
+        title: ToastTituloError,
         description: 'Usuario y contraseña no tiene información',
+      });
+    }
+  };
+
+  const consultarUsuarioDetalle = async () => {
+    try {
+      const tokenFirebase = await obtenerTokenFirebase();
+
+      const {status, respuesta} =
+        await consultarApi<RespuestaUsuarioAutenticar>('api/usuario/detalle', {
+          usuario: usuario,
+          tokenFirebase,
+        });
+      if (status === 200) {
+        dispatch(setUsuarioInformacion(respuesta.usuario));
+      } else {
+        setMostrarAnimacionCargando(false);
+        toast.show({
+          title: ToastTituloError,
+          description: 'error al autenticar',
+        });
+      }
+    } catch (error: any) {
+      setMostrarAnimacionCargando(false);
+      toast.show({
+        title: ToastTituloError,
+        description: error.response.data.mensaje,
       });
     }
   };
@@ -150,7 +152,7 @@ const Login = () => {
               <FormControl>
                 <FormControl.Label
                   _text={{
-                    color: 'coolGray.800',
+                    color: colores.negro,
                     fontSize: 'md',
                     fontWeight: 500,
                   }}>
@@ -165,7 +167,7 @@ const Login = () => {
               <FormControl>
                 <FormControl.Label
                   _text={{
-                    color: 'coolGray.800',
+                    color: colores.negro,
                     fontSize: 'md',
                     fontWeight: 500,
                   }}>
@@ -178,21 +180,22 @@ const Login = () => {
                     <TouchableOpacity
                       onPress={() => setMostrarClave(!mostrarClave)}
                       style={{marginHorizontal: 5}}>
-                      {mostrarClave == false ? (
-                        <Ionicons name={'eye-off-outline'} size={25} />
-                      ) : (
-                        <Ionicons
-                          name={'eye-outline'}
-                          size={25}
-                          color={'coolGray.800'}
-                        />
-                      )}
+                      <Ionicons
+                        name={mostrarClave ? 'eye-outline' : 'eye-off-outline'}
+                        size={25}
+                        color={colores.gris}
+                      />
                     </TouchableOpacity>
                   }
                 />
               </FormControl>
               <VStack space={3} mt={2}>
-                <Button onPress={() => iniciarSesion()}>Ingresar</Button>
+                <Button
+                  onPress={() => iniciarSesion()}
+                  isLoading={mostrarAnimacionCargando}
+                  isLoadingText="Cargando">
+                  Ingresar
+                </Button>
                 <Button
                   onPress={() => navigation.navigate('CrearCuenta')}
                   variant="link">
