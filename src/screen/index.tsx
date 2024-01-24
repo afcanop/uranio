@@ -16,19 +16,19 @@ const themeApp: any = {
 };
 
 const AppNavigator: React.FC<any> = () => {
-  const usuarioAutenticado = useSelector((state: RootState) => {
+  const usuario = useSelector((state: RootState) => {
     return {
       autentificacion: state.usuario.autentificacion,
-      codigoPanal: state.usuario.codigoPanal,
+      panalId: state.usuario.panalId,
     };
   }, shallowEqual);
 
   return (
     <NavigationContainer theme={themeApp}>
       <StatusBar animated={true} backgroundColor="#175B8E" />
-      {usuarioAutenticado.autentificacion ? (
+      {usuario.autentificacion ? (
         <>
-          {usuarioAutenticado.codigoPanal === null ? (
+          {usuario.panalId === null ? (
             <ConectarPanelStackScreen />
           ) : (
             <MainDrawerScreen />
