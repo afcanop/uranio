@@ -43,6 +43,68 @@ import notifee, {
   AndroidStyle,
   EventType,
 } from '@notifee/react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ConectarCeldaStackScreen from './ConectarCeldaStackScreen';
+
+const misRutas = [
+  {
+    ruta: 'Inicio',
+    nombre: 'Inicio',
+    icono: 'home',
+  },
+  {
+    ruta: 'Entrega',
+    nombre: 'Entrega',
+    icono: 'file-tray-full',
+  },
+  {
+    ruta: 'Visita',
+    nombre: 'Visita',
+    icono: 'people',
+  },
+  {
+    ruta: 'Votacion',
+    nombre: 'Votación',
+    icono: 'albums',
+  },
+  {
+    ruta: 'Reservas',
+    nombre: 'Reservas',
+    icono: 'calendar',
+  },
+  {
+    ruta: 'Documentos',
+    nombre: 'Documentos',
+    icono: 'document-text',
+  },
+  {
+    ruta: 'Atenciones',
+    nombre: 'Atenciones',
+    icono: 'alert',
+  },
+  {
+    ruta: 'PQRS',
+    nombre: 'PQRS',
+    icono: 'help',
+  },
+  {
+    ruta: 'Contactanos',
+    nombre: 'Contactanos',
+    icono: 'trail-sign',
+  },
+];
+
+// const texto: any = {
+//   Inicio:
+//   Entrega: 'Entrega',
+//   Visita: 'Visita',
+//   Votacion: '',
+//   Reservas: 'Reservas',
+//   Documentos: 'Documentos',
+//   Atenciones: 'Atenciones',
+//   PQRS: 'PQRS',
+//   Contactanos: 'Contactanos',
+// };
 
 export default function MainDrawerScreen() {
   const navigation = useNavigation();
@@ -95,8 +157,6 @@ export default function MainDrawerScreen() {
   }, []);
 
   async function onDisplayNotification(remoteMessage) {
-    console.log(remoteMessage);
-    
     // Create a channel (required for Android)
     const channelId = await notifee.createChannel({
       id: 'default',
@@ -138,59 +198,6 @@ export default function MainDrawerScreen() {
     });
   }
 
-  const mostrarMenuItem = (nombre: any, index: any, stateIndex: any) => {
-    const iconos: any = {
-      Inicio: 'home',
-      Entrega: 'file-tray-full',
-      Visita: 'people',
-      Votacion: 'albums',
-      Reservas: 'calendar',
-      Documentos: 'document-text',
-      Atenciones: 'alert',
-      PQRS: 'help',
-      Contactanos: 'trail-sign',
-    };
-
-    const texto: any = {
-      Inicio: 'Inicio',
-      Entrega: 'Entrega',
-      Visita: 'Visita',
-      Votacion: 'Votación',
-      Reservas: 'Reservas',
-      Documentos: 'Documentos',
-      Atenciones: 'ATENCIONES',
-      PQRS: 'PQRS',
-      Contactanos: 'Contactanos',
-    };
-
-    const icono = iconos[nombre];
-    const textoItem = texto[nombre];
-
-    if (icono !== undefined && textoItem !== undefined) {
-      return (
-        <>
-          <Ionicons
-            name={index === stateIndex ? icono : `${icono}-outline`}
-            size={25}
-            color={index === stateIndex ? colores.blanco : colores.negro}
-          />
-          <Text
-            style={[
-              styles.menuItemTexto,
-              {
-                color: index === stateIndex ? colores.blanco : colores.negro,
-              },
-            ]}>
-            {textoItem}
-          </Text>
-        </>
-      );
-    }
-
-    // Manejar el caso 'Contactanos' u otros casos no especificados
-    return null;
-  };
-
   const cerrarSession = () => {
     return Alert.alert(
       'Cerrar sesión',
@@ -198,12 +205,13 @@ export default function MainDrawerScreen() {
       [
         {
           text: 'Cancelar',
-          onPress: () => console.log('Cancel Pressed'),
+          onPress: () => null,
           style: 'cancel',
         },
         {
           text: 'Confirmar',
-          onPress: () => {
+          onPress: async () => {
+            await AsyncStorage.getAllKeys();
             dispatch(cerrarSesionUsuario());
           },
         },
@@ -237,7 +245,7 @@ export default function MainDrawerScreen() {
             </HStack>
           </Box>
           <VStack space="3">
-            {props.state.routeNames.map((name: String, index: Number) => (
+            {misRutas.map((item, index) => (
               <Pressable
                 px="5"
                 py="2.5"
@@ -245,11 +253,36 @@ export default function MainDrawerScreen() {
                   index === props.state.index ? colores.primary : 'transparent'
                 }
                 onPress={() => {
-                  props.navigation.navigate(name);
+                  props.navigation.navigate(item.ruta);
                 }}
                 key={index.toString()}>
                 <HStack space="1" alignItems="center">
-                  {mostrarMenuItem(name, index, props.state.index)}
+                  <Ionicons
+                    name={
+                      index === props.state.index
+                        ? item.icono
+                        : `${item.icono}-outline`
+                    }
+                    size={25}
+                    color={
+                      index === props.state.index
+                        ? colores.blanco
+                        : colores.negro
+                    }
+                  />
+                  <Text
+                    style={[
+                      styles.menuItemTexto,
+                      {
+                        color:
+                          index === props.state.index
+                            ? colores.blanco
+                            : colores.negro,
+                      },
+                    ]}>
+                    {item.nombre}
+                  </Text>
+                  {/* {mostrarMenuItem(name, index, props.state.index)} */}
                 </HStack>
               </Pressable>
             ))}
@@ -319,6 +352,9 @@ export default function MainDrawerScreen() {
       <Drawer.Screen name="PQRS">{() => <PqrsStackScreen />}</Drawer.Screen>
       <Drawer.Screen name="Contactanos">
         {() => <ContactanosStackScreen />}
+      </Drawer.Screen>
+      <Drawer.Screen name="ConectarCelda">
+        {() => <ConectarCeldaStackScreen />}
       </Drawer.Screen>
     </Drawer.Navigator>
   );
