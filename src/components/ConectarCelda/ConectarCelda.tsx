@@ -97,15 +97,6 @@ const ConectarCelda = () => {
 
   const celdaAsignar = async () => {
     try {
-      console.log(
-        {
-          codigoUsuario: usuario.codigo,
-          codigoPanal: usuario.codigoPanal,
-          celda,
-          llave: codigoConfirmacion,
-        }
-      );
-      
       const {status, respuesta} = await consultarApi<RespuestaCeldaAsignar>(
         'api/celda/vincular',
         {
