@@ -19,8 +19,8 @@ const Index = () => {
   const toast = useToast();
   const usuario = useSelector((state: RootState) => {
     return {
-      codigo: state.usuario.codigo,
-      celda: state.usuario.codigoCelda,
+      codigo: state.usuario.id,
+      celda: state.usuario.celdaId,
     };
   });
 

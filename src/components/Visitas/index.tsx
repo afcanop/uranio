@@ -41,8 +41,8 @@ const VisitaLista = () => {
 
   const usuario = useSelector((state: RootState) => {
     return {
-      celda: state.usuario.codigoCelda,
-      codigo: state.usuario.codigo,
+      celda: state.usuario.celdaId,
+      codigo: state.usuario.id,
     };
   });
 

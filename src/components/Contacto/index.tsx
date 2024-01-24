@@ -11,7 +11,7 @@ import { Keyboard } from 'react-native';
 const Contactanos = () => {
   const toast = useToast();
   const [descripcion, setDescripcion] = useState<string>('');
-  const usuarioCodigo = useSelector((state: RootState) => state.usuario.codigo);
+  const usuarioCodigo = useSelector((state: RootState) => state.usuario.id);
   const [mostrarAnimacionCargando, setMostrarAnimacionCargando] =
     useState<boolean>(false);
 

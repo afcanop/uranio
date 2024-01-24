@@ -16,7 +16,7 @@ const CambioClave = () => {
   const [mostrarClave, setMostrarClave] = useState<boolean>(false);
   const [mostrarConfirmarClave, setMostrarConfirmarClave] =
     useState<boolean>(false);
-  const codigoUsuario = useSelector((state: RootState) => state.usuario.codigo);
+  const codigoUsuario = useSelector((state: RootState) => state.usuario.id);
 
   const guardarContrasena = async () => {
     if (clave.length >= 8 && confirmarClave.length >= 8) {

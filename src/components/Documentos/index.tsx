@@ -39,7 +39,7 @@ const Documento = () => {
   const width = useSharedValue(0);
 
   const usuarioCodigoPanal = useSelector(
-    (state: RootState) => state.usuario.codigoPanal,
+    (state: RootState) => state.usuario.panalId,
   );
 
   useFocusEffect(

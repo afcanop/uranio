@@ -26,6 +26,7 @@ export interface Usuario {
   urlFoto: string | null;
   urlImagen: string;
 }
+
 export interface RespuestaUsuarioAutenticar {
   error: boolean;
   errorMensaje?: string;

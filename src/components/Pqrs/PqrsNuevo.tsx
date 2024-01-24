@@ -24,7 +24,7 @@ const PqrsNuevo = () => {
   const [arrPqrsTipo, setArrPqrsTipo] = useState<CasoTipo[]>([]);
   const navigation = useNavigation();
   const toast = useToast();
-  const usuarioCodigo = useSelector((state: RootState) => state.usuario.codigo);
+  const usuarioCodigo = useSelector((state: RootState) => state.usuario.id);
   const [mostrarAnimacionCargando, setMostrarAnimacionCargando] =
     useState<boolean>(false);
   useFocusEffect(

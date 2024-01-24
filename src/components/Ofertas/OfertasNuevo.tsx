@@ -51,8 +51,8 @@ const OfertasNuevo = () => {
   const [arrCategorias, setArrCategorias] = useState<Categoria[]>([]);
   const usuario = useSelector((state: RootState) => {
     return {
-      codigoPanal: state.usuario.codigoPanal,
-      codigo: state.usuario.codigo,
+      codigoPanal: state.usuario.panalId,
+      codigo: state.usuario.id,
     };
   });
 

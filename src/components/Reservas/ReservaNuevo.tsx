@@ -64,7 +64,7 @@ const ReservaNuevo = () => {
   ] = useState<boolean>(false);
 
   const usuarioCodigoCelda = useSelector(
-    (state: RootState) => state.usuario.codigoCelda,
+    (state: RootState) => state.usuario.celdaId,
   );
 
   useFocusEffect(

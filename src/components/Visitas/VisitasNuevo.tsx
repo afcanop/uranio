@@ -20,8 +20,8 @@ const VisitasNuevo = () => {
     useState<boolean>(false);
   const usuario = useSelector((state: RootState) => {
     return {
-      codigoCelda: state.usuario.codigoCelda,
-      codigoPanal: state.usuario.codigoPanal,
+      codigoCelda: state.usuario.celdaId,
+      codigoPanal: state.usuario.panalId,
     };
   });
 

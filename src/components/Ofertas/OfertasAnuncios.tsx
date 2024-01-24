@@ -32,7 +32,7 @@ const OfertasAnuncios = () => {
   const {isOpen, onOpen, onClose} = useDisclose();
   const [recargarLista, setRecargarLista] = useState(false);
   const [arrOfertas, setArrOfertas] = useState<Oferta[]>([]);
-  const usuario = useSelector((state: RootState) => state.usuario.codigo);
+  const usuario = useSelector((state: RootState) => state.usuario.id);
 
   useFocusEffect(
     useCallback(() => {

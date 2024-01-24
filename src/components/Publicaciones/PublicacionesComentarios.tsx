@@ -32,7 +32,7 @@ const PublicacionesComentarios = () => {
   const toast = useToast();
   const usuario = useSelector((state: RootState) => {
     return {
-      codigo: state.usuario.codigo,
+      codigo: state.usuario.id,
       imagen: state.usuario.urlImagen,
     };
   }, shallowEqual);

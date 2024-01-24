@@ -17,7 +17,7 @@ const Index = () => {
   const [recargarLista] = useState<boolean>(false);
   const [arrReservas, setArrReservas] = useState<ReservaDetalle[]>([]);
   const usuarioCodigoCelda = useSelector(
-    (state: RootState) => state.usuario.codigoCelda,
+    (state: RootState) => state.usuario.celdaId,
   );
 
   useFocusEffect(

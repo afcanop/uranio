@@ -15,8 +15,8 @@ const Index = () => {
   const [recargarLista] = useState<boolean>(false);
   const usuario = useSelector((state: RootState) => {
     return {
-      codigo: state.usuario.codigo,
-      panal: state.usuario.codigoPanal,
+      codigo: state.usuario.id,
+      panal: state.usuario.panalId,
     };
   });
 

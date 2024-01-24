@@ -20,7 +20,7 @@ const CambioImagen = () => {
   const [accesoCamara, setAccesoCamara] = useState<Boolean>(false);
   const [camaraTipo, setCamaraTipo] = useState<CameraType>(CameraType.Back);
   const camera = useRef(null);
-  const codigoUsuario = useSelector((state: RootState) => state.usuario.codigo);
+  const codigoUsuario = useSelector((state: RootState) => state.usuario.id);
 
   useFocusEffect(
     useCallback(() => {

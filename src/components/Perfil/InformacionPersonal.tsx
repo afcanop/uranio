@@ -11,7 +11,7 @@ const InformacionPersonal = () => {
   const dispatch = useDispatch();
   const usuario = useSelector((state: RootState) => {
     return {
-      codigo: state.usuario.codigo,
+      codigo: state.usuario.id,
       nombre: state.usuario.nombre,
       celular: state.usuario.celular,
     };
