@@ -3,9 +3,9 @@ import {Usuario} from '../../interface/usuario';
 
 const initialState: Usuario = {
   autentificacion: false,
-  codigo: null,
   estadoHabilitado: null,
   fechaHabilitacion: null,
+  id: null,
   operador: null,
   correo: null,
   celular: null,
@@ -18,20 +18,19 @@ const initialState: Usuario = {
   puntoServicioToken: '',
   urlImagen: '',
   habilitadoConfiguracion: false,
-  codigoCelda: null,
-  codigoPanal: null,
-  codigoCiudad: null,
-  codigoPuesto: null,
-  codigoTercero: null,
+  celdaId: null,
+  panalId: null,
+  ciudadId: null,
   calidadImagen: '',
   celda: '',
   tienda: false,
   oferta: false,
   panalNombre: '',
   ciudadNombre: '',
+  tokenJwt: null,
 };
 
-const usuarioInformacionSlice = createSlice({
+const usuarioSlice = createSlice({
   name: 'usuarioInformacion',
   initialState,
   reducers: {
@@ -39,7 +38,7 @@ const usuarioInformacionSlice = createSlice({
       return {
         ...state,
         autentificacion: true,
-        codigo: action.payload.codigo,
+        id: action.payload.id,
         estadoHabilitado: action.payload.estadoHabilitado,
         fechaHabilitacion: action.payload.fechaHabilitacion,
         tokenFireBase: action.payload.tokenFireBase,
@@ -50,15 +49,14 @@ const usuarioInformacionSlice = createSlice({
         urlImagen: action.payload.urlImagen,
         codigoOperacion: action.payload.codigoOperacion,
         habilitadoConfiguracion: action.payload.habilitadoConfiguracion,
-        codigoCelda: action.payload.codigoCelda,
-        codigoPanal: action.payload.codigoPanal,
-        codigoCiudad: action.payload.codigoCiudad,
-        codigoPuesto: action.payload.codigoPuesto,
-        codigoTercero: action.payload.codigoTercero,
+        celdaId: action.payload.celdaId,
+        panalId: action.payload.panalId,
+        ciudadId: action.payload.ciudadId,
         calidadImagen: action.payload.calidadImagen,
         celda: action.payload.celda,
         tienda: action.payload.tienda,
         oferta: action.payload.oferta,
+        tokenJwt: action.payload.tokenJwt,
       };
     },
     actualizarUsuarioInformacion: (
@@ -80,6 +78,6 @@ export const {
   setUsuarioInformacion,
   actualizarUsuarioInformacion,
   cerrarSesionUsuario,
-} = usuarioInformacionSlice.actions;
+} = usuarioSlice.actions;
 
-export default usuarioInformacionSlice.reducer;
+export default usuarioSlice.reducer;
