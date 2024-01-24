@@ -30,13 +30,12 @@ const Index = () => {
   const dispatch = useDispatch();
 
   const usuario = useSelector((state: RootState) => {
-    console.log(state.usuario);
     return {
       codigo: state.usuario.id,
       nombre: state.usuario.nombre,
       celular: state.usuario.celular,
       panal: state.usuario.panalNombre,
-      celda: state.usuario.celdaId,
+      celda: state.usuario.celda,
       ciudad: state.usuario.ciudadNombre,
       imagen: state.usuario.urlImagen,
     };
@@ -68,7 +67,7 @@ const Index = () => {
       if (status === 200) {
         dispatch(
           actualizarUsuarioInformacion({
-            ciudadId: null,
+            celdaId: null,
             panalId: null,
             oferta: false,
             tienda: false,
