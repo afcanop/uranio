@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {Box, Button, Center, Heading, Text} from 'native-base';
+import {Button, Center, Heading, Text} from 'native-base';
 import {useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import ContenedorAnimado from './ContendorAnimado';
@@ -25,7 +25,7 @@ const ValidarCelda: React.FC<ContenedorProps> = ({children}) => {
               Para poder acceder a esta información, por favor completa él
               proceso de asignar celda.
             </Text>
-            <Button my="2" onPress={() => null}>
+            <Button my="2" onPress={() => navigation.navigate('ConectarCelda')}>
               Completar
             </Button>
           </ContenedorAnimado>
