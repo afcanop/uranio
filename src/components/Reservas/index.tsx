@@ -10,6 +10,7 @@ import colores from 'assets/theme/colores';
 import ContenedorAnimado from 'common/ContendorAnimado';
 import TextoFecha from 'common/TextoFecha';
 import {RefreshControl} from 'react-native-gesture-handler';
+import ValidarCelda from 'common/ValidarCelda';
 
 const Index = () => {
   const toast = useToast();
@@ -42,44 +43,46 @@ const Index = () => {
   };
 
   return (
-    <Contenedor>
-      <FlatList
-        data={arrReservas}
-        renderItem={({item, index}) => (
-          <ContenedorAnimado delay={50 * index}>
-            <Box
-              marginBottom={2}
-              padding={2}
-              rounded="lg"
-              overflow="hidden"
-              borderColor="coolGray.200"
-              borderWidth="1"
-              justifyContent={'space-between'}>
-              <Center>
-                <Text
-                  fontSize={'3xl'}
-                  fontWeight={'bold'}
-                  color={colores.primary}>
-                  {item.reservaNombre}
-                </Text>
-              </Center>
-              <Text mt={2}>{item.reservaDescripcion}</Text>
-              <Text mt={2}>Comentario: {item.comentario ?? 'No aplica'}</Text>
-              <TextoFecha fecha={item.fecha} />
-            </Box>
-          </ContenedorAnimado>
-        )}
-        keyExtractor={item => `${item.codigoReservaDetallePk}`}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={recargarLista}
-            onRefresh={consultarReservas}
-          />
-        }
-      />
-    </Contenedor>
+    <ValidarCelda>
+      <Contenedor>
+        <FlatList
+          data={arrReservas}
+          renderItem={({item, index}) => (
+            <ContenedorAnimado delay={50 * index}>
+              <Box
+                marginBottom={2}
+                padding={2}
+                rounded="lg"
+                overflow="hidden"
+                borderColor="coolGray.200"
+                borderWidth="1"
+                justifyContent={'space-between'}>
+                <Center>
+                  <Text
+                    fontSize={'3xl'}
+                    fontWeight={'bold'}
+                    color={colores.primary}>
+                    {item.reservaNombre}
+                  </Text>
+                </Center>
+                <Text mt={2}>{item.reservaDescripcion}</Text>
+                <Text mt={2}>Comentario: {item.comentario ?? 'No aplica'}</Text>
+                <TextoFecha fecha={item.fecha} />
+              </Box>
+            </ContenedorAnimado>
+          )}
+          keyExtractor={item => `${item.codigoReservaDetallePk}`}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={recargarLista}
+              onRefresh={consultarReservas}
+            />
+          }
+        />
+      </Contenedor>
+    </ValidarCelda>
   );
 };
 

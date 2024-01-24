@@ -10,6 +10,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import colores from 'assets/theme/colores';
 import ContenedorAnimado from 'common/ContendorAnimado';
+import ValidarCelda from 'common/ValidarCelda';
 
 const Index = () => {
   const [arrAtenciones, setArrAtenciones] = useState<Atencion[]>([]);
@@ -49,45 +50,47 @@ const Index = () => {
   };
 
   return (
-    <Contenedor>
-      <FlatList
-        data={arrAtenciones}
-        renderItem={({item, index}) => (
-          <ContenedorAnimado delay={50 * index}>
-            <Box
-              mb={2}
-              padding={2}
-              rounded="lg"
-              overflow="hidden"
-              borderColor="coolGray.200"
-              borderWidth="1"
-              justifyContent={'space-between'}>
-              <HStack>
-                <VStack space={2} flex={1}>
-                  <HStack justifyContent={'space-between'}>
-                    <Text>{item.fecha}</Text>
-                    <Text color={colores.verde[500]}>
-                      {item.estadoAtendido ? 'Atendido' : 'Sin atender'}
-                    </Text>
-                  </HStack>
+    <ValidarCelda>
+      <Contenedor>
+        <FlatList
+          data={arrAtenciones}
+          renderItem={({item, index}) => (
+            <ContenedorAnimado delay={50 * index}>
+              <Box
+                mb={2}
+                padding={2}
+                rounded="lg"
+                overflow="hidden"
+                borderColor="coolGray.200"
+                borderWidth="1"
+                justifyContent={'space-between'}>
+                <HStack>
+                  <VStack space={2} flex={1}>
+                    <HStack justifyContent={'space-between'}>
+                      <Text>{item.fecha}</Text>
+                      <Text color={colores.verde[500]}>
+                        {item.estadoAtendido ? 'Atendido' : 'Sin atender'}
+                      </Text>
+                    </HStack>
 
-                  <Text>{item.descripcion}</Text>
-                </VStack>
-              </HStack>
-            </Box>
-          </ContenedorAnimado>
-        )}
-        keyExtractor={item => `${item.codigoAtencionPk}`}
-        refreshControl={
-          <RefreshControl
-            refreshing={recargarLista}
-            onRefresh={consultarAtenciones}
-          />
-        }
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      />
-    </Contenedor>
+                    <Text>{item.descripcion}</Text>
+                  </VStack>
+                </HStack>
+              </Box>
+            </ContenedorAnimado>
+          )}
+          keyExtractor={item => `${item.codigoAtencionPk}`}
+          refreshControl={
+            <RefreshControl
+              refreshing={recargarLista}
+              onRefresh={consultarAtenciones}
+            />
+          }
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+        />
+      </Contenedor>
+    </ValidarCelda>
   );
 };
 
