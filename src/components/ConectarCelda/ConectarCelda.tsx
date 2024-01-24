@@ -23,99 +23,114 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {actualizarUsuarioInformacion} from 'store/reducers/usuarioReducer';
 import {consultarApi} from 'utils/api';
+import {ToastTituloError} from 'utils/const';
 
 const thirdIndicatorStyles: StepIndicatorStyles = {
   stepIndicatorSize: 25,
   currentStepIndicatorSize: 20,
   separatorStrokeWidth: 2,
   currentStepStrokeWidth: 3,
-  stepStrokeCurrentColor: '#7eaec4',
+  stepStrokeCurrentColor: colores.primary,
   stepStrokeWidth: 3,
-  stepStrokeFinishedColor: '#7eaec4',
-  stepStrokeUnFinishedColor: '#dedede',
-  separatorFinishedColor: '#7eaec4',
-  separatorUnFinishedColor: '#dedede',
-  stepIndicatorFinishedColor: '#7eaec4',
-  stepIndicatorUnFinishedColor: '#ffffff',
-  stepIndicatorCurrentColor: '#ffffff',
+  stepStrokeFinishedColor: colores.verde['500'],
+  stepStrokeUnFinishedColor: colores.gris,
+  separatorFinishedColor: colores.gris,
+  separatorUnFinishedColor: colores.gris,
+  stepIndicatorFinishedColor: colores.verde['100'],
+  stepIndicatorUnFinishedColor: colores.gris,
+  stepIndicatorCurrentColor: colores.blanco,
   stepIndicatorLabelFontSize: 0,
   currentStepIndicatorLabelFontSize: 0,
   stepIndicatorLabelCurrentColor: 'transparent',
   stepIndicatorLabelFinishedColor: 'transparent',
   stepIndicatorLabelUnFinishedColor: 'transparent',
-  labelColor: '#999999',
+  labelColor: colores.gris,
   labelSize: 13,
-  currentStepLabelColor: '#7eaec4',
+  currentStepLabelColor: colores.gris,
 };
 
 const ConectarCelda = () => {
   const toast = useToast();
-  const dispatch = useDispatch();
-  const [paginaActual, setPaginaActual] = useState<number>(0);
-  const [celda, setCelda] = useState<String>('');
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
-  const [codigoConfirmacion, setCodigoConfirmacion] = useState<String>('');
+  const [paginaActual, setPaginaActual] = useState<number>(1);
+  const [celda, setCelda] = useState<string>('');
+
+  const [codigoConfirmacion, setCodigoConfirmacion] = useState<string>('');
   const actualizarPaginaActual = (numero: number) => {
     setPaginaActual(paginaActual + numero);
   };
   const usuario = useSelector((state: RootState) => {
     return {
-      codigo: state.usuario.codigo,
+      codigo: state.usuario.id,
       panalNombre: state.usuario.panalNombre,
-      codigoPanal: state.usuario.codigoPanal,
+      codigoPanal: state.usuario.panalId,
     };
   });
 
   const celdaLLave = async () => {
-    const respuestaApiCeldaLLave: RespuestaCeldaLLave = await consultarApi(
-      'api/celda/llave',
-      {
-        codigoUsuario: usuario.codigo,
-        codigoPanal: usuario.codigoPanal,
-        celda,
-      },
-    );
-
-    if (respuestaApiCeldaLLave.error === false) {
-      Alert.alert(
-        'Información',
-        `Se envió un código de seguridad al correo ${respuestaApiCeldaLLave.correo}, si este correo no es el tuyo, por favor comunicarse con administración`,
+    try {
+      const {status, respuesta} = await consultarApi<RespuestaCeldaLLave>(
+        'api/celda/llave',
+        {
+          codigoUsuario: usuario.codigo,
+          codigoPanal: usuario.codigoPanal,
+          celda,
+        },
       );
-      actualizarPaginaActual(+1);
-    } else {
+
+      if (status === 200) {
+        Alert.alert(
+          'Información',
+          `Se envió un código de seguridad al correo ${respuesta.correo}, si este correo no es el tuyo, por favor comunicarse con administración`,
+        );
+        actualizarPaginaActual(+1);
+      }
+    } catch (error: any) {
       toast.show({
-        title: 'Algo ha salido mal',
-        description: respuestaApiCeldaLLave.errorMensaje,
+        title: ToastTituloError,
+        description: error.response.data.mensaje,
       });
     }
   };
 
   const celdaAsignar = async () => {
-    const respuestaApiCeldaLLave: RespuestaCeldaAsignar = await consultarApi(
-      'api/celda/asignar',
-      {
-        codigoUsuario: usuario.codigo,
-        codigoPanal: usuario.codigoPanal,
-        celda,
-        llave: codigoConfirmacion,
-      },
-    );
-    if (respuestaApiCeldaLLave.error === false) {
-      dispatch(
-        actualizarUsuarioInformacion({
-          celda: respuestaApiCeldaLLave.celda,
-          codigoCelda: respuestaApiCeldaLLave.codigoCelda,
-        }),
+    try {
+      console.log(
+        {
+          codigoUsuario: usuario.codigo,
+          codigoPanal: usuario.codigoPanal,
+          celda,
+          llave: codigoConfirmacion,
+        }
       );
-      Alert.alert(
-        'Éxito',
-        'En hora buena, se ha conectado correctamente a su celda, ahora puede recibir notificaciones de vistas, entregas, reservas y pedir atenciones desde la aplicación.',
+      
+      const {status, respuesta} = await consultarApi<RespuestaCeldaAsignar>(
+        'api/celda/vincular',
+        {
+          codigoUsuario: usuario.codigo,
+          codigoPanal: usuario.codigoPanal,
+          celda,
+          llave: codigoConfirmacion,
+        },
       );
-    } else {
+      if (status === 200) {
+        dispatch(
+          actualizarUsuarioInformacion({
+            celda: respuesta.celda,
+            celdaId: respuesta.codigoCelda,
+          }),
+        );
+        Alert.alert(
+          'Éxito',
+          'En hora buena, se ha conectado correctamente a su celda, ahora puede recibir notificaciones de vistas, entregas, reservas y pedir atenciones desde la aplicación.',
+        );
+      }
+    } catch (error: any) {
       toast.show({
-        title: 'Algo ha salido mal',
-        description: respuestaApiCeldaLLave.errorMensaje,
+        title: ToastTituloError,
+        description: error.response.data.mensaje,
       });
     }
   };
@@ -144,6 +159,7 @@ const ConectarCelda = () => {
                 <Input
                   type="text"
                   keyboardType="number-pad"
+                  value={celda}
                   onChangeText={valor => setCelda(valor)}
                   autoCapitalize={'none'}
                 />
@@ -219,6 +235,7 @@ const ConectarCelda = () => {
                 </FormControl.Label>
                 <Input
                   type="text"
+                  value={codigoConfirmacion}
                   keyboardType="number-pad"
                   onChangeText={valor => setCodigoConfirmacion(valor)}
                   autoCapitalize={'none'}
