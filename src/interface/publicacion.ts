@@ -12,13 +12,13 @@ export interface Publicacion {
   usuarioNombre: string;
 }
 
-export interface respuestaPublicacionLista {
+export interface RespuestaPublicacionLista {
   error: boolean;
   errorMensaje?: string;
   publicaciones: Publicacion[];
 }
 
-export interface respuestaPublicacionNuevo {
+export interface RespuestaPublicacionNuevo {
   error: boolean;
   errorMensaje?: string;
   codigoPublicacion: number;

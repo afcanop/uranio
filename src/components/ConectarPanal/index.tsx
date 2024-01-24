@@ -1,27 +1,31 @@
-/* eslint-disable react/no-unstable-nested-components */
-import {Alert, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import React, {useCallback, useLayoutEffect, useState} from 'react';
 import {
   Box,
   Button,
   Center,
   CheckIcon,
-  Divider,
   FormControl,
-  Image,
   Link,
   Select,
   Text,
-  VStack,
   useToast,
 } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {consultarApi} from 'utils/api';
-import {RespuestaCiudadBuscar} from 'interface/api/ciudad';
-import {Ciudad} from 'interface/Ciudad';
-import {RespuestaAsignarPanal, RespuestaPanelBuscar} from 'interface/panal';
-import {Panal} from 'interface/panal';
+import {Ciudad, RespuestaCiudadBuscar} from 'interface/ciudad';
+import {
+  Panal,
+  RespuestaPanalAsignar,
+  RespuestaPanelBuscar,
+} from 'interface/panal';
 import colores from 'assets/theme/colores';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
@@ -29,17 +33,19 @@ import {
   actualizarUsuarioInformacion,
   cerrarSesionUsuario,
 } from 'store/reducers/usuarioReducer';
+import ContenedorAnimado from 'common/ContendorAnimado';
+import {ToastTituloError} from 'utils/const';
 
 const ConectarPanal = () => {
-  const [ciudad, setCiudad] = useState<String>('');
-  const [panal, setPanal] = useState<String>('');
-  const [arrCiudades, setArrCiudades] = useState<any>([]);
-  const [arrPanales, setArrPanales] = useState<any>([]);
+  const [ciudad, setCiudad] = useState<string>('');
+  const [panal, setPanal] = useState<string>('');
+  const [arrCiudades, setArrCiudades] = useState<Ciudad[]>([]);
+  const [arrPanales, setArrPanales] = useState<Panal[]>([]);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const toast = useToast();
 
-  const usuarioCodigo = useSelector((state: RootState) => state.usuario.codigo);
+  const usuarioCodigo = useSelector((state: RootState) => state.usuario.id);
 
   useFocusEffect(
     useCallback(() => {
@@ -65,14 +71,12 @@ const ConectarPanal = () => {
       [
         {
           text: 'Cancelar',
-          onPress: () => console.log('Cancel Pressed'),
+          onPress: () => null,
           style: 'cancel',
         },
         {
           text: 'Confirmar',
-          onPress: () => {
-            dispatch(cerrarSesionUsuario());
-          },
+          onPress: () => dispatch(cerrarSesionUsuario()),
         },
       ],
       {cancelable: true},
@@ -80,52 +84,53 @@ const ConectarPanal = () => {
   };
 
   const consultarCiudades = async () => {
-    const respuestaApiCiudadBuscar: RespuestaCiudadBuscar = await consultarApi(
+    const {status, respuesta} = await consultarApi<RespuestaCiudadBuscar>(
       'api/ciudad/buscar',
       null,
     );
-    if (respuestaApiCiudadBuscar.error === false) {
-      setArrCiudades(respuestaApiCiudadBuscar.ciudades);
-    } else {
+    if (status === 200) {
+      setArrCiudades(respuesta.ciudades);
     }
   };
 
   const consultarPaneles = async (ciudadSeleccionada: any) => {
-    const respuestaApiPanalBuscar: RespuestaPanelBuscar = await consultarApi(
+    const {status, respuesta} = await consultarApi<RespuestaPanelBuscar>(
       'api/panal/buscar',
       {
         nombre: '',
         codigoCiudad: ciudadSeleccionada,
       },
     );
-    if (respuestaApiPanalBuscar.error === false) {
-      setArrPanales(respuestaApiPanalBuscar.panales);
+    if (status === 200) {
+      setArrPanales(respuesta.panales);
     } else {
     }
   };
 
   const asignarPanal = async () => {
-    const respuestaApiAsignarPanal: RespuestaAsignarPanal = await consultarApi(
-      'api/usuario/asignarpanal',
-      {
-        codigoUsuario: usuarioCodigo,
-        codigoPanal: panal,
-        codigoCiudad: ciudad,
-      },
-    );
-    if (respuestaApiAsignarPanal.error === false) {
-      dispatch(
-        actualizarUsuarioInformacion({
-          codigoCiudad: respuestaApiAsignarPanal?.ciudad,
-          oferta: respuestaApiAsignarPanal.oferta,
-          codigoPanal: respuestaApiAsignarPanal.panal,
-          tienda: respuestaApiAsignarPanal.tienda,
-        }),
+    try {
+      const {status, respuesta} = await consultarApi<RespuestaPanalAsignar>(
+        'api/panal/asignar',
+        {
+          codigoUsuario: usuarioCodigo,
+          codigoPanal: parseInt(panal, 10),
+          codigoCiudad: parseInt(ciudad, 10),
+        },
       );
-    } else {
+      if (status === 200) {
+        dispatch(
+          actualizarUsuarioInformacion({
+            ciudadId: respuesta.ciudad,
+            oferta: respuesta.oferta,
+            panalId: respuesta.panal,
+            tienda: respuesta.tienda,
+          }),
+        );
+      }
+    } catch (error: any) {
       toast.show({
-        title: 'Algo ha salido mal',
-        description: respuestaApiAsignarPanal.errorMensaje,
+        title: ToastTituloError,
+        description: error.response.data.mensaje,
       });
     }
   };
@@ -133,108 +138,106 @@ const ConectarPanal = () => {
   const btnConnectar = ciudad === '' && panal === '';
 
   return (
-    <ScrollView>
-      <Box flex={1} padding={2}>
-        <VStack space={3} mt="5">
+    <KeyboardAvoidingView>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Box flex={1} padding={2}>
           <Center>
-            <Image
-              style={styles.image}
-              source={require('../../assets/img/logo-fondo-blanco.png')}
-            />
-          </Center>
-          <FormControl>
-            <FormControl.Label>Ciudad</FormControl.Label>
-            <Select
-              selectedValue={ciudad}
-              accessibilityLabel="Seleccionar ciudad"
-              placeholder="Seleccionar ciudad"
-              _selectedItem={{
-                bg: 'teal.600',
-                color: 'white',
-                endIcon: <CheckIcon size="5" />,
-              }}
-              mt={1}
-              onValueChange={itemValue => {
-                setCiudad(itemValue);
-                consultarPaneles(itemValue);
-              }}>
-              {arrCiudades.map((item: Ciudad) => (
-                <Select.Item
-                  label={item.nombre}
-                  value={`${item.codigoCiudadPk}`}
-                />
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl>
-            <FormControl.Label>Panal</FormControl.Label>
-            <Select
-              selectedValue={panal}
-              accessibilityLabel="Seleccionar panal"
-              placeholder="Seleccionar panal"
-              _selectedItem={{
-                bg: 'teal.600',
-                endIcon: <CheckIcon size="5" />,
-              }}
-              mt={1}
-              onValueChange={itemValue => setPanal(itemValue)}>
-              {arrPanales.map((item: Panal) => (
-                <Select.Item
-                  label={item.nombre}
-                  value={`${item.codigoPanalPk}`}
-                />
-              ))}
-            </Select>
-          </FormControl>
-          <Button
-            mt="2"
-            isDisabled={btnConnectar}
-            onPress={() => asignarPanal()}>
-            Connectar
-          </Button>
-          <Divider />
-          <Center>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('ConectarPanalQr')}>
-              <Text>O leer qr</Text>
-              <Ionicons
-                name={'qr-code-outline'}
-                size={60}
-                color={'coolGray.800'}
+            <ContenedorAnimado delay={100}>
+              <Image
+                style={{width: 128, height: 128}}
+                source={require('../../assets/img/logo-fondo-blanco.png')}
               />
-            </TouchableOpacity>
+            </ContenedorAnimado>
           </Center>
-          <Divider />
-          <Center>
-            <Link>No encuentras tu panal</Link>
-          </Center>
-          <Divider />
-          <Text>
-            Si no encuentras tu panal, escríbenos, estamos vinculando nuevos
-            panales a nuestra comunidad; disfruta de los servicios como anuncios
-            de paquetes con foto, visitantes, servicios dentro de la unidad
-            (electricistas, fontaneros, paseo de mascotas), votaciones para
-            tomar las decisiones entre todos los miembros del panal, publicar
-            artículos que tengas para la venta, tienda que te entrega en tiempo
-            récord y muchas otras cosas más, No te pierdas la oportunidad de
-            estar. ¿Qué es un panal? Un panal es tu unidad residencial,
-            edificio, condominio y las celdas pueden ser tu oficina,
-            apartamento, o finca
-          </Text>
-          <Center>
-            <Image
-              style={styles.image}
-              source={require('../../assets/img/cuestionario.png')}
-            />
-          </Center>
-        </VStack>
-      </Box>
-    </ScrollView>
+          <ContenedorAnimado delay={200}>
+            <FormControl>
+              <FormControl.Label>Ciudad</FormControl.Label>
+              <Select
+                selectedValue={ciudad}
+                accessibilityLabel="Seleccionar ciudad"
+                placeholder="Seleccionar ciudad"
+                _selectedItem={{
+                  bg: 'teal.600',
+                  color: 'white',
+                  endIcon: <CheckIcon size="5" />,
+                }}
+                mt={1}
+                onValueChange={itemValue => {
+                  setCiudad(itemValue);
+                  consultarPaneles(itemValue);
+                }}>
+                {arrCiudades.map((item: Ciudad) => (
+                  <Select.Item
+                    label={item.nombre}
+                    value={`${item.id}`}
+                    key={`${item.id}`}
+                  />
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl>
+              <FormControl.Label>Panal</FormControl.Label>
+              <Select
+                selectedValue={panal}
+                accessibilityLabel="Seleccionar panal"
+                placeholder="Seleccionar panal"
+                _selectedItem={{
+                  bg: 'teal.600',
+                  endIcon: <CheckIcon size="5" />,
+                }}
+                mt={1}
+                onValueChange={itemValue => setPanal(itemValue)}>
+                {arrPanales.map((item: Panal) => (
+                  <Select.Item label={item.nombre} value={`${item.id}`} />
+                ))}
+              </Select>
+            </FormControl>
+            <Button
+              mt="2"
+              isDisabled={btnConnectar}
+              onPress={() => asignarPanal()}>
+              Connectar
+            </Button>
+          </ContenedorAnimado>
+          <ContenedorAnimado delay={300}>
+            <Center>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('ConectarPanalQr')}>
+                <Text my={5}>O leer qr</Text>
+                <Ionicons
+                  name={'qr-code-outline'}
+                  size={60}
+                  color={colores.primary}
+                />
+              </TouchableOpacity>
+
+              <Link my={5}>No encuentras tu panal</Link>
+            </Center>
+          </ContenedorAnimado>
+          <ContenedorAnimado delay={400}>
+            <Text>
+              Si no encuentras tu panal, escríbenos, estamos vinculando nuevos
+              panales a nuestra comunidad; disfruta de los servicios como
+              anuncios de paquetes con foto, visitantes, servicios dentro de la
+              unidad (electricistas, fontaneros, paseo de mascotas), votaciones
+              para tomar las decisiones entre todos los miembros del panal,
+              publicar artículos que tengas para la venta, tienda que te entrega
+              en tiempo récord y muchas otras cosas más, No te pierdas la
+              oportunidad de estar. ¿Qué es un panal? Un panal es tu unidad
+              residencial, edificio, condominio y las celdas pueden ser tu
+              oficina, apartamento, o finca
+            </Text>
+            <Center>
+              <Image
+                style={{width: 128, height: 128}}
+                source={require('../../assets/img/cuestionario.png')}
+              />
+            </Center>
+          </ContenedorAnimado>
+        </Box>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 export default ConectarPanal;
-
-const styles = StyleSheet.create({
-  image: {width: 128, height: 128},
-});

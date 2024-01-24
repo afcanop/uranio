@@ -2,7 +2,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import colores from 'assets/theme/colores';
-import {Publicacion, respuestaPublicacionLista} from 'interface/publicacion';
+import {Publicacion, RespuestaPublicacionLista} from 'interface/publicacion';
 import React, {useCallback, useState} from 'react';
 import {ActivityIndicator, FlatList} from 'react-native';
 import {shallowEqual, useSelector} from 'react-redux';
@@ -12,6 +12,7 @@ import PublicacionesItem from './PublicacionesItem';
 import {Actionsheet, useDisclose, useToast} from 'native-base';
 import ConectarCelda from 'components/ConectarCelda/ConectarCelda';
 import {RefreshControl} from 'react-native-gesture-handler';
+import { ToastTituloError } from 'utils/const';
 
 const Index = () => {
   const toast = useToast();
@@ -23,8 +24,8 @@ const Index = () => {
   const [codigoPublicacionPk, setCodigoPublicacionPk] = useState<number>(0);
   const usuario = useSelector((state: RootState) => {
     return {
-      codigo: state.usuario.codigo,
-      codigoCelda: state.usuario.codigoCelda,
+      codigo: state.usuario.id,
+      codigoCelda: state.usuario.celdaId,
     };
   }, shallowEqual);
 
@@ -48,31 +49,30 @@ const Index = () => {
   };
 
   const consultarPublicaciones = async () => {
-    const respuestaApiPublicacionLista: respuestaPublicacionLista =
-      await consultarApi(
+    try {
+      const {status, respuesta} = await consultarApi<RespuestaPublicacionLista>(
         `api/publicacion/lista/${usuario.codigo}/${pagina}`,
         null,
         {
           method: 'get',
-          aplicarUrlBase: true,
         },
       );
-
-    if (respuestaApiPublicacionLista.error === false) {
-      if (respuestaApiPublicacionLista.publicaciones.length > 0) {
-        if (pagina === 1) {
-          setPublicaciones(respuestaApiPublicacionLista.publicaciones);
-        } else {
-          setPublicaciones(prevPublicaciones => [
-            ...prevPublicaciones,
-            ...respuestaApiPublicacionLista.publicaciones,
-          ]);
+      if (status === 200) {
+        if (respuesta.publicaciones.length > 0) {
+          if (pagina === 1) {
+            setPublicaciones(respuesta.publicaciones);
+          } else {
+            setPublicaciones(prevPublicaciones => [
+              ...prevPublicaciones,
+              ...respuesta.publicaciones,
+            ]);
+          }
         }
       }
-    } else {
+    } catch (error: any) {
       toast.show({
-        title: 'Algo ha salido mal',
-        description: respuestaApiPublicacionLista.errorMensaje,
+        title: ToastTituloError,
+        description: error.response.data.mensaje,
       });
     }
   };

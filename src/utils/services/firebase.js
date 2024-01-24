@@ -3,15 +3,17 @@ import database from '@react-native-firebase/database';
 import messaging from '@react-native-firebase/messaging';
 import {Platform} from 'react-native';
 import {fechaActual} from '../funciones';
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 export const crearRegistroFireBase = async (codigoUsuario, token) => {
-  const reference = database().ref(`/session/${codigoUsuario}`).set({
-    os: Platform.OS,
-    activo: true,
-    fechaAutenticacion: `${fechaActual().fecha} ${fechaActual().hora}`,
-    token
-  });
+  const reference = database()
+    .ref(`/session/${codigoUsuario}`)
+    .set({
+      os: Platform.OS,
+      activo: true,
+      fechaAutenticacion: `${fechaActual().fecha} ${fechaActual().hora}`,
+      token,
+    });
 };
 
 export const consultarSessionFireBase = async (codigoUsuario, setData) => {
@@ -27,7 +29,6 @@ export const consultarRegistrosFireBase = async codigoUsuario => {
   // const informacionFirebase = await consultaFireBase._snapshot.value;
   // return informacionFirebase;
 };
-
 
 export const actualizarRegistroFireBase = (codigoUsuario, data) => {
   const reference = database().ref(`/session/${codigoUsuario}`).update(data);
