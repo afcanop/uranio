@@ -50,20 +50,17 @@ const Documento = () => {
   );
 
   const consultarContenidos = async () => {
-    const respuestaApiContenidoLista: RespuestaContenidoLista =
-      await consultarApi('api/contenido/lista', {
+    const {respuesta, status} = await consultarApi<RespuestaContenidoLista>(
+      'api/contenido/lista',
+      {
         codigoPanal: usuarioCodigoPanal,
-      });
-    if (respuestaApiContenidoLista.error === false) {
+      },
+    );
+    if (status === 200) {
       if (recargarLista) {
         setRecargarLista(false);
       }
-      setArrDocumentos(respuestaApiContenidoLista.contenidos);
-    } else {
-      toast.show({
-        title: 'Algo ha salido mal',
-        description: respuestaApiContenidoLista.errorMensaje,
-      });
+      setArrDocumentos(respuesta.contenidos);
     }
   };
 

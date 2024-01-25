@@ -51,21 +51,16 @@ const EntregasLista = () => {
   const consultarEntregas = async () => {
     try {
       setMostrarAnimacionCargando(true);
-      const respuestaApiEntregaLista: RespuestaEntregaLista =
-        await consultarApi('api/entrega/lista', {
+      const {respuesta, status} = await consultarApi<RespuestaEntregaLista>(
+        'api/entrega/lista',
+        {
           codigoCelda: usuario.celda,
-        });
+        },
+      );
 
-      if (respuestaApiEntregaLista.error === false) {
+      if (status === 200) {
         setMostrarAnimacionCargando(false);
-
-        setArrEntregas(respuestaApiEntregaLista.entregas);
-      } else {
-        setMostrarAnimacionCargando(false);
-        toast.show({
-          title: 'Algo ha salido mal',
-          description: respuestaApiEntregaLista.errorMensaje,
-        });
+        setArrEntregas(respuesta.entregas);
       }
     } catch (error) {
       setMostrarAnimacionCargando(false);
@@ -79,21 +74,18 @@ const EntregasLista = () => {
     codigoEntrega: string,
     autorizar: Autorizacion,
   ) => {
-    const respuestaApiEntregaAutorizar: RespuestaEntregaLista =
-      await consultarApi('api/entrega/autorizar', {
+    const {respuesta, status} = await consultarApi<RespuestaEntregaLista>(
+      'api/entrega/autorizar',
+      {
         codigoCelda: usuario.celda,
         codigoUsuario: usuario.codigo,
         codigoEntrega,
         autorizar,
-      });
+      },
+    );
 
-    if (respuestaApiEntregaAutorizar.error === false) {
+    if (status === 200) {
       consultarEntregas();
-    } else {
-      toast.show({
-        title: 'Algo ha salido mal',
-        description: respuestaApiEntregaAutorizar.errorMensaje,
-      });
     }
   };
 

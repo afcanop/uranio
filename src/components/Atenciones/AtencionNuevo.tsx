@@ -22,7 +22,7 @@ const AtencionNuevo = () => {
   const guardarSoporte = async () => {
     setMostrarAnimacionCargando(true);
     if (descripcion !== '') {
-      const respuestaApiCasoNuevo: RespuestaAtencionNuevo = await consultarApi(
+      const {respuesta, status} = await consultarApi<RespuestaAtencionNuevo>(
         'api/atencion/nuevo',
         {
           codigoUsuario: usuario.codigo,
@@ -31,18 +31,12 @@ const AtencionNuevo = () => {
         },
       );
 
-      if (respuestaApiCasoNuevo.error === false) {
+      if (status === 200) {
         setMostrarAnimacionCargando(false);
         setDescripcion('');
         toast.show({
           title: 'Éxito',
           description: 'El soporte registrado con éxito',
-        });
-      } else {
-        setMostrarAnimacionCargando(false);
-        toast.show({
-          title: 'Algo ha salido mal',
-          description: respuestaApiCasoNuevo.errorMensaje,
         });
       }
     } else {

@@ -28,17 +28,14 @@ const Index = () => {
   );
 
   const consultarReservas = async () => {
-    const respuestaApiReservaDetalle: respuestaReservaDetalle =
-      await consultarApi('api/reserva/detallelista', {
+    const {respuesta, status} = await consultarApi<respuestaReservaDetalle>(
+      'api/reserva/detallelista',
+      {
         codigoCelda: usuarioCodigoCelda,
-      });
-    if (respuestaApiReservaDetalle.error === false) {
-      setArrReservas(respuestaApiReservaDetalle.reservaDetalles);
-    } else {
-      toast.show({
-        title: 'Algo ha salido mal',
-        description: respuestaApiReservaDetalle.errorMensaje,
-      });
+      },
+    );
+    if (status === 200) {
+      setArrReservas(respuesta.reservaDetalles);
     }
   };
 

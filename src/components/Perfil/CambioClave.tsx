@@ -21,12 +21,15 @@ const CambioClave = () => {
   const guardarContrasena = async () => {
     if (clave.length >= 8 && confirmarClave.length >= 8) {
       if (clave === confirmarClave) {
-        const respuestaApiCambiarcontrasena: RespuestaUsuarioCambioClave =
-          await consultarApi('api/usuario/cambiarclave', {
-            codigoUsuario,
-            claveNueva: clave,
-          });
-        if (respuestaApiCambiarcontrasena.error === false) {
+        const {respuesta, status} =
+          await consultarApi<RespuestaUsuarioCambioClave>(
+            'api/usuario/cambiarclave',
+            {
+              codigoUsuario,
+              claveNueva: clave,
+            },
+          );
+        if (status === 200) {
           toast.show({
             title: 'Correcto',
             description: 'Se ha actualizado correctamente la contraseña',

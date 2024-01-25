@@ -28,20 +28,15 @@ const Index = () => {
   );
 
   const consultarPqrs = async () => {
-    const respuestaApiCiudadBuscar: respuestaCasoLista = await consultarApi(
+    const {respuesta, status} = await consultarApi<respuestaCasoLista>(
       'api/caso/lista/v1',
       {
         codigoPanal: usuario.panal,
         codigoUsuario: usuario.codigo,
       },
     );
-    if (respuestaApiCiudadBuscar.error === false) {
-      setArrPqrs(respuestaApiCiudadBuscar.casos);
-    } else {
-      toast.show({
-        title: 'Algo ha salido mal',
-        description: respuestaApiCiudadBuscar.errorMensaje,
-      });
+    if (status === 200) {
+      setArrPqrs(respuesta.casos);
     }
   };
 

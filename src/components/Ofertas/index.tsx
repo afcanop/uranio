@@ -85,32 +85,24 @@ const Index = () => {
   );
 
   const consultarCategorias = async () => {
-    const respuestaApiCategoriaLista: respuestaCategoriaLista =
-      await consultarApi('api/categoria/lista', null);
-    if (respuestaApiCategoriaLista.error === false) {
-      setArrCategorias(respuestaApiCategoriaLista.categorias);
-    } else {
-      toast.show({
-        title: 'Algo ha salido mal',
-        description: respuestaApiCategoriaLista.errorMensaje,
-      });
+    const {respuesta, status} = await consultarApi<respuestaCategoriaLista>(
+      'api/categoria/lista',
+      null,
+    );
+    if (status === 200) {
+      setArrCategorias(respuesta.categorias);
     }
   };
 
   const consultarOfertas = async () => {
-    const respuestaApiOfertaLista: respuestaOfertaLista = await consultarApi(
+    const {respuesta, status} = await consultarApi<respuestaOfertaLista>(
       'api/oferta/lista',
       {
         codigoPanal: 1,
       },
     );
-    if (respuestaApiOfertaLista.error === false) {
-      setArrOfertas(respuestaApiOfertaLista.ofertas);
-    } else {
-      toast.show({
-        title: 'Algo ha salido mal',
-        description: respuestaApiOfertaLista.errorMensaje,
-      });
+    if (status === 200) {
+      setArrOfertas(respuesta.ofertas);
     }
   };
 

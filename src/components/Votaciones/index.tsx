@@ -54,7 +54,7 @@ const VotacionLista = () => {
   );
 
   const consultarVotaciones = async () => {
-    const respuestaApiVisitaLista: RespuestaVotacionLista = await consultarApi(
+    const {respuesta, status} = await consultarApi<RespuestaVotacionLista>(
       'api/votacion/lista',
       {
         codigoCelda: usuario.celda,
@@ -79,22 +79,19 @@ const VotacionLista = () => {
   ) => {
     setMostrarAnimacionCargando(false);
     setVotacionSeleccionada(codigoVotacionDetalle);
-    const respuestaApiVotacionVotar: RespuestaVotacionLista =
-      await consultarApi('api/votacion/votar', {
+    const {respuesta, status} = await consultarApi<RespuestaVotacionLista>(
+      'api/votacion/votar',
+      {
         codigoVotacion,
         codigoVotacionDetalle,
         codigoCelda: usuario.celda,
         codigoUsuario: usuario.codigo,
-      });
-    if (respuestaApiVotacionVotar.error === false) {
+      },
+    );
+    if (status === 200) {
       Alert.alert('Exito', 'Se registro su voto');
       consultarVotaciones();
       setMostrarAnimacionCargando(false);
-    } else {
-      toast.show({
-        title: 'Algo ha salido mal',
-        description: respuestaApiVotacionVotar.errorMensaje,
-      });
     }
   };
 

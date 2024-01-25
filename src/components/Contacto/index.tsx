@@ -19,7 +19,7 @@ const Contactanos = () => {
     setMostrarAnimacionCargando(true);
     Keyboard.dismiss();
     if (descripcion !== '') {
-      const respuestaApiCasoNuevo: RespuestaSoporteNuevo = await consultarApi(
+      const {respuesta, status} = await consultarApi<RespuestaSoporteNuevo>(
         'api/soporte/nuevo',
         {
           codigoUsuario: usuarioCodigo,
@@ -27,20 +27,13 @@ const Contactanos = () => {
         },
       );
 
-      if (respuestaApiCasoNuevo.error === false) {
+      if (status === 200) {
         setMostrarAnimacionCargando(false);
 
         setDescripcion('');
         toast.show({
           title: 'Éxito',
           description: 'El soporte registrado con éxito',
-        });
-      } else {
-        setMostrarAnimacionCargando(false);
-
-        toast.show({
-          title: 'Algo ha salido mal',
-          description: respuestaApiCasoNuevo.errorMensaje,
         });
       }
     } else {

@@ -32,20 +32,17 @@ const Index = () => {
   );
 
   const consultarAtenciones = async () => {
-    const respuestaApiAtencionLista: RespuestaAtencionLista =
-      await consultarApi('api/atencion/lista', {
+    const {respuesta, status} = await consultarApi<RespuestaAtencionLista>(
+      'api/atencion/lista',
+      {
         codigoCelda: usuario.celda,
-      });
-    if (respuestaApiAtencionLista.error === false) {
+      },
+    );
+    if (status === 200) {
       if (recargarLista) {
         setRecargarLista(false);
       }
-      setArrAtenciones(respuestaApiAtencionLista.atenciones);
-    } else {
-      toast.show({
-        title: 'Algo ha salido mal',
-        description: respuestaApiAtencionLista.errorMensaje,
-      });
+      setArrAtenciones(respuesta.atenciones);
     }
   };
 

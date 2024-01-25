@@ -56,7 +56,7 @@ const VisitaLista = () => {
   const consultarVisitas = async () => {
     try {
       setMostrarAnimacionCargando(true);
-      const respuestaApiVisitaLista: RespuestaVisitaLista = await consultarApi(
+      const {respuesta, status} = await consultarApi<RespuestaVisitaLista>(
         'api/visita/lista',
         {
           codigoCelda: usuario.celda,
@@ -95,19 +95,16 @@ const VisitaLista = () => {
     codigoVisita: string,
     autorizar: Autorizacion,
   ) => {
-    const respuestaApiEntregaAutorizar: RespuestaVisitaAutorizar =
-      await consultarApi('api/visita/autorizar', {
+    const {respuesta, status} = await consultarApi<RespuestaVisitaAutorizar>(
+      'api/visita/autorizar',
+      {
         codigoUsuario: usuario.codigo,
         codigoVisita,
         autorizar,
-      });
-    if (respuestaApiEntregaAutorizar.error === false) {
+      },
+    );
+    if (status === 200) {
       consultarVisitas();
-    } else {
-      toast.show({
-        title: 'Algo ha salido mal',
-        description: respuestaApiEntregaAutorizar.errorMensaje,
-      });
     }
   };
 

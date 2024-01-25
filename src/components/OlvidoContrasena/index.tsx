@@ -23,19 +23,17 @@ function OlvidoContrasena() {
 
   const recuperarContrasena = async () => {
     if (validarCorreoElectronico(usuario)) {
-      const respuestaApiUsuarioRecuperarClave: RespuestaUsuarioRecuperarClave =
-        await consultarApi('api/usuario/recuperarclave', {usuario});
-      if (respuestaApiUsuarioRecuperarClave.error === false) {
+      const {respuesta, status} =
+        await consultarApi<RespuestaUsuarioRecuperarClave>(
+          'api/usuario/recuperarclave',
+          {usuario},
+        );
+      if (status === 200) {
         navigation.goBack();
         toast.show({
           title: 'Correcto',
           description:
             'Se ha enviado un correo electrónico con a información de recuperación de contraseña',
-        });
-      } else {
-        toast.show({
-          title: 'Algo ha salido mal',
-          description: respuestaApiUsuarioRecuperarClave.errorMensaje,
         });
       }
     } else {

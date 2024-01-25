@@ -33,23 +33,20 @@ const BuscarProducto = () => {
   const buscarItem = async (itemNombre: string) => {
     setNombre(itemNombre);
     if (itemNombre.length >= 3) {
-      const respuestaApiItemBuscaritem: RespuestaItemBuscarItem =
-        await consultarApi('api/item/buscaritem', {
+      const {respuesta, status} = await consultarApi<RespuestaItemBuscarItem>(
+        'api/item/buscaritem',
+        {
           itemNombre: nombre,
-        });
-      if (respuestaApiItemBuscaritem.error === false) {
+        },
+      );
+      if (status === 200) {
         const items: any[] = [];
-        for (const key in respuestaApiItemBuscaritem.itemes) {
-          if (respuestaApiItemBuscaritem.itemes.hasOwnProperty(key)) {
-            items.push(respuestaApiItemBuscaritem.itemes[key]);
+        for (const key in respuesta.itemes) {
+          if (respuesta.itemes.hasOwnProperty(key)) {
+            items.push(respuesta.itemes[key]);
           }
         }
         setArrProductos(items);
-      } else {
-        toast.show({
-          title: 'Algo ha salido mal',
-          description: respuestaApiItemBuscaritem.errorMensaje,
-        });
       }
     }
   };
