@@ -29,7 +29,7 @@ export const consultarApi = async <T>(
       return Promise.reject(error);
     },
   );
-  
+
   const informacionConsulta: AxiosResponse<T> = await axios({
     method: configuracion.method ?? 'post',
     url: URL_BASE + urlConsulta,

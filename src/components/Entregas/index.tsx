@@ -15,7 +15,7 @@ import {
 import React, {useCallback, useState} from 'react';
 import {Pressable, TouchableOpacity} from 'react-native';
 import {RefreshControl} from 'react-native-gesture-handler';
-import {useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {consultarApi} from 'utils/api';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -39,7 +39,7 @@ const EntregasLista = () => {
       codigo: state.usuario.id,
       celda: state.usuario.celdaId,
     };
-  });
+  }, shallowEqual);
 
   useFocusEffect(
     useCallback(() => {
@@ -67,25 +67,6 @@ const EntregasLista = () => {
       console.error('Error al consultar entregas:', error);
     } finally {
       setMostrarAnimacionCargando(false);
-    }
-  };
-
-  const entregaAutorizar = async (
-    codigoEntrega: string,
-    autorizar: Autorizacion,
-  ) => {
-    const {respuesta, status} = await consultarApi<RespuestaEntregaLista>(
-      'api/entrega/autorizar',
-      {
-        codigoCelda: usuario.celda,
-        codigoUsuario: usuario.codigo,
-        codigoEntrega,
-        autorizar,
-      },
-    );
-
-    if (status === 200) {
-      consultarEntregas();
     }
   };
 
@@ -142,83 +123,24 @@ const EntregasLista = () => {
                       <HStack space={2}>
                         <Image
                           source={{
-                            uri: obtenerUrlTipoEntrega(
-                              item.codigoEntregaTipoFk,
-                            ),
+                            uri: obtenerUrlTipoEntrega(item.entregaTipoNombre),
                           }}
                           alt="Alternate Text"
                           size={'sm'}
                         />
                         <VStack space={1}>
-                          <Text>{item.codigoEntregaTipoFk}</Text>
-                          <Text>{item.codigoEntregaPk}</Text>
+                          <Text>{item.entregaTipoNombre}</Text>
+                          <Text>{item.id}</Text>
                           <TextoFecha fecha={item.fechaIngreso} />
                           <Text>{item.descripcion ?? 'Sin descripción'}</Text>
                         </VStack>
                       </HStack>
-                      {item.estadoAutorizado === 'P' ? (
-                        <HStack
-                          flexDirection={'row'}
-                          space={4}
-                          flex={1}
-                          alignContent={'center'}
-                          alignItems={'center'}
-                          justifyContent={'flex-end'}>
-                          <Pressable
-                            onPress={() =>
-                              entregaAutorizar(`${item.codigoEntregaPk}`, 'S')
-                            }
-                            style={({pressed}) => [
-                              {
-                                backgroundColor: pressed
-                                  ? colores.verde['100']
-                                  : 'transparent',
-                                borderRadius: 50 / 2,
-                              },
-                            ]}>
-                            <Ionicons
-                              name={'checkmark-outline'}
-                              size={50}
-                              color={colores.verde['500']}
-                            />
-                          </Pressable>
-                          <Pressable
-                            onPress={() =>
-                              entregaAutorizar(`${item.codigoEntregaPk}`, 'N')
-                            }
-                            style={({pressed}) => [
-                              {
-                                backgroundColor: pressed
-                                  ? colores.rojo['100']
-                                  : 'transparent',
-                                borderRadius: 50 / 2,
-                              },
-                            ]}>
-                            <Ionicons
-                              name={'close-outline'}
-                              size={50}
-                              color={colores.rojo['500']}
-                            />
-                          </Pressable>
-                        </HStack>
-                      ) : (
-                        <VStack alignItems={'flex-end'}>
-                          <>{entregaTipoEstado(`${item.estadoAutorizado}`)}</>
-                          <Text color={colores.primary}>
-                            {item.estadoCerrado
-                              ? item.estadoAutorizado === 'S'
-                                ? 'Entregado'
-                                : 'cerrado'
-                              : 'Pendiente'}
-                          </Text>
-                        </VStack>
-                      )}
                     </HStack>
                   </Box>
                 </ContenedorAnimado>
               </TouchableOpacity>
             )}
-            keyExtractor={item => `${item.codigoEntregaPk}`}
+            keyExtractor={item => `${item.id}`}
             refreshControl={
               <RefreshControl
                 refreshing={recargarLista}

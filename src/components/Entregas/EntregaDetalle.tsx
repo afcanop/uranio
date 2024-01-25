@@ -29,12 +29,12 @@ const EntregaDetalle = () => {
                 fontSize={'3xl'}
                 fontWeight={'bold'}
                 color={colores.primary}>
-                {entrega.codigoEntregaTipoFk}
+                {entrega.entregaTipoNombre}
               </Text>
             </Center>
             <HStack space={2}>
               <Text fontWeight={'bold'}>Código:</Text>
-              <Text>{entrega.codigoEntregaTipoFk}</Text>
+              <Text>{entrega.id}</Text>
             </HStack>
             <HStack space={2}>
               <Text fontWeight={'bold'}>Fecha:</Text>
@@ -42,7 +42,7 @@ const EntregaDetalle = () => {
             </HStack>
             <HStack space={2}>
               <Text fontWeight={'bold'}>Descripción:</Text>
-              <Text>{entrega.descripcion}</Text>
+              <Text>{entrega.descripcion ?? 'no aplica'}</Text>
             </HStack>
           </Box>
         </ContenedorAnimado>

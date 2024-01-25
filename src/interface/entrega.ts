@@ -1,13 +1,18 @@
+export type EntregaEstadoAutorizado = 'N' | 'S' | 'P';
+
 export interface Entrega {
-  codigoEntregaPk: number;
+  id: number;
+  celda: number;
   fechaIngreso: string;
   descripcion: any;
-  codigoEntregaTipoFk: string;
-  estadoAutorizado: 'N' | 'S' | 'P';
+  entregaTipoId: number;
+  entregaTipoNombre: string;
+  estadoAutorizado: EntregaEstadoAutorizado;
   estadoCerrado: boolean;
   urlImagen?: string;
   urlImagenIngreso: string;
 }
+
 
 export interface RespuestaEntregaLista {
   error: boolean;
