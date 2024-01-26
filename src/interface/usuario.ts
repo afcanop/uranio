@@ -1,6 +1,6 @@
 export interface Usuario {
   autentificacion: boolean;
-  celda: string | null;
+  celdaCelda: string | null;
   celdaId: number | null;
   celular: string | null;
   ciudadId: number | null;

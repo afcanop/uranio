@@ -62,15 +62,9 @@ const VisitaLista = () => {
           codigoCelda: usuario.celda,
         },
       );
-      if (respuestaApiVisitaLista.error === false) {
+      if (status === 200) {
         setMostrarAnimacionCargando(false);
-        setArrVisitas(respuestaApiVisitaLista.visitas);
-      } else {
-        setMostrarAnimacionCargando(false);
-        toast.show({
-          title: 'Algo ha salido mal',
-          description: respuestaApiVisitaLista.errorMensaje,
-        });
+        setArrVisitas(respuesta.visitas);
       }
     } catch (error) {
       setMostrarAnimacionCargando(false);
@@ -95,7 +89,7 @@ const VisitaLista = () => {
     codigoVisita: string,
     autorizar: Autorizacion,
   ) => {
-    const {respuesta, status} = await consultarApi<RespuestaVisitaAutorizar>(
+    const {status} = await consultarApi<RespuestaVisitaAutorizar>(
       'api/visita/autorizar',
       {
         codigoUsuario: usuario.codigo,
@@ -142,8 +136,12 @@ const VisitaLista = () => {
                       justifyContent={'space-between'}>
                       <HStack space={2}>
                         <VStack space={1}>
-                          <Text>{item.codigoVisitaPk}</Text>
-                          <Text>{item.numeroIdentificacion}</Text>
+                          <Text>{item.id}</Text>
+                          <Text>
+                            {item.numeroIdentificacion !== ''
+                              ? item.numeroIdentificacion
+                              : 'No registra número identificación'}
+                          </Text>
                           <TextoFecha fecha={item.fecha} />
                           <Text>Placa veiculo: {item.placa}</Text>
                         </VStack>
@@ -210,7 +208,7 @@ const VisitaLista = () => {
                 </ContenedorAnimado>
               </TouchableOpacity>
             )}
-            keyExtractor={item => `${item.codigoVisitaPk}`}
+            keyExtractor={item => `${item.id}`}
             refreshControl={
               <RefreshControl
                 refreshing={recargarLista}

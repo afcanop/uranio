@@ -1,5 +1,5 @@
 export interface Visita {
-  codigoVisitaPk: number;
+  id: number;
   fecha: string;
   numeroIdentificacion: string;
   nombre: string;
@@ -7,7 +7,7 @@ export interface Visita {
   estadoAutorizado: string;
   estadoCerrado: boolean;
   codigoIngreso: string;
-  urlImagen?: string;
+  urlImagenIngreso?: string;
 }
 
 export interface RespuestaVisitaLista {

@@ -3,7 +3,7 @@ import Contenedor from 'common/Contenedor';
 import {Button, FormControl, Input, VStack, useToast} from 'native-base';
 import {consultarApi} from 'utils/api';
 import {RespuestaVisitaNuevo} from 'interface/visita';
-import {useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {useNavigation} from '@react-navigation/native';
 import {Alert} from 'react-native';
@@ -20,45 +20,43 @@ const VisitasNuevo = () => {
     useState<boolean>(false);
   const usuario = useSelector((state: RootState) => {
     return {
-      codigoCelda: state.usuario.celdaId,
+      celda: state.usuario.celdaCelda,
       codigoPanal: state.usuario.panalId,
     };
-  });
+  }, shallowEqual);
 
   const guardarVisitas = async () => {
-    setMostrarAnimacionCargando(true);
-    if (nombre !== '' && numeroIdentificacion !== '') {
-      const respuestaApiVisitaNuevo: RespuestaVisitaNuevo = await consultarApi(
-        'api/visita/nuevo',
-        {
-          codigoCelda: usuario.codigoCelda,
-          codigoPanal: usuario.codigoPanal,
-          numeroIdentificacion,
-          nombre,
-          placa,
-        },
-      );
-
-      if (respuestaApiVisitaNuevo.error === false) {
-        Alert.alert(
-          'Correcto',
-          `Su visita quedó registrada con el código: ${respuestaApiVisitaNuevo.codigoIngreso}`,
+    try {
+      setMostrarAnimacionCargando(true);
+      if (nombre !== '') {
+        const {respuesta, status} = await consultarApi<RespuestaVisitaNuevo>(
+          'api/visita/nuevo',
+          {
+            celda: usuario.celda,
+            codigoPanal: usuario.codigoPanal,
+            numeroIdentificacion,
+            nombre,
+            placa,
+          },
         );
-        navigation.goBack();
+
+        if (status === 200) {
+          Alert.alert(
+            'Correcto',
+            `Su visita quedó registrada con el código: ${respuesta.codigoIngreso}`,
+          );
+          navigation.goBack();
+        }
       } else {
         setMostrarAnimacionCargando(false);
         toast.show({
           title: 'Algo ha salido mal',
-          description: respuestaApiVisitaNuevo.errorMensaje,
+          description: 'El campos nombre son obligatorios',
         });
       }
-    } else {
+    } catch (error: any) {
       setMostrarAnimacionCargando(false);
-      toast.show({
-        title: 'Algo ha salido mal',
-        description:
-          'Los campos nombre y número identificación son obligatorios',
-      });
+      console.log(error.request);
     }
   };
 
@@ -74,7 +72,7 @@ const VisitasNuevo = () => {
             />
           </FormControl>
           <FormControl>
-            <FormControl.Label isRequired>Identificación</FormControl.Label>
+            <FormControl.Label>Identificación</FormControl.Label>
             <Input
               value={numeroIdentificacion}
               onChangeText={(text: string) => setNumeroIdentificacion(text)}
