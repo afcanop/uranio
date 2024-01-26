@@ -104,7 +104,7 @@ const EntregasLista = () => {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('EntregaDetalle', {
-                    entrega: item,
+                    entregaId: item.id,
                   })
                 }>
                 <ContenedorAnimado delay={50 * index}>

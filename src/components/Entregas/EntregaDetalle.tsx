@@ -1,16 +1,53 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import Contenedor from 'common/Contenedor';
 import {Box, Center, HStack, Image, Text} from 'native-base';
-import {useRoute} from '@react-navigation/native';
+import {useFocusEffect, useRoute} from '@react-navigation/native';
 import colores from 'assets/theme/colores';
 import {ScrollView} from 'react-native';
 import TextoFecha from 'common/TextoFecha';
 import ContenedorAnimado from 'common/ContendorAnimado';
+import {consultarApi} from 'utils/api';
+import {Entrega, RespuestaEntregaDetalle} from 'interface/entrega';
 
 const EntregaDetalle = () => {
   const route = useRoute();
 
-  const {entrega} = route.params;
+  const {entregaId} = route.params;
+  const [entrega, setEntrega] = useState<Entrega>({
+    id: 0,
+    celda: 0,
+    fechaIngreso: '',
+    descripcion: null,
+    entregaTipoId: 0,
+    entregaTipoNombre: '',
+    estadoAutorizado: 'P',
+    estadoCerrado: false,
+    urlImagen: undefined,
+    urlImagenIngreso: '',
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      const unsubscribe = () => consultarEntregaDetalle();
+      unsubscribe();
+    }, []),
+  );
+
+  const consultarEntregaDetalle = async () => {
+    try {
+      const {respuesta, status} = await consultarApi<RespuestaEntregaDetalle>(
+        'api/entrega/detalle',
+        {
+          codigoEntrega: entregaId,
+        },
+      );
+      if (status === 200) {
+        setEntrega(respuesta.entrega);
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
 
   return (
     <ScrollView>

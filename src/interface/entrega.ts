@@ -23,5 +23,5 @@ export interface RespuestaEntregaLista {
 export interface RespuestaEntregaDetalle {
   error: boolean;
   errorMensaje?: string;
-  entregas: Entrega;
+  entrega: Entrega;
 }
