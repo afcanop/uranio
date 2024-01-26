@@ -1,6 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {
   Box,
+  Button,
   FlatList,
   HStack,
   Heading,
@@ -26,7 +27,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import colores from 'assets/theme/colores';
 import {consultarApi} from 'utils/api';
 import ContenedorAnimado from 'common/ContendorAnimado';
-import {Pressable} from 'react-native';
+import {Alert, Pressable} from 'react-native';
 import ValidarCelda from 'common/ValidarCelda';
 
 type Autorizacion = 'N' | 'S' | 'P';
@@ -74,31 +75,22 @@ const VisitaLista = () => {
     }
   };
 
-  const entregaTipoEstado = (tipoEntrega: Autorizacion) => {
-    switch (tipoEntrega) {
-      case 'N':
-        return <Text color={colores.rojo['500']}>No autorizado</Text>;
-      case 'S':
-        return <Text color={colores.verde['500']}>Autorizado</Text>;
-      default:
-        return <Text color={colores.primary}>Pendiente</Text>;
-    }
-  };
-
   const visitaAutorizar = async (
     codigoVisita: string,
-    autorizar: Autorizacion,
   ) => {
-    const {status} = await consultarApi<RespuestaVisitaAutorizar>(
-      'api/visita/autorizar',
-      {
-        codigoUsuario: usuario.codigo,
-        codigoVisita,
-        autorizar,
-      },
-    );
-    if (status === 200) {
-      consultarVisitas();
+    try {
+      const {status} = await consultarApi<RespuestaVisitaAutorizar>(
+        'api/visita/autorizar',
+        {
+          codigoUsuario: usuario.codigo,
+          codigoVisita,
+        },
+      );
+      if (status === 200) {
+        consultarVisitas();
+      }
+    } catch (error: any) {
+      console.log(error.toJSON());
     }
   };
 
@@ -111,24 +103,24 @@ const VisitaLista = () => {
           <FlatList
             data={arrVisitas}
             renderItem={({item, index}) => (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('VisitasDetalle', {
-                    vista: item,
-                  })
-                }>
-                <ContenedorAnimado delay={50 * index}>
-                  <Box
-                    marginBottom={2}
-                    padding={2}
-                    rounded="lg"
-                    overflow="hidden"
-                    borderColor="coolGray.200"
-                    borderWidth="1">
-                    <Row justifyContent={'space-between'}>
+              <ContenedorAnimado delay={50 * index}>
+                <Box
+                  marginBottom={2}
+                  padding={2}
+                  rounded="lg"
+                  overflow="hidden"
+                  borderColor="coolGray.200"
+                  borderWidth="1">
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('VisitasDetalle', {
+                        vista: item,
+                      })
+                    }>
+                    <HStack justifyContent={'space-between'}>
                       <Text fontWeight={'bold'}>{item.nombre}</Text>
                       <Text fontWeight={'bold'}>{item.codigoIngreso}</Text>
-                    </Row>
+                    </HStack>
                     <HStack
                       flexDirection={'row'}
                       flex={2}
@@ -146,67 +138,29 @@ const VisitaLista = () => {
                           <Text>Placa veiculo: {item.placa}</Text>
                         </VStack>
                       </HStack>
-                      {item.estadoAutorizado === 'P' ? (
-                        <HStack
-                          flexDirection={'row'}
-                          space={4}
-                          flex={1}
-                          alignContent={'center'}
-                          alignItems={'center'}
-                          justifyContent={'flex-end'}>
-                          <Pressable
-                            onPress={() =>
-                              visitaAutorizar(`${item.codigoVisitaPk}`, 'S')
-                            }
-                            style={({pressed}) => [
-                              {
-                                backgroundColor: pressed
-                                  ? colores.verde['100']
-                                  : 'transparent',
-                                borderRadius: 50 / 2,
-                              },
-                            ]}>
-                            <Ionicons
-                              name={'checkmark-outline'}
-                              size={50}
-                              color={colores.verde['500']}
-                            />
-                          </Pressable>
-                          <Pressable
-                            onPress={() =>
-                              visitaAutorizar(`${item.codigoVisitaPk}`, 'N')
-                            }
-                            style={({pressed}) => [
-                              {
-                                backgroundColor: pressed
-                                  ? colores.rojo['100']
-                                  : 'transparent',
-                                borderRadius: 50 / 2,
-                              },
-                            ]}>
-                            <Ionicons
-                              name={'close-outline'}
-                              size={50}
-                              color={colores.rojo['500']}
-                            />
-                          </Pressable>
-                        </HStack>
-                      ) : (
-                        <VStack alignItems={'flex-end'}>
-                          <>{entregaTipoEstado(`${item.estadoAutorizado}`)}</>
-                          <Text color={colores.primary}>
-                            {item.estadoCerrado
-                              ? item.estadoAutorizado === 'S'
-                                ? 'Ingreso'
-                                : 'cerrado'
-                              : 'Pendiente'}
-                          </Text>
-                        </VStack>
-                      )}
                     </HStack>
-                  </Box>
-                </ContenedorAnimado>
-              </TouchableOpacity>
+                  </TouchableOpacity>
+                  {!item.estadoAutorizado ? (
+                    <HStack
+                      flexDirection={'row'}
+                      space={4}
+                      flex={1}
+                      alignContent={'center'}
+                      alignItems={'center'}>
+                      <Button
+                        mt="2"
+                        w={'full'}
+                        onPress={() => visitaAutorizar(`${item.id}`, 'S')}
+                        isLoading={mostrarAnimacionCargando}
+                        isLoadingText="Cargando">
+                        Aceptar
+                      </Button>
+                    </HStack>
+                  ) : (
+                    <Text color={colores.primary}>Ingreso</Text>
+                  )}
+                </Box>
+              </ContenedorAnimado>
             )}
             keyExtractor={item => `${item.id}`}
             refreshControl={
