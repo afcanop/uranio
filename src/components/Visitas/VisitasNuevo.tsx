@@ -8,6 +8,7 @@ import {RootState} from 'store/reducers';
 import {useNavigation} from '@react-navigation/native';
 import {Alert} from 'react-native';
 import ContenedorAnimado from 'common/ContendorAnimado';
+import { ToastTituloError } from 'utils/const';
 
 const VisitasNuevo = () => {
   const toast = useToast();
@@ -56,7 +57,10 @@ const VisitasNuevo = () => {
       }
     } catch (error: any) {
       setMostrarAnimacionCargando(false);
-      console.log(error.request);
+      toast.show({
+        title: ToastTituloError,
+        description: error.response.data.mensaje,
+      });
     }
   };
 

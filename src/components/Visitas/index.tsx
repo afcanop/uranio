@@ -29,6 +29,7 @@ import {consultarApi} from 'utils/api';
 import ContenedorAnimado from 'common/ContendorAnimado';
 import {Alert, Pressable} from 'react-native';
 import ValidarCelda from 'common/ValidarCelda';
+import {ToastTituloError} from 'utils/const';
 
 type Autorizacion = 'N' | 'S' | 'P';
 
@@ -75,9 +76,7 @@ const VisitaLista = () => {
     }
   };
 
-  const visitaAutorizar = async (
-    codigoVisita: string,
-  ) => {
+  const visitaAutorizar = async (codigoVisita: string) => {
     try {
       const {status} = await consultarApi<RespuestaVisitaAutorizar>(
         'api/visita/autorizar',
@@ -90,7 +89,10 @@ const VisitaLista = () => {
         consultarVisitas();
       }
     } catch (error: any) {
-      console.log(error.toJSON());
+      toast.show({
+        title: ToastTituloError,
+        description: error.response.data.mensaje,
+      });
     }
   };
 
