@@ -20,7 +20,7 @@ import colores from 'assets/theme/colores';
 import {RefreshControl} from 'react-native-gesture-handler';
 import {Oferta, respuestaOfertaLista} from 'interface/ofertas';
 import {consultarApi} from 'utils/api';
-import {useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {ScrollView, TouchableOpacity} from 'react-native';
 import {Categoria, respuestaCategoriaLista} from 'interface/categoria';
@@ -35,7 +35,7 @@ const Index = () => {
     return {
       codigoPanal: state.usuario.panalId,
     };
-  });
+  }, shallowEqual);
 
   useLayoutEffect(() => {
     navigation.setOptions({

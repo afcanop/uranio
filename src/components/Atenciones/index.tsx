@@ -6,7 +6,7 @@ import Contenedor from 'common/Contenedor';
 import {useFocusEffect} from '@react-navigation/native';
 import {Atencion, RespuestaAtencionLista} from 'interface/atencion';
 import {consultarApi} from 'utils/api';
-import {useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import colores from 'assets/theme/colores';
 import ContenedorAnimado from 'common/ContendorAnimado';
@@ -22,7 +22,7 @@ const Index = () => {
       codigo: state.usuario.id,
       celda: state.usuario.celdaId,
     };
-  });
+  }, shallowEqual);
 
   useFocusEffect(
     useCallback(() => {

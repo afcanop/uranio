@@ -3,7 +3,7 @@ import {Box, FlatList, HStack, VStack, Text, useToast} from 'native-base';
 import Contenedor from 'common/Contenedor';
 import {useFocusEffect} from '@react-navigation/native';
 import {consultarApi} from 'utils/api';
-import {useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {Caso, respuestaCasoLista} from 'interface/pqrs';
 import ContenedorAnimado from 'common/ContendorAnimado';
@@ -18,8 +18,8 @@ const Index = () => {
       codigo: state.usuario.id,
       panal: state.usuario.panalId,
     };
-  });
-
+  }, shallowEqual);
+  
   useFocusEffect(
     useCallback(() => {
       const unsubscribe = () => consultarPqrs();
@@ -29,7 +29,7 @@ const Index = () => {
 
   const consultarPqrs = async () => {
     const {respuesta, status} = await consultarApi<respuestaCasoLista>(
-      'api/caso/lista/v1',
+      'api/caso/lista',
       {
         codigoPanal: usuario.panal,
         codigoUsuario: usuario.codigo,

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Button, HStack, Image, Text, VStack} from 'native-base';
-import {useDispatch, useSelector} from 'react-redux';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {agregarAlCarrito} from 'store/reducers/tiendaReducer';
 import AjusteDeCantidadInput from 'common/AjusteDeCantidadInput';
 import {RootState} from 'store/reducers';
@@ -19,7 +19,7 @@ const BuscarProductoItem = ({item}) => {
       existeProductoEnCarrito: existeProductoEnCarrito ? true : false,
       cantidad: existeProductoEnCarrito?.cantidadAgregada,
     };
-  });
+  }, shallowEqual);
 
   return (
     <VStack

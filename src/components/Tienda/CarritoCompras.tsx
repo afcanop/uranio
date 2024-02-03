@@ -2,7 +2,7 @@ import {FlatList} from 'react-native';
 import React from 'react';
 import {Box, Button, HStack, Image, Text, VStack} from 'native-base';
 import Contenedor from 'common/Contenedor';
-import {useDispatch, useSelector} from 'react-redux';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import AjusteDeCantidadInput from 'common/AjusteDeCantidadInput';
 import {retirarDelCarrito} from 'store/reducers/tiendaReducer';
@@ -15,7 +15,7 @@ const CarritoCompras = () => {
       carrito: state.tienda.carrito,
       totalCarrito: state.tienda.totalCarrito,
     };
-  });
+  }, shallowEqual);
 
   const retirarProducto = (productoId: number) => {
     dispatch(retirarDelCarrito(productoId));

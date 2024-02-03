@@ -18,7 +18,7 @@ import {
   RespuestaVisitaLista,
   Visita,
 } from 'interface/visita';
-import {useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import Contenedor from 'common/Contenedor';
 import {RefreshControl, TouchableOpacity} from 'react-native-gesture-handler';
@@ -46,7 +46,7 @@ const VisitaLista = () => {
       celda: state.usuario.celdaId,
       codigo: state.usuario.id,
     };
-  });
+  }, shallowEqual);
 
   useFocusEffect(
     useCallback(() => {

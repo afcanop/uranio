@@ -12,7 +12,7 @@ import PublicacionesItem from './PublicacionesItem';
 import {Actionsheet, useDisclose, useToast} from 'native-base';
 import ConectarCelda from 'components/ConectarCelda/ConectarCelda';
 import {RefreshControl} from 'react-native-gesture-handler';
-import { ToastTituloError } from 'utils/const';
+import {ToastTituloError} from 'utils/const';
 
 const Index = () => {
   const toast = useToast();

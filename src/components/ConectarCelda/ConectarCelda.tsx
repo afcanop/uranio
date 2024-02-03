@@ -19,7 +19,7 @@ import {Alert, ScrollView, TouchableOpacity} from 'react-native';
 import StepIndicator from 'react-native-step-indicator';
 import {StepIndicatorStyles} from 'react-native-step-indicator/lib/typescript/src/types';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useDispatch, useSelector} from 'react-redux';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {actualizarUsuarioInformacion} from 'store/reducers/usuarioReducer';
 import {consultarApi} from 'utils/api';
@@ -67,7 +67,7 @@ const ConectarCelda = () => {
       panalNombre: state.usuario.panalNombre,
       codigoPanal: state.usuario.panalId,
     };
-  });
+  }, shallowEqual);
 
   const celdaLLave = async () => {
     try {

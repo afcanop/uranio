@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Box, Button, FormControl, Input, VStack, useToast} from 'native-base';
 import {RootState} from 'store/reducers';
-import {useDispatch, useSelector} from 'react-redux';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {consultarApi} from 'utils/api';
 import {RespuestaUsuarioEditarinformacion} from 'interface/usuario';
 import {actualizarUsuarioInformacion} from 'store/reducers/usuarioReducer';
@@ -15,7 +15,7 @@ const InformacionPersonal = () => {
       nombre: state.usuario.nombre,
       celular: state.usuario.celular,
     };
-  });
+  }, shallowEqual);
   const [nombre, setNombre] = useState<String | null>(usuario.nombre);
   const [celular, setCelular] = useState<String | null>(usuario.celular);
 

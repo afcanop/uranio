@@ -21,7 +21,7 @@ import {
   Votacion,
   VotacionListaDetalle,
 } from 'interface/votaciones';
-import {useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {consultarApi} from 'utils/api';
 import colores from 'assets/theme/colores';
@@ -44,7 +44,7 @@ const VotacionLista = () => {
       celda: state.usuario.celdaId,
       codigo: state.usuario.id,
     };
-  });
+  }, shallowEqual);
 
   useFocusEffect(
     useCallback(() => {
@@ -60,15 +60,15 @@ const VotacionLista = () => {
         codigoCelda: usuario.celda,
       },
     );
-    if (respuestaApiVisitaLista.error === false) {
+    if (status === 200) {
       if (recargarLista) {
         setRecargarLista(false);
       }
-      setArrVotacion(respuestaApiVisitaLista.votaciones);
+      setArrVotacion(respuesta.votaciones);
     } else {
       toast.show({
         title: 'Algo ha salido mal',
-        description: respuestaApiVisitaLista.errorMensaje,
+        description: status,
       });
     }
   };

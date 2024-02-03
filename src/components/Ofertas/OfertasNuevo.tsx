@@ -35,7 +35,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import rnfs from 'react-native-fs';
 import {Camera, CameraScreen, CameraType} from 'react-native-camera-kit';
 import MensajeSinPermisoCamara from 'common/MensajeSinPermisoCamara';
-import {useSelector} from 'react-redux';
+import {shallowEqual, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 
 const OfertasNuevo = () => {
@@ -54,7 +54,7 @@ const OfertasNuevo = () => {
       codigoPanal: state.usuario.panalId,
       codigo: state.usuario.id,
     };
-  });
+  }, shallowEqual);
 
   useFocusEffect(
     useCallback(() => {

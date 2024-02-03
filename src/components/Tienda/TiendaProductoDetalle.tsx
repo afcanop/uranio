@@ -13,7 +13,7 @@ import {
 } from 'native-base';
 import Contenedor from 'common/Contenedor';
 import AjusteDeCantidadInput from 'common/AjusteDeCantidadInput';
-import {useDispatch, useSelector} from 'react-redux';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {agregarAlCarrito} from 'store/reducers/tiendaReducer';
 import {ScrollView} from 'react-native';
@@ -29,7 +29,7 @@ const TiendaProductoDetalle = () => {
       existeProductoEnCarrito: existeProductoEnCarrito ? true : false,
       cantidad: existeProductoEnCarrito?.cantidadAgregada,
     };
-  });
+  , shallowEqual);
 
   return (
     <Contenedor>

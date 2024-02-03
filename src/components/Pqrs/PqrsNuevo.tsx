@@ -13,7 +13,7 @@ import {
   useToast,
 } from 'native-base';
 import React, {useCallback, useState} from 'react';
-import { Keyboard } from 'react-native';
+import {Keyboard} from 'react-native';
 import {useSelector} from 'react-redux';
 import {RootState} from 'store/reducers';
 import {consultarApi} from 'utils/api';
@@ -35,17 +35,17 @@ const PqrsNuevo = () => {
   );
 
   const consultarPqrsTipo = async () => {
-    const respuestaApiCasoLista: respuestaCasoTipoLista = await consultarApi(
+    const {respuesta, status} = await consultarApi<respuestaCasoTipoLista>(
       'api/casotipo/buscar',
       null,
     );
 
-    if (respuestaApiCasoLista.error === false) {
-      setArrPqrsTipo(respuestaApiCasoLista.casosTipos);
+    if (status === 200) {
+      setArrPqrsTipo(respuesta.casosTipos);
     } else {
       toast.show({
         title: 'Algo ha salido mal',
-        description: respuestaApiCasoLista.errorMensaje,
+        description: respuesta.errorMensaje,
       });
     }
   };
