@@ -29,7 +29,7 @@ const TiendaProductoDetalle = () => {
       existeProductoEnCarrito: existeProductoEnCarrito ? true : false,
       cantidad: existeProductoEnCarrito?.cantidadAgregada,
     };
-  , shallowEqual);
+  }, shallowEqual);
 
   return (
     <Contenedor>
