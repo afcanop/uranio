@@ -28,6 +28,7 @@ const initialState: Usuario = {
   panalNombre: '',
   ciudadNombre: '',
   tokenJwt: null,
+  celda: '',
 };
 
 const usuarioSlice = createSlice({

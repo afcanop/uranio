@@ -35,7 +35,7 @@ const Index = () => {
       nombre: state.usuario.nombre,
       celular: state.usuario.celular,
       panal: state.usuario.panalNombre,
-      celda: state.usuario.celda,
+      celda: state.usuario.celdaId,
       ciudad: state.usuario.ciudadNombre,
       imagen: state.usuario.urlImagen,
     };

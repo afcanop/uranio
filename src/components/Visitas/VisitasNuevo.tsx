@@ -8,7 +8,7 @@ import {RootState} from 'store/reducers';
 import {useNavigation} from '@react-navigation/native';
 import {Alert} from 'react-native';
 import ContenedorAnimado from 'common/ContendorAnimado';
-import { ToastTituloError } from 'utils/const';
+import {ToastTituloError} from 'utils/const';
 
 const VisitasNuevo = () => {
   const toast = useToast();
@@ -21,7 +21,7 @@ const VisitasNuevo = () => {
     useState<boolean>(false);
   const usuario = useSelector((state: RootState) => {
     return {
-      celda: state.usuario.celdaCelda,
+      celda: state.usuario.celda,
       codigoPanal: state.usuario.panalId,
     };
   }, shallowEqual);
@@ -56,10 +56,11 @@ const VisitasNuevo = () => {
         });
       }
     } catch (error: any) {
+      console.error(error);
       setMostrarAnimacionCargando(false);
       toast.show({
         title: ToastTituloError,
-        description: error.response.data.mensaje,
+        description: 'error.response.data.mensaje',
       });
     }
   };

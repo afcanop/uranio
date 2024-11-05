@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios, {AxiosResponse} from 'axios';
 
-const URL_BASE = 'https://yodoapi.online/';
+const URL_BASE = 'http://yodoapi.online/';
 
 interface Configuracion {
   method?: 'post' | 'get' | 'put' | 'delete';

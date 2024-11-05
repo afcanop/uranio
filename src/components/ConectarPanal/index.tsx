@@ -110,7 +110,7 @@ const ConectarPanal = () => {
   const asignarPanal = async () => {
     try {
       const {status, respuesta} = await consultarApi<RespuestaPanalAsignar>(
-        'api/panal/asignar',
+        'api/panal/vincular',
         {
           codigoUsuario: usuarioCodigo,
           codigoPanal: parseInt(panal, 10),

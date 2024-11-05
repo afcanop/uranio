@@ -1,7 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import colores from 'assets/theme/colores';
+import ContenedorAnimado from 'common/ContendorAnimado';
 import Contenedor from 'common/Contenedor';
-import {Entrega, RespuestaEntregaLista} from 'interface/entrega';
+import TextoFecha from 'common/TextoFecha';
+import ValidarCelda from 'common/ValidarCelda';
+import { Entrega, RespuestaEntregaLista } from 'interface/entrega';
 import {
   Box,
   FlatList,
@@ -12,18 +16,13 @@ import {
   VStack,
   useToast,
 } from 'native-base';
-import React, {useCallback, useState} from 'react';
-import {Pressable, TouchableOpacity} from 'react-native';
-import {RefreshControl} from 'react-native-gesture-handler';
-import {shallowEqual, useSelector} from 'react-redux';
-import {RootState} from 'store/reducers';
-import {consultarApi} from 'utils/api';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import colores from 'assets/theme/colores';
-import {urlCaja, urlCajas, urlSobre} from 'utils/const';
-import TextoFecha from 'common/TextoFecha';
-import ContenedorAnimado from 'common/ContendorAnimado';
-import ValidarCelda from 'common/ValidarCelda';
+import React, { useCallback, useState } from 'react';
+import { TouchableOpacity } from 'react-native';
+import { RefreshControl } from 'react-native-gesture-handler';
+import { shallowEqual, useSelector } from 'react-redux';
+import { RootState } from 'store/reducers';
+import { consultarApi } from 'utils/api';
+import { urlCaja, urlCajas, urlSobre } from 'utils/const';
 type Autorizacion = 'N' | 'S' | 'P';
 
 const EntregasLista = () => {

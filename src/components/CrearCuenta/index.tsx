@@ -36,7 +36,7 @@ function CrearCuenta() {
         if (clave.length >= 8) {
           try {
             const {status} = await consultarApi<RespuestaUsuarioNuevo>(
-              'api/registro',
+              'api/usuario/registro',
               {
                 email: usuario,
                 password: clave,

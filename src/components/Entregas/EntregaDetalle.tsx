@@ -44,9 +44,7 @@ const EntregaDetalle = () => {
       if (status === 200) {
         setEntrega(respuesta.entrega);
       }
-    } catch (error: any) {
-      console.log(error);
-    }
+    } catch (error: any) {}
   };
 
   return (

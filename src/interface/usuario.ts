@@ -25,6 +25,7 @@ export interface Usuario {
   tokenJwt: string | null;
   urlFoto: string | null;
   urlImagen: string;
+  celda: string;
 }
 
 export interface RespuestaUsuarioAutenticar {

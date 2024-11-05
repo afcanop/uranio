@@ -103,7 +103,7 @@ const Documento = () => {
           await rnfs.writeFile(filePath, 'Lorem ipsum dolor sit amet', 'utf8');
         })
         .catch(err => {
-          console.log('Download error:', err);
+          //console.log('Download error:', err);
         });
     }
   };
@@ -116,10 +116,10 @@ const Documento = () => {
           cerrarModal();
         })
         .catch(_err => {
-          console.log(_err);
+          //console.log(_err);
         });
     } else {
-      console.log('El archivo aún no ha sido descargado.');
+      //console.log('El archivo aún no ha sido descargado.');
     }
   };
 

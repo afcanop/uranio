@@ -79,7 +79,6 @@ const ConectarCelda = () => {
           celda,
         },
       );
-
       if (status === 200) {
         Alert.alert(
           'Información',
