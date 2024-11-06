@@ -21,7 +21,8 @@ const VisitasNuevo = () => {
     useState<boolean>(false);
   const usuario = useSelector((state: RootState) => {
     return {
-      celda: state.usuario.celda,
+      celdaId: state.usuario.celdaId,
+      celda: state.usuario.celdaCelda,
       codigoPanal: state.usuario.panalId,
     };
   }, shallowEqual);
@@ -33,6 +34,7 @@ const VisitasNuevo = () => {
         const {respuesta, status} = await consultarApi<RespuestaVisitaNuevo>(
           'api/visita/nuevo',
           {
+            codigoCelda: usuario.celdaId,
             celda: usuario.celda,
             codigoPanal: usuario.codigoPanal,
             numeroIdentificacion,
@@ -44,7 +46,7 @@ const VisitasNuevo = () => {
         if (status === 200) {
           Alert.alert(
             'Correcto',
-            `Su visita quedó registrada con el código: ${respuesta.codigoIngreso}`,
+            `Su visita quedó registrada con el código: ${respuesta.codigo}`,
           );
           navigation.goBack();
         }
