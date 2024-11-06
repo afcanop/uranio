@@ -1,35 +1,32 @@
-import React, {useCallback, useState} from 'react';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import colores from 'assets/theme/colores';
+import ContenedorAnimado from 'common/ContendorAnimado';
+import Contenedor from 'common/Contenedor';
+import TextoFecha from 'common/TextoFecha';
+import ValidarCelda from 'common/ValidarCelda';
+import {
+  RespuestaVisitaAutorizar,
+  RespuestaVisitaLista,
+  Visita,
+} from 'interface/visita';
 import {
   Box,
   Button,
   FlatList,
   HStack,
   Heading,
-  Row,
   Spinner,
   Stack,
   Text,
   VStack,
   useToast,
 } from 'native-base';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {
-  RespuestaVisitaAutorizar,
-  RespuestaVisitaLista,
-  Visita,
-} from 'interface/visita';
-import {shallowEqual, useSelector} from 'react-redux';
-import {RootState} from 'store/reducers';
-import Contenedor from 'common/Contenedor';
-import {RefreshControl, TouchableOpacity} from 'react-native-gesture-handler';
-import TextoFecha from 'common/TextoFecha';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import colores from 'assets/theme/colores';
-import {consultarApi} from 'utils/api';
-import ContenedorAnimado from 'common/ContendorAnimado';
-import {Alert, Pressable} from 'react-native';
-import ValidarCelda from 'common/ValidarCelda';
-import {ToastTituloError} from 'utils/const';
+import React, { useCallback, useState } from 'react';
+import { RefreshControl, TouchableOpacity } from 'react-native-gesture-handler';
+import { shallowEqual, useSelector } from 'react-redux';
+import { RootState } from 'store/reducers';
+import { consultarApi } from 'utils/api';
+import { ToastTituloError } from 'utils/const';
 
 type Autorizacion = 'N' | 'S' | 'P';
 
@@ -137,7 +134,7 @@ const VisitaLista = () => {
                               : 'No registra número identificación'}
                           </Text>
                           <TextoFecha fecha={item.fecha} />
-                          <Text>Placa veiculo: {item.placa}</Text>
+                          <Text>Placa vehículo: {item.placa}</Text>
                         </VStack>
                       </HStack>
                     </HStack>
