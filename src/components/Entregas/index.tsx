@@ -71,9 +71,9 @@ const EntregasLista = () => {
 
   const obtenerUrlTipoEntrega = (tipoEntrega: string) => {
     switch (tipoEntrega) {
-      case 'SOBRE':
+      case 'Sobre':
         return urlSobre;
-      case 'CAJA':
+      case 'Caja':
         return urlCaja;
       default:
         return urlCajas;
