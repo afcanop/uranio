@@ -23,11 +23,13 @@ function OlvidoContrasena() {
 
   const recuperarContrasena = async () => {
     if (validarCorreoElectronico(usuario)) {
-      const {respuesta, status} =
-        await consultarApi<RespuestaUsuarioRecuperarClave>(
-          'api/usuario/recuperarclave',
-          {usuario},
-        );
+      const {status} = await consultarApi<RespuestaUsuarioRecuperarClave>(
+        'api/usuario/recuperar_clave',
+        {usuario},
+        {
+          requiereToken: false,
+        },
+      );
       if (status === 200) {
         navigation.goBack();
         toast.show({
